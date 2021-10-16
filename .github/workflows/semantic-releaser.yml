@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: 14
 
-      - name: Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        run: npx semantic-release
+      # - name: Release
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      #   run: npx semantic-release

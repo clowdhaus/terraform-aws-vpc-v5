@@ -17,6 +17,58 @@
 - Examples not only validate different configurations, but demonstrate different design patterns used for networking
 - What does migrating from v3.x to v4.x look like
 
+## Resources
+
+### Supported
+
+- [ ] aws_customer_gateway
+- [ ] aws_default_network_acl
+- [ ] aws_default_route_table
+- [x] aws_default_security_group
+- [ ] aws_default_subnet
+- [ ] aws_default_vpc
+- [ ] aws_default_vpc_dhcp_options
+- [ ] aws_ec2_managed_prefix_list
+- [ ] aws_ec2_managed_prefix_list_entry
+- [ ] aws_egress_only_internet_gateway
+- [ ] aws_flow_log
+- [ ] aws_internet_gateway
+- [ ] aws_main_route_table_association
+- [ ] aws_nat_gateway
+- [ ] aws_network_acl
+- [ ] aws_network_acl_rule
+- [ ] aws_network_interface
+- [ ] aws_network_interface_attachment
+- [ ] aws_network_interface_sg_attachment
+- [ ] aws_route
+- [ ] aws_route_table
+- [ ] aws_route_table_association
+- [ ] aws_security_group
+- [ ] aws_security_group_rule
+- [ ] aws_subnet
+- [x] aws_vpc
+- [ ] aws_vpc_dhcp_options
+- [ ] aws_vpc_dhcp_options_association
+- [ ] aws_vpc_endpoint
+- [ ] aws_vpc_endpoint_connection_notification
+- [ ] aws_vpc_endpoint_route_table_association
+- [ ] aws_vpc_endpoint_service
+- [ ] aws_vpc_endpoint_service_allowed_principal
+- [ ] aws_vpc_endpoint_subnet_association
+- [x] aws_vpc_ipv4_cidr_block_association
+- [ ] aws_vpc_peering_connection
+- [ ] aws_vpc_peering_connection_accepter
+- [ ] aws_vpc_peering_connection_options
+- [ ] aws_route53_resolver_dnssec_config
+
+### Not Supported
+
+- [ ] aws_vpn_connection
+- [ ] aws_vpn_connection_route
+- [ ] aws_vpn_gateway
+- [ ] aws_vpn_gateway_attachment
+- [ ] aws_vpn_gateway_route_propagation
+
 ## Usage
 
 See [`examples`](./examples) directory for working examples to reference:
@@ -48,7 +100,9 @@ Examples codified under the [`examples`](./examples) are intended to give users 
 
 ## Providers
 
-No providers.
+| Name | Version |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 3.62 |
 
 ## Modules
 
@@ -56,15 +110,49 @@ No modules.
 
 ## Resources
 
-No resources.
+| Name | Type |
+|------|------|
+| [aws_default_security_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_security_group) | resource |
+| [aws_vpc.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc) | resource |
+| [aws_vpc_ipv4_cidr_block_association.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_ipv4_cidr_block_association) | resource |
 
 ## Inputs
 
-No inputs.
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_assign_generated_ipv6_cidr_block"></a> [assign\_generated\_ipv6\_cidr\_block](#input\_assign\_generated\_ipv6\_cidr\_block) | Requests an Amazon-provided IPv6 CIDR block with a /56 prefix length for the VPC. You cannot specify the range of IP addresses, or the size of the CIDR block. Default is `false` | `bool` | `null` | no |
+| <a name="input_cidr_block"></a> [cidr\_block](#input\_cidr\_block) | The CIDR block for the VPC. Default value is a valid CIDR, but not acceptable by AWS and should be overridden | `string` | `"0.0.0.0/0"` | no |
+| <a name="input_create_vpc"></a> [create\_vpc](#input\_create\_vpc) | Controls if VPC should be created (it affects almost all resources) | `bool` | `true` | no |
+| <a name="input_default_security_group_egress"></a> [default\_security\_group\_egress](#input\_default\_security\_group\_egress) | List of maps of egress rules to set on the default security group | `list(map(string))` | `null` | no |
+| <a name="input_default_security_group_ingress"></a> [default\_security\_group\_ingress](#input\_default\_security\_group\_ingress) | List of maps of ingress rules to set on the default security group | `list(map(string))` | `null` | no |
+| <a name="input_default_security_group_name"></a> [default\_security\_group\_name](#input\_default\_security\_group\_name) | Name to be used on the default security group | `string` | `"default"` | no |
+| <a name="input_default_security_group_tags"></a> [default\_security\_group\_tags](#input\_default\_security\_group\_tags) | Additional tags for the default security group | `map(string)` | `{}` | no |
+| <a name="input_enable_classiclink"></a> [enable\_classiclink](#input\_enable\_classiclink) | A boolean flag to enable/disable ClassicLink for the VPC. Only valid in regions and accounts that support EC2 Classic | `bool` | `null` | no |
+| <a name="input_enable_classiclink_dns_support"></a> [enable\_classiclink\_dns\_support](#input\_enable\_classiclink\_dns\_support) | A boolean flag to enable/disable ClassicLink DNS Support for the VPC. Only valid in regions and accounts that support EC2 Classic | `bool` | `null` | no |
+| <a name="input_enable_dns_hostnames"></a> [enable\_dns\_hostnames](#input\_enable\_dns\_hostnames) | A boolean flag to enable/disable DNS hostnames in the VPC. Defaults `false` | `bool` | `null` | no |
+| <a name="input_enable_dns_support"></a> [enable\_dns\_support](#input\_enable\_dns\_support) | A boolean flag to enable/disable DNS support in the VPC. Defaults `true` | `bool` | `null` | no |
+| <a name="input_instance_tenancy"></a> [instance\_tenancy](#input\_instance\_tenancy) | A tenancy option for instances launched into the VPC. Default is `default`, which makes your instances shared on the host | `string` | `"default"` | no |
+| <a name="input_manage_default_security_group"></a> [manage\_default\_security\_group](#input\_manage\_default\_security\_group) | Determines whether the default security group is adopted and managed by the module | `bool` | `true` | no |
+| <a name="input_name"></a> [name](#input\_name) | Name to be used on all the resources as identifier | `string` | `""` | no |
+| <a name="input_secondary_cidr_blocks"></a> [secondary\_cidr\_blocks](#input\_secondary\_cidr\_blocks) | List of secondary CIDR blocks to associate with the VPC to extend the IP Address pool | `list(string)` | `[]` | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to add to all resources | `map(string)` | `{}` | no |
+| <a name="input_vpc_tags"></a> [vpc\_tags](#input\_vpc\_tags) | Additional tags for the VPC | `map(string)` | `{}` | no |
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_vpc_arn"></a> [vpc\_arn](#output\_vpc\_arn) | Amazon Resource Name (ARN) of VPC |
+| <a name="output_vpc_cidr_block"></a> [vpc\_cidr\_block](#output\_vpc\_cidr\_block) | The CIDR block of the VPC |
+| <a name="output_vpc_default_network_acl_id"></a> [vpc\_default\_network\_acl\_id](#output\_vpc\_default\_network\_acl\_id) | The ID of the network ACL created by default on VPC creation |
+| <a name="output_vpc_default_route_table_id"></a> [vpc\_default\_route\_table\_id](#output\_vpc\_default\_route\_table\_id) | The ID of the route table created by default on VPC creation |
+| <a name="output_vpc_default_security_group_arn"></a> [vpc\_default\_security\_group\_arn](#output\_vpc\_default\_security\_group\_arn) | The ARN of the security group created by default on VPC creation |
+| <a name="output_vpc_default_security_group_id"></a> [vpc\_default\_security\_group\_id](#output\_vpc\_default\_security\_group\_id) | The ID of the security group created by default on VPC creation |
+| <a name="output_vpc_id"></a> [vpc\_id](#output\_vpc\_id) | The ID of the VPC |
+| <a name="output_vpc_ipv6_association_id"></a> [vpc\_ipv6\_association\_id](#output\_vpc\_ipv6\_association\_id) | The association ID for the IPv6 CIDR block |
+| <a name="output_vpc_ipv6_cidr_block"></a> [vpc\_ipv6\_cidr\_block](#output\_vpc\_ipv6\_cidr\_block) | The IPv6 CIDR block |
+| <a name="output_vpc_main_route_table_id"></a> [vpc\_main\_route\_table\_id](#output\_vpc\_main\_route\_table\_id) | The ID of the main route table associated with this VPC. Note that you can change a VPC's main route table by using an `aws_main_route_table_association` |
+| <a name="output_vpc_secondary_ipv4_cidr_block_assocations"></a> [vpc\_secondary\_ipv4\_cidr\_block\_assocations](#output\_vpc\_secondary\_ipv4\_cidr\_block\_assocations) | The IPv6 CIDR block |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 ## License
