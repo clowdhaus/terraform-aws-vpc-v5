@@ -3,7 +3,7 @@
 ################################################################################
 
 resource "aws_default_security_group" "this" {
-  count = var.create_vpc && var.manage_default_security_group ? 1 : 0
+  count = var.create && var.manage_default_security_group ? 1 : 0
 
   vpc_id = aws_vpc.this[0].id
 

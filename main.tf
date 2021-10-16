@@ -3,7 +3,7 @@
 ################################################################################
 
 resource "aws_vpc" "this" {
-  count = var.create_vpc ? 1 : 0
+  count = var.create ? 1 : 0
 
   cidr_block                       = var.cidr_block
   instance_tenancy                 = var.instance_tenancy
@@ -23,7 +23,7 @@ resource "aws_vpc" "this" {
 }
 
 resource "aws_vpc_ipv4_cidr_block_association" "this" {
-  for_each = var.create_vpc ? toset(var.secondary_cidr_blocks) : []
+  for_each = var.create ? toset(var.secondary_cidr_blocks) : []
 
   vpc_id     = aws_vpc.this[0].id
   cidr_block = each.value
