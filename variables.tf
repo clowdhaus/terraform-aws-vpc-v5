@@ -77,6 +77,52 @@ variable "secondary_cidr_blocks" {
 }
 
 ################################################################################
+# DHCP Options Set
+################################################################################
+
+variable "create_dhcp_options" {
+  description = "Controls if custom DHCP options set is created"
+  type        = bool
+  default     = false
+}
+
+variable "dhcp_options_domain_name" {
+  description = "The suffix domain name to use by default when resolving non fully qualified domain names"
+  type        = string
+  default     = null
+}
+
+variable "dhcp_options_domain_name_servers" {
+  description = "List of name servers to configure in `/etc/resolv.conf`"
+  type        = list(string)
+  default     = ["AmazonProvidedDNS"]
+}
+
+variable "dhcp_options_ntp_servers" {
+  description = "List of NTP servers to configure"
+  type        = list(string)
+  default     = null
+}
+
+variable "dhcp_options_netbios_name_servers" {
+  description = "List of NETBIOS name servers"
+  type        = list(string)
+  default     = null
+}
+
+variable "dhcp_options_netbios_node_type" {
+  description = "The NetBIOS node type (1, 2, 4, or 8). AWS recommends to specify 2 since broadcast and multicast are not supported in their network"
+  type        = number
+  default     = null
+}
+
+variable "dhcp_options_tags" {
+  description = "Additional tags for the DHCP option set"
+  type        = map(string)
+  default     = {}
+}
+
+################################################################################
 # Default Security Group for VPC created
 ################################################################################
 

@@ -28,3 +28,30 @@ resource "aws_vpc_ipv4_cidr_block_association" "this" {
   vpc_id     = aws_vpc.this[0].id
   cidr_block = each.value
 }
+
+################################################################################
+# DHCP Options Set
+################################################################################
+
+resource "aws_vpc_dhcp_options" "this" {
+  count = var.create && var.create_dhcp_options ? 1 : 0
+
+  domain_name          = var.dhcp_options_domain_name
+  domain_name_servers  = var.dhcp_options_domain_name_servers
+  ntp_servers          = var.dhcp_options_ntp_servers
+  netbios_name_servers = var.dhcp_options_netbios_name_servers
+  netbios_node_type    = var.dhcp_options_netbios_node_type
+
+  tags = merge(
+    { "Name" = var.name },
+    var.tags,
+    var.dhcp_options_tags,
+  )
+}
+
+resource "aws_vpc_dhcp_options_association" "this" {
+  count = var.create && var.create_dhcp_options ? 1 : 0
+
+  vpc_id          = aws_vpc.this[0].id
+  dhcp_options_id = aws_vpc_dhcp_options.this[0].id
+}

@@ -7,7 +7,8 @@
 - `create_vpc` -> `create`
 - `cidr` -> `cidr_block` to match Terraform AWS provider
 - `enable_ipv6` -> `assign_generated_ipv6_cidr_block` to match Terraform AWS provider
-- `aws_default_route_table.default` -> `aws_default_route_table.this` to align convention
+- `aws_default_route_table.default` -> `aws_default_route_table.this` to align with convention
+- `enable_dhcp_options` -> `create_dhcp_options` to align with conventions
 
 ### Added
 

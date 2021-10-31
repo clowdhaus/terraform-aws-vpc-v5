@@ -48,6 +48,20 @@ output "secondary_ipv4_cidr_block_assocations" {
 }
 
 ################################################################################
+# DHCP Options Set
+################################################################################
+
+output "dhcp_options_id" {
+  description = "The ID of the DHCP options set"
+  value       = try(aws_vpc_dhcp_options.this[0].id, null)
+}
+
+output "dhcp_options_arn" {
+  description = "The ARN of the DHCP options set"
+  value       = try(aws_vpc_dhcp_options.this[0].arn, null)
+}
+
+################################################################################
 # Default Security Group for VPC created
 ################################################################################
 
