@@ -77,7 +77,7 @@ variable "secondary_cidr_blocks" {
 }
 
 ################################################################################
-# Default Security Group
+# Default Security Group for VPC created
 ################################################################################
 
 variable "manage_default_security_group" {
@@ -106,6 +106,46 @@ variable "default_security_group_egress" {
 
 variable "default_security_group_tags" {
   description = "Additional tags for the default security group"
+  type        = map(string)
+  default     = {}
+}
+
+################################################################################
+# Account Default VPC
+################################################################################
+
+variable "manage_default_vpc" {
+  description = "Determines whether the default VPC is adopted and managed by the module"
+  type        = bool
+  default     = false
+}
+
+variable "default_vpc_name" {
+  description = "Name to be used on the Default VPC"
+  type        = string
+  default     = ""
+}
+
+variable "default_vpc_enable_dns_support" {
+  description = "A boolean flag to enable/disable DNS support in the VPC. Defaults `true`"
+  type        = bool
+  default     = null
+}
+
+variable "default_vpc_enable_dns_hostnames" {
+  description = "A boolean flag to enable/disable DNS hostnames in the VPC. Defaults `false`"
+  type        = bool
+  default     = null
+}
+
+variable "default_vpc_enable_classiclink" {
+  description = "A boolean flag to enable/disable ClassicLink for the VPC. Only valid in regions and accounts that support EC2 Classic"
+  type        = bool
+  default     = null
+}
+
+variable "default_vpc_tags" {
+  description = "Additional tags for the Default VPC"
   type        = map(string)
   default     = {}
 }
