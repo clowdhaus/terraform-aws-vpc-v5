@@ -13,6 +13,7 @@
 
 - Added `destination_prefix_list_id` attribute for default route table route(s)
 - Added `var.default_route_table_name` variable to allow setting route table name and align with rest of default resources
+- Added support for `aws_default_vpc_dhcp_options`
 
 ### Modified
 

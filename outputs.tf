@@ -93,6 +93,20 @@ output "default_route_table_arn" {
 }
 
 ################################################################################
+# Default DHCP Options
+################################################################################
+
+output "default_dhcp_options_id" {
+  description = "The ID of the default DHCP options set"
+  value       = try(aws_default_vpc_dhcp_options.this[0].id, null)
+}
+
+output "default_dhcp_options_arn" {
+  description = "The ARN of the default DHCP options set"
+  value       = try(aws_default_vpc_dhcp_options.this[0].arn, null)
+}
+
+################################################################################
 # Account Default VPC
 ################################################################################
 

@@ -184,6 +184,46 @@ variable "default_route_table_tags" {
 }
 
 ################################################################################
+# Default DHCP Options
+################################################################################
+
+variable "manage_default_dhcp_options" {
+  description = "Determines whether the default DHCP options are adopted and managed by the module"
+  type        = bool
+  default     = false
+}
+
+variable "default_dhcp_options_netbios_name_servers" {
+  description = "List of NETBIOS name servers"
+  type        = list(string)
+  default     = null
+}
+
+variable "default_dhcp_options_netbios_node_type" {
+  description = " The NetBIOS node type (1, 2, 4, or 8). AWS recommends to specify 2 since broadcast and multicast are not supported in their network"
+  type        = number
+  default     = null
+}
+
+variable "default_dhcp_options_owner_id" {
+  description = "The ID of the AWS account that owns the DHCP options set"
+  type        = string
+  default     = null
+}
+
+variable "default_dhcp_options_name" {
+  description = "Name to be used on the default DHCP options"
+  type        = string
+  default     = ""
+}
+
+variable "default_dhcp_options_tags" {
+  description = "Additional tags for the default DHCP options"
+  type        = map(string)
+  default     = {}
+}
+
+################################################################################
 # Account Default VPC
 ################################################################################
 
@@ -191,12 +231,6 @@ variable "manage_default_vpc" {
   description = "Determines whether the default VPC is adopted and managed by the module"
   type        = bool
   default     = false
-}
-
-variable "default_vpc_name" {
-  description = "Name to be used on the Default VPC"
-  type        = string
-  default     = ""
 }
 
 variable "default_vpc_enable_dns_support" {
@@ -215,6 +249,12 @@ variable "default_vpc_enable_classiclink" {
   description = "A boolean flag to enable/disable ClassicLink for the VPC. Only valid in regions and accounts that support EC2 Classic"
   type        = bool
   default     = null
+}
+
+variable "default_vpc_name" {
+  description = "Name to be used on the Default VPC"
+  type        = string
+  default     = ""
 }
 
 variable "default_vpc_tags" {
