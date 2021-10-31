@@ -2,7 +2,7 @@
 
 :warning: This is experimental only - please do not rely on this being stable at this time. The goal of this project is to explore changes to the upstream `terraform-aws-vpc` module and hopefully/eventually land those changes there as v4.0. For now, this is just for testing and open collaboration on what that next version might look like, and how users can migrate from v3.x to v4.x
 
-## Desgin Goals
+## Design Goals
 
 - Terraform v1.x is min supported now that its GA
 - Use of maps/`for_each` over `count` for stable/isolated changes
