@@ -76,6 +76,22 @@ output "default_network_acl_arn" {
   value       = try(aws_default_network_acl.this[0].arn, null)
 }
 
+
+################################################################################
+# Default Route Table for VPC created
+################################################################################
+
+# # Not enabled since its covered by the aws_vpc output already
+# output "default_route_table_id" {
+#   description = "ID of the default route table"
+#   value       = try(aws_default_route_table.this[0].id, null)
+# }
+
+output "default_route_table_arn" {
+  description = "ARN of the default route table"
+  value       = try(aws_default_route_table.this[0].arn, null)
+}
+
 ################################################################################
 # Account Default VPC
 ################################################################################

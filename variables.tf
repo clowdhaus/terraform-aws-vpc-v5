@@ -145,6 +145,45 @@ variable "default_network_acl_tags" {
 }
 
 ################################################################################
+# Default Route Table for VPC created
+################################################################################
+
+variable "manage_default_route_table" {
+  description = "Determines whether the default route table is adopted and managed by the module"
+  type        = bool
+  default     = false
+}
+
+variable "default_route_table_propagating_vgws" {
+  description = "List of virtual gateways for propagation"
+  type        = list(string)
+  default     = []
+}
+
+variable "default_route_table_routes" {
+  description = "Configuration block of routes. See https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_route_table#route"
+  type        = list(map(string))
+  default     = []
+}
+
+variable "default_route_table_timeouts" {
+  description = "Create and update timeout configurations for the default route table"
+  type        = map(string)
+  default     = {}
+}
+
+variable "default_route_table_name" {
+  description = "Name to be used on the default route table"
+  type        = string
+  default     = ""
+}
+variable "default_route_table_tags" {
+  description = "Additional tags for the default route table"
+  type        = map(string)
+  default     = {}
+}
+
+################################################################################
 # Account Default VPC
 ################################################################################
 
