@@ -38,11 +38,78 @@ resource "aws_default_security_group" "this" {
   }
 
   tags = merge(
-    {
-      "Name" = format("%s", var.default_security_group_name)
-    },
+    { "Name" = coalesce(var.default_security_group_name, "default-${var.name}") },
     var.tags,
     var.default_security_group_tags,
+  )
+}
+
+################################################################################
+# Default Network ACL for VPC created
+################################################################################
+
+resource "aws_default_network_acl" "this" {
+  count = var.create && var.manage_default_network_acl ? 1 : 0
+
+  default_network_acl_id = try(aws_vpc.this[0].default_network_acl_id, null)
+
+  # The value of subnet_ids should be any subnet IDs that are not set as subnet_ids
+  #   for any of the non-default network ACLs
+  # !!! TODO - this will need to be updated
+  # subnet_ids = setsubtract(
+  #   compact(flatten([
+  #     aws_subnet.public.*.id,
+  #     aws_subnet.private.*.id,
+  #     aws_subnet.intra.*.id,
+  #     aws_subnet.database.*.id,
+  #     aws_subnet.redshift.*.id,
+  #     aws_subnet.elasticache.*.id,
+  #     aws_subnet.outpost.*.id,
+  #   ])),
+  #   compact(flatten([
+  #     aws_network_acl.public.*.subnet_ids,
+  #     aws_network_acl.private.*.subnet_ids,
+  #     aws_network_acl.intra.*.subnet_ids,
+  #     aws_network_acl.database.*.subnet_ids,
+  #     aws_network_acl.redshift.*.subnet_ids,
+  #     aws_network_acl.elasticache.*.subnet_ids,
+  #     aws_network_acl.outpost.*.subnet_ids,
+  #   ]))
+  # )
+
+  dynamic "ingress" {
+    for_each = var.default_network_acl_ingress
+    content {
+      action          = ingress.value.action
+      from_port       = ingress.value.from_port
+      protocol        = ingress.value.protocol
+      rule_no         = ingress.value.rule_no
+      to_port         = ingress.value.to_port
+      cidr_block      = lookup(ingress.value, "cidr_block", null)
+      icmp_code       = lookup(ingress.value, "icmp_code", null)
+      icmp_type       = lookup(ingress.value, "icmp_type", null)
+      ipv6_cidr_block = lookup(ingress.value, "ipv6_cidr_block", null)
+    }
+  }
+  dynamic "egress" {
+    for_each = var.default_network_acl_egress
+    content {
+      action          = egress.value.action
+      from_port       = egress.value.from_port
+      protocol        = egress.value.protocol
+      rule_no         = egress.value.rule_no
+      to_port         = egress.value.to_port
+      cidr_block      = lookup(egress.value, "cidr_block", null)
+      icmp_code       = lookup(egress.value, "icmp_code", null)
+      icmp_type       = lookup(egress.value, "icmp_type", null)
+      ipv6_cidr_block = lookup(egress.value, "ipv6_cidr_block", null)
+    }
+  }
+
+  tags = merge(
+    { "Name" = coalesce(var.default_network_acl_name, "default-${var.name}") },
+    var.tags,
+    var.default_network_acl_tags,
   )
 }
 
@@ -51,16 +118,14 @@ resource "aws_default_security_group" "this" {
 ################################################################################
 
 resource "aws_default_vpc" "this" {
-  count = var.manage_default_vpc ? 1 : 0
+  count = var.create && var.manage_default_vpc ? 1 : 0
 
   enable_dns_support   = var.default_vpc_enable_dns_support
   enable_dns_hostnames = var.default_vpc_enable_dns_hostnames
   enable_classiclink   = var.default_vpc_enable_classiclink
 
   tags = merge(
-    {
-      "Name" = format("%s", var.default_vpc_name)
-    },
+    { "Name" = coalesce(var.default_vpc_name, "default") },
     var.tags,
     var.default_vpc_tags,
   )

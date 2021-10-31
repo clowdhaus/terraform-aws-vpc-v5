@@ -89,7 +89,7 @@ variable "manage_default_security_group" {
 variable "default_security_group_name" {
   description = "Name to be used on the default security group"
   type        = string
-  default     = "default"
+  default     = ""
 }
 
 variable "default_security_group_ingress" {
@@ -106,6 +106,40 @@ variable "default_security_group_egress" {
 
 variable "default_security_group_tags" {
   description = "Additional tags for the default security group"
+  type        = map(string)
+  default     = {}
+}
+
+################################################################################
+# Default Network ACL for VPC created
+################################################################################
+
+variable "manage_default_network_acl" {
+  description = "Determines whether the default network ACL is adopted and managed by the module"
+  type        = bool
+  default     = false
+}
+
+variable "default_network_acl_name" {
+  description = "Name to be used on the default network ACL"
+  type        = string
+  default     = ""
+}
+
+variable "default_network_acl_ingress" {
+  description = "List of maps for ingress rules to set on the default network ACL"
+  type        = list(map(string))
+  default     = []
+}
+
+variable "default_network_acl_egress" {
+  description = "List of maps for egress rules to set on the default network ACL"
+  type        = list(map(string))
+  default     = []
+}
+
+variable "default_network_acl_tags" {
+  description = "Additional tags for the default network ACL"
   type        = map(string)
   default     = {}
 }

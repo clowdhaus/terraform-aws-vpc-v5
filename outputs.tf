@@ -48,7 +48,7 @@ output "secondary_ipv4_cidr_block_assocations" {
 }
 
 ################################################################################
-# Default Security Group
+# Default Security Group for VPC created
 ################################################################################
 
 output "default_security_group_arn" {
@@ -59,6 +59,21 @@ output "default_security_group_arn" {
 output "default_security_group_id" {
   description = "The ID of the security group created by default on VPC creation"
   value       = try(aws_vpc.this[0].default_security_group_id, null)
+}
+
+################################################################################
+# Default Network ACL for VPC created
+################################################################################
+
+# # Not enabled since its covered by the aws_vpc output already
+# output "default_network_acl_id" {
+#   description = "ID of the Default Network ACL"
+#   value       = try(aws_default_network_acl.this[0].id, null)
+# }
+
+output "default_network_acl_arn" {
+  description = "ARN of the Default Network ACL"
+  value       = try(aws_default_network_acl.this[0].arn, null)
 }
 
 ################################################################################
