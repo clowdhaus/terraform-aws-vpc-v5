@@ -53,28 +53,12 @@ resource "aws_default_network_acl" "this" {
 
   default_network_acl_id = try(aws_vpc.this[0].default_network_acl_id, null)
 
-  # The value of subnet_ids should be any subnet IDs that are not set as subnet_ids
-  #   for any of the non-default network ACLs
-  # !!! TODO - this will need to be updated
+  # # The value of subnet_ids should be any subnet IDs that are not set as subnet_ids
+  # #   for any of the non-default network ACLs
+  # # !!! TODO - this will need to be updated
   # subnet_ids = setsubtract(
-  #   compact(flatten([
-  #     aws_subnet.public.*.id,
-  #     aws_subnet.private.*.id,
-  #     aws_subnet.intra.*.id,
-  #     aws_subnet.database.*.id,
-  #     aws_subnet.redshift.*.id,
-  #     aws_subnet.elasticache.*.id,
-  #     aws_subnet.outpost.*.id,
-  #   ])),
-  #   compact(flatten([
-  #     aws_network_acl.public.*.subnet_ids,
-  #     aws_network_acl.private.*.subnet_ids,
-  #     aws_network_acl.intra.*.subnet_ids,
-  #     aws_network_acl.database.*.subnet_ids,
-  #     aws_network_acl.redshift.*.subnet_ids,
-  #     aws_network_acl.elasticache.*.subnet_ids,
-  #     aws_network_acl.outpost.*.subnet_ids,
-  #   ]))
+  #   aws_subnet.this.*.id,
+  #   aws_network_acl.this.*.subnet_ids,
   # )
 
   dynamic "ingress" {

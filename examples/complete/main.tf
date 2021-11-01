@@ -61,11 +61,18 @@ module "vpc" {
 
   manage_default_route_table = true
   route_tables = {
+    public  = {}
+    private = {}
+  }
+
+  create_igw = true
+  igw_routes = {
     public = {
-      route = []
+      route_table_key = "public"
     }
     private = {
-      route = []
+      route_table_key        = "private"
+      destination_cidr_block = "10.13.0.0/16"
     }
   }
 

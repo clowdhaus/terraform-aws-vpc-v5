@@ -70,7 +70,6 @@ resource "aws_route_table" "this" {
   for_each = var.create ? var.route_tables : {}
 
   vpc_id = local.vpc_id
-  route  = each.value.route
 
   dynamic "timeouts" {
     for_each = var.route_table_timeouts
@@ -93,6 +92,29 @@ resource "aws_route_table_association" "this" {
 
   subnet_id      = aws_subnet.this[each.key].id
   route_table_id = aws_route_table.this[each.value.route_table_key].id
+}
+
+resource "aws_route" "this" {
+  for_each = var.create ? var.routes : {}
+
+  route_table_id = aws_route_table.this[each.value.route_table_key].id
+
+  # One of the following destination arguments must be supplied:
+  destination_cidr_block      = lookup(each.value, "cidr_block", null)
+  destination_ipv6_cidr_block = lookup(each.value, "ipv6_cidr_block", null)
+  destination_prefix_list_id  = lookup(each.value, "destination_prefix_list_id", null)
+
+  # One of the following target arguments must be supplied:
+  carrier_gateway_id        = lookup(each.value, "carrier_gateway_id", null)
+  egress_only_gateway_id    = lookup(each.value, "egress_only_gateway_id", null)
+  gateway_id                = lookup(each.value, "gateway_id", null)
+  instance_id               = lookup(each.value, "instance_id", null)
+  nat_gateway_id            = lookup(each.value, "nat_gateway_id", null)
+  local_gateway_id          = lookup(each.value, "local_gateway_id", null)
+  network_interface_id      = lookup(each.value, "network_interface_id", null)
+  transit_gateway_id        = lookup(each.value, "transit_gateway_id", null)
+  vpc_endpoint_id           = lookup(each.value, "vpc_endpoint_id", null)
+  vpc_peering_connection_id = lookup(each.value, "vpc_peering_connection_id", null)
 }
 
 ################################################################################
@@ -127,4 +149,48 @@ resource "aws_subnet" "this" {
     var.tags,
     lookup(each.value, "tags", {})
   )
+}
+
+################################################################################
+# Internet Gateway
+################################################################################
+
+resource "aws_internet_gateway" "this" {
+  count = var.create && var.create_igw ? 1 : 0
+
+  vpc_id = local.vpc_id
+
+  tags = merge(
+    { "Name" = var.name },
+    var.tags,
+    var.igw_tags,
+  )
+}
+
+resource "aws_route" "internet_gateway" {
+  for_each = var.create && var.create_igw ? var.igw_routes : {}
+
+  route_table_id         = aws_route_table.this[each.value.route_table_key].id
+  destination_cidr_block = lookup(each.value, "destination_cidr_block", "0.0.0.0/0")
+  gateway_id             = aws_internet_gateway.this[0].id
+}
+
+resource "aws_egress_only_internet_gateway" "this" {
+  count = var.create && var.create_egress_only_igw ? 1 : 0
+
+  vpc_id = local.vpc_id
+
+  tags = merge(
+    { "Name" = var.name },
+    var.tags,
+    var.igw_tags,
+  )
+}
+
+resource "aws_route" "egress_only_internet_gateway" {
+  for_each = var.create && var.create_egress_only_igw ? var.egress_only_igw_routes : {}
+
+  route_table_id              = aws_route_table.this[each.value.route_table_key].id
+  destination_ipv6_cidr_block = lookup(each.value, "destination_ipv6_cidr_block", "::/0")
+  gateway_id                  = aws_egress_only_internet_gateway.this[0].id
 }
