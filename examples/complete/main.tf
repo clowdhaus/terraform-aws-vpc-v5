@@ -18,11 +18,17 @@ locals {
 ################################################################################
 
 locals {
-  azs                  = ["${local.region}a", "${local.region}b", "${local.region}c"]
-  public_subnet_cidrs  = [for sub in [11, 12, 13] : "${local.cidr_prefix}.${sub}.0/24"]
-  private_subnet_cidrs = [for sub in [8, 9, 10] : "${local.cidr_prefix}.${sub}.0/24"]
+  azs = ["${local.region}a", "${local.region}b", "${local.region}c"]
+  public_subnet_cidrs = concat(
+    [for sub in [11, 12, 13] : "${local.cidr_prefix}.${sub}.0/24"],
+    [for sub2 in [11, 12, 13] : "${local.cidr_prefix_2}.${sub2}.0/24"],
+  )
+  private_subnet_cidrs = concat(
+    [for sub in [8, 9, 10] : "${local.cidr_prefix}.${sub}.0/24"],
+    [for sub2 in [8, 9, 10] : "${local.cidr_prefix_2}.${sub2}.0/24"],
+  )
 
-  public_subnets = { for sub in range(3) :
+  public_subnets = { for sub in range(length(local.public_subnet_cidrs)) :
     "public-${sub}" => {
       route_table_key   = "public"
       availability_zone = element(local.azs, sub)
@@ -30,7 +36,7 @@ locals {
     }
   }
 
-  private_subnets = { for sub in range(3) :
+  private_subnets = { for sub in range(length(local.private_subnet_cidrs)) :
     "private-${sub}" => {
       route_table_key   = "private"
       availability_zone = element(local.azs, sub)

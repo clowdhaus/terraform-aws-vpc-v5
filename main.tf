@@ -1,3 +1,9 @@
+locals {
+  # Use `local.vpc_id` to give a hint to Terraform that subnets should be deleted before secondary CIDR blocks can be free!
+  vpc_id = try(aws_vpc_ipv4_cidr_block_association.this[0].vpc_id, aws_vpc.this[0].id, "")
+
+}
+
 ################################################################################
 # VPC
 ################################################################################
@@ -52,7 +58,7 @@ resource "aws_vpc_dhcp_options" "this" {
 resource "aws_vpc_dhcp_options_association" "this" {
   count = var.create && var.create_dhcp_options ? 1 : 0
 
-  vpc_id          = aws_vpc.this[0].id
+  vpc_id          = local.vpc_id
   dhcp_options_id = aws_vpc_dhcp_options.this[0].id
 }
 
@@ -63,7 +69,7 @@ resource "aws_vpc_dhcp_options_association" "this" {
 resource "aws_route_table" "this" {
   for_each = var.create ? var.route_tables : {}
 
-  vpc_id = aws_vpc.this[0].id
+  vpc_id = local.vpc_id
   route  = each.value.route
 
   dynamic "timeouts" {
@@ -96,7 +102,7 @@ resource "aws_route_table_association" "this" {
 resource "aws_subnet" "this" {
   for_each = var.create ? var.subnets : {}
 
-  vpc_id = aws_vpc.this[0].id
+  vpc_id = local.vpc_id
 
   availability_zone               = lookup(each.value, "availability_zone", null)
   availability_zone_id            = lookup(each.value, "availability_zone_id", null)
