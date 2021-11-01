@@ -30,22 +30,22 @@
 - [x] aws_default_vpc_dhcp_options
 - [ ] aws_ec2_managed_prefix_list
 - [ ] aws_ec2_managed_prefix_list_entry
-- [ ] aws_egress_only_internet_gateway
+- [x] aws_egress_only_internet_gateway
 - [ ] aws_flow_log
-- [ ] aws_internet_gateway
-- [ ] aws_main_route_table_association
+- [x] aws_internet_gateway
+- ❌ aws_main_route_table_association
 - [ ] aws_nat_gateway
-- [ ] aws_network_acl
-- [ ] aws_network_acl_rule
+- [x] aws_network_acl
+- [x] aws_network_acl_rule
 - [ ] aws_network_interface
 - [ ] aws_network_interface_attachment
 - [ ] aws_network_interface_sg_attachment
-- ❌ aws_route - routes managed under `aws_route_table`
+- [x] aws_route - routes managed under
 - [x] aws_route_table
-- [ ] aws_route_table_association
+- [x] aws_route_table_association
 - ❌ aws_security_group
 - ❌ aws_security_group_rule
-- [ ] aws_subnet
+- [x] aws_subnet
 - [x] aws_vpc
 - [x] aws_vpc_dhcp_options
 - [x] aws_vpc_dhcp_options_association
@@ -119,6 +119,8 @@ No modules.
 | [aws_default_vpc_dhcp_options.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_vpc_dhcp_options) | resource |
 | [aws_egress_only_internet_gateway.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/egress_only_internet_gateway) | resource |
 | [aws_internet_gateway.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway) | resource |
+| [aws_network_acl.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl) | resource |
+| [aws_network_acl_rule.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
 | [aws_route.egress_only_internet_gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
 | [aws_route.internet_gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
 | [aws_route.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
@@ -183,6 +185,8 @@ No modules.
 | <a name="input_manage_default_security_group"></a> [manage\_default\_security\_group](#input\_manage\_default\_security\_group) | Determines whether the default security group is adopted and managed by the module | `bool` | `true` | no |
 | <a name="input_manage_default_vpc"></a> [manage\_default\_vpc](#input\_manage\_default\_vpc) | Determines whether the default VPC is adopted and managed by the module | `bool` | `false` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name to be used on all the resources as identifier | `string` | `""` | no |
+| <a name="input_network_acl_rules"></a> [network\_acl\_rules](#input\_network\_acl\_rules) | Map of network ACL rules | `map(any)` | `{}` | no |
+| <a name="input_network_acls"></a> [network\_acls](#input\_network\_acls) | Map of network ACLs | `any` | `{}` | no |
 | <a name="input_route_table_timeouts"></a> [route\_table\_timeouts](#input\_route\_table\_timeouts) | Create, update, and delete timeout configurations for route tables | `map(string)` | `{}` | no |
 | <a name="input_route_tables"></a> [route\_tables](#input\_route\_tables) | Map of route table definitions | `map(any)` | `{}` | no |
 | <a name="input_routes"></a> [routes](#input\_routes) | Map of route definitions | `map(any)` | `{}` | no |
@@ -225,6 +229,8 @@ No modules.
 | <a name="output_ipv6_association_id"></a> [ipv6\_association\_id](#output\_ipv6\_association\_id) | The association ID for the IPv6 CIDR block |
 | <a name="output_ipv6_cidr_block"></a> [ipv6\_cidr\_block](#output\_ipv6\_cidr\_block) | The IPv6 CIDR block |
 | <a name="output_main_route_table_id"></a> [main\_route\_table\_id](#output\_main\_route\_table\_id) | The ID of the main route table associated with this VPC. Note that you can change a VPC's main route table by using an `aws_main_route_table_association` |
+| <a name="output_network_acl_rules"></a> [network\_acl\_rules](#output\_network\_acl\_rules) | Map of network ACL rules created and their attributes |
+| <a name="output_network_acls"></a> [network\_acls](#output\_network\_acls) | Map of network ACLs created and their attributes |
 | <a name="output_route_tables"></a> [route\_tables](#output\_route\_tables) | Map of route tables created and their attributes |
 | <a name="output_routes"></a> [routes](#output\_routes) | Map of routes created and their attributes |
 | <a name="output_secondary_ipv4_cidr_block_assocations"></a> [secondary\_ipv4\_cidr\_block\_assocations](#output\_secondary\_ipv4\_cidr\_block\_assocations) | Map of secondary IPV4 CIDR block associations and their attributes |

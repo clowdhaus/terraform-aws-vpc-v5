@@ -194,6 +194,21 @@ variable "igw_tags" {
   default     = {}
 }
 
+################################################################################
+# Network ACL
+################################################################################
+
+variable "network_acls" {
+  description = "Map of network ACLs"
+  type        = any
+  default     = {}
+}
+
+variable "network_acl_rules" {
+  description = "Map of network ACL rules"
+  type        = map(any)
+  default     = {}
+}
 
 ################################################################################
 # Default Security Group for VPC created
