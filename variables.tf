@@ -123,6 +123,38 @@ variable "dhcp_options_tags" {
 }
 
 ################################################################################
+# Route Table
+################################################################################
+
+variable "route_tables" {
+  description = "Map of route table definitions"
+  type        = map(any)
+  default     = {}
+}
+
+variable "route_table_timeouts" {
+  description = "Create, update, and delete timeout configurations for route tables"
+  type        = map(string)
+  default     = {}
+}
+
+################################################################################
+# Subnet
+################################################################################
+
+variable "subnets" {
+  description = "Map of subnet definitions"
+  type        = map(any)
+  default     = {}
+}
+
+variable "subnet_timeouts" {
+  description = "Create and delete timeout configurations for subnets"
+  type        = map(string)
+  default     = {}
+}
+
+################################################################################
 # Default Security Group for VPC created
 ################################################################################
 

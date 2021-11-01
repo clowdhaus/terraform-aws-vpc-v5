@@ -3,8 +3,8 @@ provider "aws" {
 }
 
 locals {
-  name        = "default-example"
-  cidr_prefix = "10.0"
+  name        = "example-${replace(basename(path.cwd), "_", "-")}"
+  cidr_prefix = "10.99"
   region      = "eu-west-1"
   tags = {
     Owner       = "user"

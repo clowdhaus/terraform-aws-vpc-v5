@@ -55,3 +55,70 @@ resource "aws_vpc_dhcp_options_association" "this" {
   vpc_id          = aws_vpc.this[0].id
   dhcp_options_id = aws_vpc_dhcp_options.this[0].id
 }
+
+################################################################################
+# Route Table
+################################################################################
+
+resource "aws_route_table" "this" {
+  for_each = var.create ? var.route_tables : {}
+
+  vpc_id = aws_vpc.this[0].id
+  route  = each.value.route
+
+  dynamic "timeouts" {
+    for_each = var.route_table_timeouts
+    content {
+      create = lookup(each.value, "create", null)
+      update = lookup(each.value, "update", null)
+      delete = lookup(each.value, "delete", null)
+    }
+  }
+
+  tags = merge(
+    { "Name" = lookup(each.value, "name", "${var.name}-${each.key}") },
+    var.tags,
+    lookup(each.value, "tags", {})
+  )
+}
+
+resource "aws_route_table_association" "this" {
+  for_each = var.create ? var.subnets : {}
+
+  subnet_id      = aws_subnet.this[each.key].id
+  route_table_id = aws_route_table.this[each.value.route_table_key].id
+}
+
+################################################################################
+# Subnet
+################################################################################
+
+resource "aws_subnet" "this" {
+  for_each = var.create ? var.subnets : {}
+
+  vpc_id = aws_vpc.this[0].id
+
+  availability_zone               = lookup(each.value, "availability_zone", null)
+  availability_zone_id            = lookup(each.value, "availability_zone_id", null)
+  cidr_block                      = each.value.cidr_block
+  customer_owned_ipv4_pool        = lookup(each.value, "customer_owned_ipv4_pool", null)
+  ipv6_cidr_block                 = lookup(each.value, "ipv6_cidr_block", null)
+  map_customer_owned_ip_on_launch = lookup(each.value, "map_customer_owned_ip_on_launch", null)
+  map_public_ip_on_launch         = lookup(each.value, "map_public_ip_on_launch", null)
+  outpost_arn                     = lookup(each.value, "outpost_arn", null)
+  assign_ipv6_address_on_creation = lookup(each.value, "assign_ipv6_address_on_creation", null)
+
+  dynamic "timeouts" {
+    for_each = var.subnet_timeouts
+    content {
+      create = lookup(each.value, "create", null)
+      delete = lookup(each.value, "delete", null)
+    }
+  }
+
+  tags = merge(
+    { "Name" = lookup(each.value, "name", "${var.name}-${each.key}") },
+    var.tags,
+    lookup(each.value, "tags", {})
+  )
+}

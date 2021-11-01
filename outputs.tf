@@ -43,7 +43,7 @@ output "ipv6_cidr_block" {
 }
 
 output "secondary_ipv4_cidr_block_assocations" {
-  description = "The IPv6 CIDR block"
+  description = "Map of secondary IPV4 CIDR block associations and their attributes"
   value       = aws_vpc_ipv4_cidr_block_association.this
 }
 
@@ -59,6 +59,15 @@ output "dhcp_options_id" {
 output "dhcp_options_arn" {
   description = "The ARN of the DHCP options set"
   value       = try(aws_vpc_dhcp_options.this[0].arn, null)
+}
+
+################################################################################
+# Route Table
+################################################################################
+
+output "route_tables" {
+  description = "Map of route tables created and their attributes"
+  value       = aws_route_table.this
 }
 
 ################################################################################
