@@ -77,34 +77,34 @@ module "vpc" {
   }
 
   manage_default_network_acl = true
-  network_acls = {
-    private = {
-      subnet_keys = keys(local.private_subnets)
-    }
-    public = {
-      subnet_keys = keys(local.public_subnets)
-    }
-  }
-  network_acl_rules = {
-    allow_all_outbound = {
-      network_acl_key = "private"
-      rule_number     = 10
-      egress          = true
-      protocol        = "-1"
-      rule_action     = "allow"
-      cidr_block      = "0.0.0.0/0"
-    }
-    block_inbound_ssh = {
-      network_acl_key = "public"
-      rule_number     = 10
-      egress          = false
-      protocol        = "tcp"
-      rule_action     = "deny"
-      cidr_block      = "0.0.0.0/0"
-      from_port       = 22
-      to_port         = 22
-    }
-  }
+  # network_acls = {
+  #   private = {
+  #     subnet_keys = keys(local.private_subnets)
+  #   }
+  #   public = {
+  #     subnet_keys = keys(local.public_subnets)
+  #   }
+  # }
+  # network_acl_rules = {
+  #   allow_all_outbound = {
+  #     network_acl_key = "private"
+  #     rule_number     = 10
+  #     egress          = true
+  #     protocol        = "-1"
+  #     rule_action     = "allow"
+  #     cidr_block      = "0.0.0.0/0"
+  #   }
+  #   block_inbound_ssh = {
+  #     network_acl_key = "public"
+  #     rule_number     = 10
+  #     egress          = false
+  #     protocol        = "tcp"
+  #     rule_action     = "deny"
+  #     cidr_block      = "0.0.0.0/0"
+  #     from_port       = 22
+  #     to_port         = 22
+  #   }
+  # }
 
   tags = local.tags
 }
