@@ -4,11 +4,12 @@
 
 ## Design Goals
 
-- Terraform v1.x is min supported now that its GA
-- Terraform AWS provider v4.x is min supported version
-- Use of maps/`for_each` over `count` for stable/isolated changes
-- n-number of subnet groups with custom naming scheme
-  - Currently only `private`, `public`, `internal`, `database`, and `redshift` are permitted and using those names
+1. Use of maps/`for_each` over `count` for stable/isolated changes
+2. n-number of subnet groups with custom naming scheme
+  - Currently in `v3.x` only `private`, `public`, `internal`, `database`, and `redshift` are permitted and using those specific names. This has served well for quite some time but with each new feature release by AWS, this current structure is proving to be too rigid and not scalable. In `v4.x` we aim to provide a more flexible approach that will cover a broad suite of use cases - both current and future. Because a lot of the request for changes we currently see are centered around subnets as the core construct, it makes the most sense to split this out into its own module. Speaking out loud for a moment:
+    - This will contain various gateways - internet, egress only, etc. - allowing users to opt in to creating or not (public subnet => provision internet gateway, private subnet => provision NAT gateway or egress only gateway, etc.). - This will contain route table(s) and NACLs
+    - The number will be determined by users (how many subnets to be provisioned within a module definition)
+
 - Ability to stack CIDR ranges - AWS allows up to 5 CIDR ranges to be stacked on a VPC
 - Changing between 1 NAT gateway vs 1 NAT Gateway per availability zone should not cause traffic disruptions
 - Flexible route table association - users can select how they want to associate route tables
