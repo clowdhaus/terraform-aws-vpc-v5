@@ -18,57 +18,115 @@
 - Examples not only validate different configurations, but demonstrate different design patterns used for networking
 - What does migrating from v3.x to v4.x look like
 
-## Resources
+## Supported Resources
 
-### Supported
+### Defaults
 
-- [ ] aws_customer_gateway
 - [x] aws_default_network_acl
 - [x] aws_default_route_table
 - [x] aws_default_security_group
 - ❌ aws_default_subnet
 - [x] aws_default_vpc
 - [x] aws_default_vpc_dhcp_options
+
+### EC2 Managed Prefix
+
 - [ ] aws_ec2_managed_prefix_list
 - [ ] aws_ec2_managed_prefix_list_entry
-- [x] aws_egress_only_internet_gateway
-- [ ] aws_flow_log
-- [x] aws_internet_gateway
-- ❌ aws_main_route_table_association
-- [ ] aws_nat_gateway
-- [x] aws_network_acl
-- [x] aws_network_acl_rule
-- [ ] aws_network_interface
-- [ ] aws_network_interface_attachment
-- [ ] aws_network_interface_sg_attachment
-- [x] aws_route - routes managed under
-- [x] aws_route_table
-- [x] aws_route_table_association
-- ❌ aws_security_group
-- ❌ aws_security_group_rule
-- [x] aws_subnet
-- [x] aws_vpc
-- [x] aws_vpc_dhcp_options
-- [x] aws_vpc_dhcp_options_association
+
+### VPC Endpoint
+
 - [x] aws_vpc_endpoint
+- [ ] aws_vpc_endpoint_connection_accepter
 - [ ] aws_vpc_endpoint_connection_notification
 - [ ] aws_vpc_endpoint_route_table_association
 - [ ] aws_vpc_endpoint_service
 - [ ] aws_vpc_endpoint_service_allowed_principal
 - [ ] aws_vpc_endpoint_subnet_association
-- [x] aws_vpc_ipv4_cidr_block_association
+
+### IPAM
+
+- [ ] aws_vpc_ipam
+- [ ] aws_vpc_ipam_organization_admin_account
+- [ ] aws_vpc_ipam_pool
+- [ ] aws_vpc_ipam_pool_cidr
+- [ ] aws_vpc_ipam_pool_cidr_allocation
+- [ ] aws_vpc_ipam_preview_next_cidr
+- [ ] aws_vpc_ipam_scope
+
+### VPC Peering
+
 - [ ] aws_vpc_peering_connection
 - [ ] aws_vpc_peering_connection_accepter
 - [ ] aws_vpc_peering_connection_options
+
+### Subnet
+
+This is where most of the logic will captured; the design is centered around the subnet and its usage patterns
+
+- [ ] aws_customer_gateway
+- [ ] aws_ec2_subnet_cidr_reservation
+- [x] aws_egress_only_internet_gateway
+- [x] aws_internet_gateway
+- [ ] aws_nat_gateway
+- [x] aws_network_acl
+- [ ] aws_network_acl_association
+- [x] aws_network_acl_rule
+- [x] aws_route
+- [x] aws_route_table
+- [x] aws_route_table_association
+- [x] aws_subnet
+
+### Network Interface
+
+- [ ] aws_network_interface
+- [ ] aws_network_interface_attachment
+- [ ] aws_network_interface_sg_attachment
+
+### Network Firewall
+
+- [ ] aws_networkfirewall_firewall
+- [ ] aws_networkfirewall_firewall_policy
+- [ ] aws_networkfirewall_logging_configuration
+- [ ] aws_networkfirewall_resource_policy
+- [ ] aws_networkfirewall_rule_group
+
+### VPC (Core)
+
+- [ ] aws_flow_log
+- ❌ aws_main_route_table_association
+- [x] aws_vpc
+- [x] aws_vpc_dhcp_options
+- [x] aws_vpc_dhcp_options_association
+- [x] aws_vpc_ipv4_cidr_block_association
+- [ ] aws_vpc_ipv6_cidr_block_association
 - [ ] aws_route53_resolver_dnssec_config
 
-### Not Supported
+## Resources Not Supported
 
-- [ ] aws_vpn_connection
-- [ ] aws_vpn_connection_route
-- [ ] aws_vpn_gateway
-- [ ] aws_vpn_gateway_attachment
-- [ ] aws_vpn_gateway_route_propagation
+### VPN Gateway
+
+See https://github.com/terraform-aws-modules/terraform-aws-vpn-gateway
+
+- ❌ aws_vpn_connection
+- ❌ aws_vpn_connection_route
+- ❌ aws_vpn_gateway
+- ❌ aws_vpn_gateway_attachment
+- ❌ aws_vpn_gateway_route_propagation
+
+### Client VPN
+
+- ❌ aws_ec2_client_vpn_authorization_rule
+- ❌ aws_ec2_client_vpn_endpoint
+- ❌ aws_ec2_client_vpn_network_association
+- ❌ aws_ec2_client_vpn_route
+
+### Security Group
+
+See https://github.com/terraform-aws-modules/terraform-aws-security-group
+
+- ❌ aws_security_group
+- ❌ aws_security_group_rule
 
 ## Usage
 
