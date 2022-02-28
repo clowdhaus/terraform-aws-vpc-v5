@@ -1,10 +1,11 @@
 # AWS VPC Terraform module
 
-:warning: This is experimental only - please do not rely on this being stable at this time. The goal of this project is to explore changes to the upstream `terraform-aws-vpc` module and hopefully/eventually land those changes there as v4.0. For now, this is just for testing and open collaboration on what that next version might look like, and how users can migrate from v3.x to v4.x
+:warning: Please do not rely on this being stable. The goal of this project is to explore changes to the upstream `terraform-aws-vpc` module and hopefully/eventually land those changes there as v4.0. For now, this is just for exploring and open collaboration on what that next version might look like, and how users can migrate from v3.x to v4.x. Feel free to watch along if you are curious.
 
 ## Design Goals
 
 - Terraform v1.x is min supported now that its GA
+- Terraform AWS provider v4.x is min supported version
 - Use of maps/`for_each` over `count` for stable/isolated changes
 - n-number of subnet groups with custom naming scheme
   - Currently only `private`, `public`, `internal`, `database`, and `redshift` are permitted and using those names
@@ -95,14 +96,14 @@ Examples codified under the [`examples`](./examples) are intended to give users 
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 3.62 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 3.62 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 4.0 |
 
 ## Modules
 
