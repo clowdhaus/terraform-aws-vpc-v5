@@ -6,29 +6,30 @@
 
 1. Use of maps/`for_each` over `count` for stable/isolated changes
 2. n-number of subnet groups with custom naming scheme
-  - Currently in `v3.x` only `private`, `public`, `internal`, `database`, and `redshift` are permitted and using those specific names. This has served well for quite some time but with each new feature release by AWS, this current structure is proving to be too rigid and not scalable. In `v4.x` we aim to provide a more flexible approach that will cover a broad suite of use cases - both current and future. Because a lot of the request for changes we currently see are centered around subnets as the core construct, it makes the most sense to split this out into its own module. Speaking out loud for a moment:
-    - This will contain various gateways - internet, egress only, etc. - allowing users to opt in to creating or not (public subnet => provision internet gateway, private subnet => provision NAT gateway or egress only gateway, etc.). - This will contain route table(s) and NACLs
-    - The number will be determined by users (how many subnets to be provisioned within a module definition)
+  - Currently in `v3.x` only `private`, `public`, `internal`, `database`, and `redshift` are permitted and using those specific names. This has served well for quite some time but with each new feature release by AWS, this current structure is proving to be too rigid and not scalable. In `v4.x` we aim to provide a more flexible approach that will cover a broad suite of use cases - both current and future. We currently receive a large number of change requests centered around subnets as the core construct; it makes the most sense to split this out into its own module and build around this common construct. Roughly speaking, this sub-module will:
+    - Provide support for gateway creation and attachment - internet, egress only, NAT, etc. - allowing users to opt in to creating or not (public subnet => provision internet gateway, private subnet => provision NAT gateway or egress only gateway, etc.).
+    - Contain route table(s) and NACL(s)
+    - A module instantiation will create a "subnet group" - that is, a collection of subnets for some purpose
+
+3. Tags, tags, tags, tags
+  - https://github.com/terraform-aws-modules/terraform-aws-vpc/issues/259
 
 - Ability to stack CIDR ranges - AWS allows up to 5 CIDR ranges to be stacked on a VPC
 - Changing between 1 NAT gateway vs 1 NAT Gateway per availability zone should not cause traffic disruptions
 - Flexible route table association - users can select how they want to associate route tables
 - Support for AWS Network Firewall
-- Support for AWS Route53 Resolver/DNSSEC (yes, no? - TBD)
-- Tags - no idea yet
 - Examples not only validate different configurations, but demonstrate different design patterns used for networking
-- What does migrating from v3.x to v4.x look like
 
 ## Supported Resources
 
 ### Defaults
 
-- [x] aws_default_network_acl
-- [x] aws_default_route_table
-- [x] aws_default_security_group
+- ✅ aws_default_network_acl
+- ✅ aws_default_route_table
+- ✅ aws_default_security_group
 - ❌ aws_default_subnet
-- [x] aws_default_vpc
-- [x] aws_default_vpc_dhcp_options
+- ✅ aws_default_vpc
+- ✅ aws_default_vpc_dhcp_options
 
 ### EC2 Managed Prefix
 
@@ -37,13 +38,14 @@
 
 ### VPC Endpoint
 
-- [x] aws_vpc_endpoint
+- ✅ aws_vpc_endpoint
 - [ ] aws_vpc_endpoint_connection_accepter
 - [ ] aws_vpc_endpoint_connection_notification
 - [ ] aws_vpc_endpoint_route_table_association
 - [ ] aws_vpc_endpoint_service
 - [ ] aws_vpc_endpoint_service_allowed_principal
 - [ ] aws_vpc_endpoint_subnet_association
+- [ ] aws_vpc_endpoint_policy
 
 ### IPAM
 
@@ -67,16 +69,19 @@ This is where most of the logic will captured; the design is centered around the
 
 - [ ] aws_customer_gateway
 - [ ] aws_ec2_subnet_cidr_reservation
-- [x] aws_egress_only_internet_gateway
-- [x] aws_internet_gateway
+- ✅ aws_egress_only_internet_gateway
+- ✅ aws_internet_gateway
+- [ ] aws_internet_gateway_attachment
 - [ ] aws_nat_gateway
-- [x] aws_network_acl
+- ✅ aws_network_acl
 - [ ] aws_network_acl_association
-- [x] aws_network_acl_rule
-- [x] aws_route
-- [x] aws_route_table
-- [x] aws_route_table_association
-- [x] aws_subnet
+- ✅ aws_network_acl_rule
+- ✅ aws_route
+- ✅ aws_route_table
+- ✅ aws_route_table_association
+- ✅ aws_subnet
+- [ ] aws_ram_resource_association -> RAM
+
 
 ### Network Interface
 
@@ -96,18 +101,29 @@ This is where most of the logic will captured; the design is centered around the
 
 - [ ] aws_flow_log
 - ❌ aws_main_route_table_association
-- [x] aws_vpc
-- [x] aws_vpc_dhcp_options
-- [x] aws_vpc_dhcp_options_association
-- [x] aws_vpc_ipv4_cidr_block_association
+- ✅ aws_vpc
+- ✅ aws_vpc_dhcp_options
+- ✅ aws_vpc_dhcp_options_association
+- ✅ aws_vpc_ipv4_cidr_block_association
 - [ ] aws_vpc_ipv6_cidr_block_association
-- [ ] aws_route53_resolver_dnssec_config
+- [?] aws_route53_resolver_dnssec_config -> https://github.com/terraform-aws-modules/terraform-aws-vpc/issues/559
+- [?] aws_route53_resolver_firewall_config
+- [?] aws_route53_resolver_rule_association
+- [ ] aws_ram_resource_share -> RAM ties in with aws_ram_resource_association from `subnet`
 
 ## Resources Not Supported
+
+### Resource Access Manager (RAM)
+
+In resource sharing for VPCs, we're really sharing subnets. `aws_ram_resource_association` is provided in the `subnet` module which allows the respective subnet to be shared or not, while `aws_ram_resource_share` in the root module is the collection of resource associations. It is up to users to create and manage `aws_ram_principal_association` and `aws_ram_resource_share_accepter` separately, externally.
+
+- ❌ aws_ram_principal_association
+- ❌ aws_ram_resource_share_accepter
 
 ### VPN Gateway
 
 See https://github.com/terraform-aws-modules/terraform-aws-vpn-gateway
+Note below on Client VPN
 
 - ❌ aws_vpn_connection
 - ❌ aws_vpn_connection_route
@@ -116,6 +132,10 @@ See https://github.com/terraform-aws-modules/terraform-aws-vpn-gateway
 - ❌ aws_vpn_gateway_route_propagation
 
 ### Client VPN
+
+TODO - change [terraform-aws-vpn-gateway](https://github.com/terraform-aws-modules/terraform-aws-vpn-gateway) into `terraform-aws-vpn` with two sub-modules:
+1. `client`
+2. `gateway`
 
 - ❌ aws_ec2_client_vpn_authorization_rule
 - ❌ aws_ec2_client_vpn_endpoint
@@ -128,6 +148,38 @@ See https://github.com/terraform-aws-modules/terraform-aws-security-group
 
 - ❌ aws_security_group
 - ❌ aws_security_group_rule
+
+### Route53 Resolver
+
+TODO - separate, external module
+
+- [?] aws_route53_resolver_endpoint
+- ❌ aws_route53_resolver_firewall_domain_list
+- ❌ aws_route53_resolver_firewall_rule
+- ❌ aws_route53_resolver_firewall_rule_group
+- ❌ aws_route53_resolver_firewall_rule_group_associatio
+- ❌ aws_route53_resolver_query_log_config
+- ❌ aws_route53_resolver_query_log_config_association
+- ❌ aws_route53_resolver_rule
+
+### Transit Gateway
+
+See https://github.com/terraform-aws-modules/terraform-aws-transit-gateway
+
+- ❌ aws_ec2_transit_gateway
+- ❌ aws_ec2_transit_gateway_peering_attachment
+- ❌ aws_ec2_transit_gateway_peering_attachment_accepter
+- ❌ aws_ec2_transit_gateway_prefix_list_reference
+- ❌ aws_ec2_transit_gateway_route
+- ❌ aws_ec2_transit_gateway_route_table
+- ❌ aws_ec2_transit_gateway_route_table_association
+- ❌ aws_ec2_transit_gateway_route_table_propagation
+- ❌ aws_ec2_transit_gateway_vpc_attachment
+- ❌ aws_ec2_transit_gateway_vpc_attachment_accepter
+- ❌ aws_ec2_transit_gateway_multicast_domain
+- ❌ aws_ec2_transit_gateway_multicast_domain_association
+- ❌ aws_ec2_transit_gateway_multicast_group_member
+- ❌ aws_ec2_transit_gateway_multicast_group_source
 
 ## Usage
 
