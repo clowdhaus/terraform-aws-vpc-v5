@@ -20,11 +20,10 @@ variable "tags" {
 # VPC
 ################################################################################
 
-# VPC
 variable "cidr_block" {
   description = "The CIDR block for the VPC. Default value is a valid CIDR, but not acceptable by AWS and should be overridden"
   type        = string
-  default     = "0.0.0.0/0"
+  default     = "10.0.0.0/16"
 }
 
 variable "instance_tenancy" {
@@ -118,78 +117,6 @@ variable "dhcp_options_netbios_node_type" {
 
 variable "dhcp_options_tags" {
   description = "Additional tags for the DHCP option set"
-  type        = map(string)
-  default     = {}
-}
-
-################################################################################
-# Route Table
-################################################################################
-
-variable "route_tables" {
-  description = "Map of route table definitions"
-  type        = map(any)
-  default     = {}
-}
-
-variable "route_table_timeouts" {
-  description = "Create, update, and delete timeout configurations for route tables"
-  type        = map(string)
-  default     = {}
-}
-
-variable "routes" {
-  description = "Map of route definitions"
-  type        = map(any)
-  default     = {}
-}
-
-################################################################################
-# Subnet
-################################################################################
-
-variable "subnets" {
-  description = "Map of subnet definitions"
-  type        = map(any)
-  default     = {}
-}
-
-variable "subnet_timeouts" {
-  description = "Create and delete timeout configurations for subnets"
-  type        = map(string)
-  default     = {}
-}
-
-################################################################################
-# Internet Gateway
-################################################################################
-
-variable "create_igw" {
-  description = "Controls if an internet gateway set is created"
-  type        = bool
-  default     = false
-}
-
-variable "igw_routes" {
-  description = "Map of routes for the internet gateway"
-  type        = map(map(string))
-  default     = {}
-}
-
-variable "create_egress_only_igw" {
-  description = "Controls if an egress only internet gateway set is created"
-  type        = bool
-  default     = false
-}
-
-variable "egress_only_igw_routes" {
-  description = "Map of routes for the egress only internet gateway"
-  type        = map(map(string))
-  default     = {}
-}
-
-variable "igw_tags" {
-  description = "Additional tags for the internet gateway/egress only internet gateway"
   type        = map(string)
   default     = {}
 }

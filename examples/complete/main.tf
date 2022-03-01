@@ -54,26 +54,26 @@ module "vpc" {
 
   manage_default_security_group = true
 
-  subnets = merge(
-    local.public_subnets,
-    local.private_subnets,
-  )
+  # subnets = merge(
+  #   local.public_subnets,
+  #   local.private_subnets,
+  # )
 
-  manage_default_route_table = true
-  route_tables = {
-    public  = {}
-    private = {}
-  }
+  # manage_default_route_table = true
+  # route_tables = {
+  #   public  = {}
+  #   private = {}
+  # }
 
-  create_igw = true
-  igw_routes = {
-    public = {
-      route_table_key = "public"
-    }
-    private = {
-      route_table_key        = "private"
-      destination_cidr_block = "10.13.0.0/16"
-    }
+  # create_igw = true
+  # igw_routes = {
+  #   public = {
+  #     route_table_key = "public"
+  #   }
+  #   private = {
+  #     route_table_key        = "private"
+  #     destination_cidr_block = "10.13.0.0/16"
+  #   }
   }
 
   manage_default_network_acl = true

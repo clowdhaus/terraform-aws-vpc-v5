@@ -1,6 +1,6 @@
-# AWS VPC Endpoints Terraform sub-module
+# AWS VPC Endpoints Terraform Module
 
-Terraform sub-module which creates VPC endpoint resources on AWS.
+Terraform module which creates VPC endpoint resources on AWS.
 
 ## Usage
 
