@@ -167,19 +167,13 @@ variable "dhcp_options_tags" {
 }
 
 ################################################################################
-# Default Security Group for VPC created
+# VPC Default Security Group
 ################################################################################
 
 variable "manage_default_security_group" {
   description = "Determines whether the default security group is adopted and managed by the module"
   type        = bool
   default     = true
-}
-
-variable "default_security_group_name" {
-  description = "Name to be used on the default security group"
-  type        = string
-  default     = ""
 }
 
 variable "default_security_group_ingress" {
@@ -201,19 +195,13 @@ variable "default_security_group_tags" {
 }
 
 ################################################################################
-# Default Network ACL for VPC created
+# VPC Default Network ACL
 ################################################################################
 
 variable "manage_default_network_acl" {
   description = "Determines whether the default network ACL is adopted and managed by the module"
   type        = bool
-  default     = false
-}
-
-variable "default_network_acl_name" {
-  description = "Name to be used on the default network ACL"
-  type        = string
-  default     = ""
+  default     = true
 }
 
 variable "default_network_acl_ingress" {
@@ -235,13 +223,13 @@ variable "default_network_acl_tags" {
 }
 
 ################################################################################
-# Default Route Table for VPC created
+# VPC Default Route Table
 ################################################################################
 
 variable "manage_default_route_table" {
   description = "Determines whether the default route table is adopted and managed by the module"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "default_route_table_propagating_vgws" {
@@ -262,11 +250,6 @@ variable "default_route_table_timeouts" {
   default     = {}
 }
 
-variable "default_route_table_name" {
-  description = "Name to be used on the default route table"
-  type        = string
-  default     = ""
-}
 variable "default_route_table_tags" {
   description = "Additional tags for the default route table"
   type        = map(string)
@@ -274,7 +257,7 @@ variable "default_route_table_tags" {
 }
 
 ################################################################################
-# Default DHCP Options
+# Account Default DHCP Options
 ################################################################################
 
 variable "manage_default_dhcp_options" {
@@ -299,12 +282,6 @@ variable "default_dhcp_options_owner_id" {
   description = "The ID of the AWS account that owns the DHCP options set"
   type        = string
   default     = null
-}
-
-variable "default_dhcp_options_name" {
-  description = "Name to be used on the default DHCP options"
-  type        = string
-  default     = ""
 }
 
 variable "default_dhcp_options_tags" {
@@ -339,12 +316,6 @@ variable "default_vpc_enable_classiclink" {
   description = "A boolean flag to enable/disable ClassicLink for the VPC. Only valid in regions and accounts that support EC2 Classic"
   type        = bool
   default     = null
-}
-
-variable "default_vpc_name" {
-  description = "Name to be used on the Default VPC"
-  type        = string
-  default     = ""
 }
 
 variable "default_vpc_tags" {

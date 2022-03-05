@@ -39,7 +39,7 @@ resource "aws_default_security_group" "this" {
 
   tags = merge(
     var.tags,
-    { "Name" = coalesce(var.default_security_group_name, "${var.name}-default") },
+    { Name = "${var.name}-default" },
     var.default_security_group_tags,
   )
 }
@@ -92,7 +92,7 @@ resource "aws_default_network_acl" "this" {
 
   tags = merge(
     var.tags,
-    { "Name" = coalesce(var.default_network_acl_name, "${var.name}-default") },
+    { Name = "${var.name}-default" },
     var.default_network_acl_tags,
   )
 }
@@ -137,7 +137,7 @@ resource "aws_default_route_table" "this" {
 
   tags = merge(
     var.tags,
-    { "Name" = coalesce(var.default_route_table_name, "${var.name}-default") },
+    { Name = "${var.name}-default" },
     var.default_route_table_tags,
   )
 }
@@ -155,7 +155,7 @@ resource "aws_default_vpc_dhcp_options" "this" {
 
   tags = merge(
     var.tags,
-    { "Name" = coalesce(var.default_dhcp_options_name, "${var.name}-default") },
+    { Name = "${var.name}-default" },
     var.default_dhcp_options_tags,
   )
 }
@@ -173,7 +173,7 @@ resource "aws_default_vpc" "this" {
 
   tags = merge(
     var.tags,
-    { "Name" = coalesce(var.default_vpc_name, "default") },
+    { Name = "default" },
     var.default_vpc_tags,
   )
 }

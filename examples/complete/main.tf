@@ -29,8 +29,8 @@ module "vpc" {
     "10.98.0.0/16" = {
       cidr_block = "10.98.0.0/16"
       timeouts = {
-        create = "10m"
-        delete = "10m"
+        create = "12m"
+        delete = "12m"
       }
     }
   }
@@ -44,8 +44,6 @@ module "vpc" {
   dhcp_options_tags                = { dhcp_options_tags = true }
 
   # Defaults
-  manage_default_security_group = false
-  manage_default_network_acl    = false
 
   tags = local.tags
 }
