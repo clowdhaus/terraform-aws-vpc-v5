@@ -2,19 +2,14 @@
 # VPC
 ################################################################################
 
-output "id" {
-  description = "The ID of the VPC"
-  value       = module.vpc.id
-}
-
 output "arn" {
   description = "Amazon Resource Name (ARN) of VPC"
   value       = module.vpc.arn
 }
 
-output "cidr_block" {
-  description = "The CIDR block of the VPC"
-  value       = module.vpc.cidr_block
+output "id" {
+  description = "The ID of the VPC"
+  value       = module.vpc.id
 }
 
 output "main_route_table_id" {
@@ -22,33 +17,61 @@ output "main_route_table_id" {
   value       = module.vpc.main_route_table_id
 }
 
-output "default_network_acl_id" {
-  description = "The ID of the network ACL created by default on VPC creation"
-  value       = module.vpc.default_network_acl_id
-}
-
-output "default_route_table_id" {
-  description = "The ID of the route table created by default on VPC creation"
-  value       = module.vpc.default_route_table_id
-}
-
 output "ipv6_association_id" {
   description = "The association ID for the IPv6 CIDR block"
   value       = module.vpc.ipv6_association_id
 }
 
+output "ipv6_cidr_block_network_border_group" {
+  description = "The Network Border Group Zone name"
+  value       = module.vpc.ipv6_cidr_block_network_border_group
+}
+
+output "cidr_block" {
+  description = "The IPv4 CIDR block of the VPC"
+  value       = module.vpc.cidr_block
+}
+
 output "ipv6_cidr_block" {
-  description = "The IPv6 CIDR block"
+  description = "The IPv6 CIDR block of the VPC"
   value       = module.vpc.ipv6_cidr_block
 }
 
-output "secondary_ipv4_cidr_block_assocations" {
-  description = "The IPv6 CIDR block"
-  value       = module.vpc.secondary_ipv4_cidr_block_assocations
+################################################################################
+# VPC CIDR Block Association(s)
+################################################################################
+
+output "ipv4_cidr_block_associations" {
+  description = "Map of IPv4 CIDR block associations and their attributes"
+  value       = module.vpc.ipv4_cidr_block_associations
+}
+
+output "ipv6_cidr_block_associations" {
+  description = "Map of IPv6 CIDR block associations and their attributes"
+  value       = module.vpc.ipv6_cidr_block_associations
 }
 
 ################################################################################
-# Default Security Group
+# DHCP Options Set
+################################################################################
+
+output "dhcp_options_id" {
+  description = "The ID of the DHCP options set"
+  value       = module.vpc.dhcp_options_id
+}
+
+output "dhcp_options_arn" {
+  description = "The ARN of the DHCP options set"
+  value       = module.vpc.dhcp_options_arn
+}
+
+output "dhcp_options_association_id" {
+  description = "The ID of the DHCP Options set association"
+  value       = module.vpc.dhcp_options_association_id
+}
+
+################################################################################
+# VPC Default Security Group
 ################################################################################
 
 output "default_security_group_arn" {
@@ -59,4 +82,100 @@ output "default_security_group_arn" {
 output "default_security_group_id" {
   description = "The ID of the security group created by default on VPC creation"
   value       = module.vpc.default_security_group_id
+}
+
+################################################################################
+# VPC Default Network ACL
+################################################################################
+
+output "default_network_acl_arn" {
+  description = "ARN of the Default Network ACL"
+  value       = module.vpc.default_network_acl_arn
+}
+
+output "default_network_acl_id" {
+  description = "ID of the Default Network ACL"
+  value       = module.vpc.default_network_acl_id
+}
+
+################################################################################
+# VPC Default Route Table
+################################################################################
+
+output "default_route_table_arn" {
+  description = "ARN of the default route table"
+  value       = module.vpc.default_route_table_arn
+}
+
+output "default_route_table_id" {
+  description = "ID of the default route table"
+  value       = module.vpc.default_route_table_id
+}
+
+################################################################################
+# Account Default DHCP Options
+################################################################################
+
+output "default_dhcp_options_id" {
+  description = "The ID of the default DHCP options set"
+  value       = module.vpc.default_dhcp_options_id
+}
+
+output "default_dhcp_options_arn" {
+  description = "The ARN of the default DHCP options set"
+  value       = module.vpc.default_dhcp_options_arn
+}
+
+################################################################################
+# Account Default VPC
+################################################################################
+
+output "default_vpc_id" {
+  description = "The ID of the Default VPC"
+  value       = module.vpc.default_vpc_id
+}
+
+output "default_vpc_arn" {
+  description = "The ARN of the Default VPC"
+  value       = module.vpc.default_vpc_arn
+}
+
+output "default_vpc_cidr_block" {
+  description = "The CIDR block of the Default VPC"
+  value       = module.vpc.default_vpc_cidr_block
+}
+
+output "default_vpc_default_security_group_id" {
+  description = "The ID of the security group created by default on Default VPC creation"
+  value       = module.vpc.default_vpc_default_security_group_id
+}
+
+output "default_vpc_default_network_acl_id" {
+  description = "The ID of the default network ACL of the Default VPC"
+  value       = module.vpc.default_vpc_default_network_acl_id
+}
+
+output "default_vpc_default_route_table_id" {
+  description = "The ID of the default route table of the Default VPC"
+  value       = module.vpc.default_vpc_default_route_table_id
+}
+
+output "default_vpc_instance_tenancy" {
+  description = "Tenancy of instances spin up within Default VPC"
+  value       = module.vpc.default_vpc_instance_tenancy
+}
+
+output "default_vpc_enable_dns_support" {
+  description = "Whether or not the Default VPC has DNS support"
+  value       = module.vpc.default_vpc_enable_dns_support
+}
+
+output "default_vpc_enable_dns_hostnames" {
+  description = "Whether or not the Default VPC has DNS hostname support"
+  value       = module.vpc.default_vpc_enable_dns_hostnames
+}
+
+output "default_vpc_main_route_table_id" {
+  description = "The ID of the main route table associated with the Default VPC"
+  value       = module.vpc.default_vpc_main_route_table_id
 }

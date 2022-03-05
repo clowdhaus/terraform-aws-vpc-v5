@@ -3,32 +3,32 @@
 ################################################################################
 
 resource "aws_subnet" "this" {
-  for_each = var.create ? var.subnets : {}
+  for_each = { for k, v in var.subnets : k => v if var.create }
 
-  vpc_id = local.vpc_id
+  vpc_id = var.vpc_id
 
-  availability_zone               = lookup(each.value, "availability_zone", null)
-  availability_zone_id            = lookup(each.value, "availability_zone_id", null)
+  availability_zone               = try(each.value.availability_zone, null)
+  availability_zone_id            = try(each.value.availability_zone_id, null)
   cidr_block                      = each.value.cidr_block
-  customer_owned_ipv4_pool        = lookup(each.value, "customer_owned_ipv4_pool", null)
-  ipv6_cidr_block                 = lookup(each.value, "ipv6_cidr_block", null)
-  map_customer_owned_ip_on_launch = lookup(each.value, "map_customer_owned_ip_on_launch", null)
-  map_public_ip_on_launch         = lookup(each.value, "map_public_ip_on_launch", null)
-  outpost_arn                     = lookup(each.value, "outpost_arn", null)
-  assign_ipv6_address_on_creation = lookup(each.value, "assign_ipv6_address_on_creation", null)
+  customer_owned_ipv4_pool        = try(each.value.customer_owned_ipv4_pool, null)
+  ipv6_cidr_block                 = try(each.value.ipv6_cidr_block, null)
+  map_customer_owned_ip_on_launch = try(each.value.map_customer_owned_ip_on_launch, null)
+  map_public_ip_on_launch         = try(each.value.map_public_ip_on_launch, null)
+  outpost_arn                     = try(each.value.outpost_arn, null)
+  assign_ipv6_address_on_creation = try(each.value.assign_ipv6_address_on_creation, null)
 
   dynamic "timeouts" {
     for_each = var.subnet_timeouts
     content {
-      create = lookup(each.value, "create", null)
-      delete = lookup(each.value, "delete", null)
+      create = try(each.value.create, null)
+      delete = try(each.value.delete, null)
     }
   }
 
   tags = merge(
-    { "Name" = lookup(each.value, "name", "${var.name}-${each.key}") },
     var.tags,
-    lookup(each.value, "tags", {})
+    { "Name" = try(each.value.name, "${var.name}-${each.key}") },
+    try(each.value.tags, {})
   )
 }
 
@@ -37,54 +37,54 @@ resource "aws_subnet" "this" {
 ################################################################################
 
 resource "aws_route_table" "this" {
-  for_each = var.create ? var.route_tables : {}
+  for_each = { for k, v in var.route_tables : k => v if var.create }
 
-  vpc_id = local.vpc_id
+  vpc_id = var.vpc_id
 
   dynamic "timeouts" {
     for_each = var.route_table_timeouts
     content {
-      create = lookup(each.value, "create", null)
-      update = lookup(each.value, "update", null)
-      delete = lookup(each.value, "delete", null)
+      create = try(each.value.create, null)
+      update = try(each.value.update, null)
+      delete = try(each.value.delete, null)
     }
   }
 
   tags = merge(
-    { "Name" = lookup(each.value, "name", "${var.name}-${each.key}") },
     var.tags,
-    lookup(each.value, "tags", {})
+    { "Name" = try(each.value.name, "${var.name}-${each.key}") },
+    try(each.value.tags, {})
   )
 }
 
 resource "aws_route_table_association" "this" {
-  for_each = var.create ? var.subnets : {}
+  for_each = { for k, v in var.subnets : k => v if var.create }
 
   subnet_id      = aws_subnet.this[each.key].id
   route_table_id = aws_route_table.this[each.value.route_table_key].id
 }
 
 resource "aws_route" "this" {
-  for_each = var.create ? var.routes : {}
+  for_each = { for k, v in var.routes : k => v if var.create }
 
   route_table_id = aws_route_table.this[each.value.route_table_key].id
 
   # One of the following destination arguments must be supplied:
-  destination_cidr_block      = lookup(each.value, "cidr_block", null)
-  destination_ipv6_cidr_block = lookup(each.value, "ipv6_cidr_block", null)
-  destination_prefix_list_id  = lookup(each.value, "destination_prefix_list_id", null)
+  destination_cidr_block      = try(each.value.cidr_block, null)
+  destination_ipv6_cidr_block = try(each.value.ipv6_cidr_block, null)
+  destination_prefix_list_id  = try(each.value.destination_prefix_list_id, null)
 
   # One of the following target arguments must be supplied:
-  carrier_gateway_id        = lookup(each.value, "carrier_gateway_id", null)
-  egress_only_gateway_id    = lookup(each.value, "egress_only_gateway_id", null)
-  gateway_id                = lookup(each.value, "gateway_id", null)
-  instance_id               = lookup(each.value, "instance_id", null)
-  nat_gateway_id            = lookup(each.value, "nat_gateway_id", null)
-  local_gateway_id          = lookup(each.value, "local_gateway_id", null)
-  network_interface_id      = lookup(each.value, "network_interface_id", null)
-  transit_gateway_id        = lookup(each.value, "transit_gateway_id", null)
-  vpc_endpoint_id           = lookup(each.value, "vpc_endpoint_id", null)
-  vpc_peering_connection_id = lookup(each.value, "vpc_peering_connection_id", null)
+  carrier_gateway_id        = try(each.value.carrier_gateway_id, null)
+  egress_only_gateway_id    = try(each.value.egress_only_gateway_id, null)
+  gateway_id                = try(each.value.gateway_id, null)
+  instance_id               = try(each.value.instance_id, null)
+  nat_gateway_id            = try(each.value.nat_gateway_id, null)
+  local_gateway_id          = try(each.value.local_gateway_id, null)
+  network_interface_id      = try(each.value.network_interface_id, null)
+  transit_gateway_id        = try(each.value.transit_gateway_id, null)
+  vpc_endpoint_id           = try(each.value.vpc_endpoint_id, null)
+  vpc_peering_connection_id = try(each.value.vpc_peering_connection_id, null)
 }
 
 ################################################################################
@@ -92,37 +92,33 @@ resource "aws_route" "this" {
 ################################################################################
 
 resource "aws_network_acl" "this" {
-  for_each = var.create ? var.network_acls : {}
+  for_each = { for k, v in var.network_acls : k => v if var.create }
 
   vpc_id     = var.vpc_id
-  subnet_ids = lookup(each.value, "subnet_ids", null)
+  subnet_ids = try(each.value.subnet_ids, null)
 
   tags = merge(
-    { "Name" = lookup(each.value, "name", "${var.name}-${each.key}") },
     var.tags,
-    lookup(each.value, "tags", {})
+    { "Name" = try(each.value.name, "${var.name}-${each.key}") },
+    try(each.value.tags, {})
   )
 }
 
-################################################################################
-# Network ACL Rule(s)
-################################################################################
-
 resource "aws_network_acl_rule" "this" {
-  for_each = var.create ? var.network_acl_rules : {}
+  for_each = { for k, v in var.network_acl_rules : k => v if var.create }
 
   network_acl_id = aws_network_acl.this[each.value.network_acl_key].id
 
   rule_number     = each.value.rule_number
-  egress          = lookup(each.value, "egress", null)
+  egress          = try(each.value.egress, null)
   protocol        = each.value.protocol
   rule_action     = each.value.rule_action
-  cidr_block      = lookup(each.value, "cidr_block", null)
-  ipv6_cidr_block = lookup(each.value, "ipv6_cidr_block", null)
-  from_port       = lookup(each.value, "from_port", null)
-  to_port         = lookup(each.value, "to_port", null)
-  icmp_type       = lookup(each.value, "icmp_type", null)
-  icmp_code       = lookup(each.value, "icmp_code", null)
+  cidr_block      = try(each.value.cidr_block, null)
+  ipv6_cidr_block = try(each.value.ipv6_cidr_block, null)
+  from_port       = try(each.value.from_port, null)
+  to_port         = try(each.value.to_port, null)
+  icmp_type       = try(each.value.icmp_type, null)
+  icmp_code       = try(each.value.icmp_code, null)
 }
 
 ################################################################################
@@ -132,31 +128,31 @@ resource "aws_network_acl_rule" "this" {
 resource "aws_internet_gateway" "this" {
   count = var.create && var.create_igw ? 1 : 0
 
-  vpc_id = local.vpc_id
+  vpc_id = var.vpc_id
 
   tags = merge(
-    { "Name" = var.name },
     var.tags,
+    { "Name" = var.name },
     var.igw_tags,
   )
 }
 
 resource "aws_route" "internet_gateway" {
-  for_each = var.create && var.create_igw ? var.igw_routes : {}
+  for_each = { for k, v in var.igw_routes : k => v if var.create && var.create_igw }
 
   route_table_id         = aws_route_table.this[each.value.route_table_key].id
-  destination_cidr_block = lookup(each.value, "destination_cidr_block", "0.0.0.0/0")
+  destination_cidr_block = try(each.value.destination_cidr_block, "0.0.0.0/0")
   gateway_id             = aws_internet_gateway.this[0].id
 }
 
 resource "aws_egress_only_internet_gateway" "this" {
   count = var.create && var.create_egress_only_igw ? 1 : 0
 
-  vpc_id = local.vpc_id
+  vpc_id = var.vpc_id
 
   tags = merge(
-    { "Name" = var.name },
     var.tags,
+    { "Name" = var.name },
     var.igw_tags,
   )
 }
@@ -165,6 +161,6 @@ resource "aws_route" "egress_only_internet_gateway" {
   for_each = var.create && var.create_egress_only_igw ? var.egress_only_igw_routes : {}
 
   route_table_id              = aws_route_table.this[each.value.route_table_key].id
-  destination_ipv6_cidr_block = lookup(each.value, "destination_ipv6_cidr_block", "::/0")
+  destination_ipv6_cidr_block = try(each.value.destination_ipv6_cidr_block, "::/0")
   gateway_id                  = aws_egress_only_internet_gateway.this[0].id
 }

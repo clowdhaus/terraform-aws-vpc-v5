@@ -16,6 +16,12 @@ variable "tags" {
   default     = {}
 }
 
+variable "vpc_id" {
+  description = "The ID of the VPC to create the resources in"
+  type        = string
+  default     = ""
+}
+
 ################################################################################
 # Subnet
 ################################################################################

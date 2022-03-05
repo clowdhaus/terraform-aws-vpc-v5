@@ -21,15 +21,57 @@ variable "tags" {
 ################################################################################
 
 variable "cidr_block" {
-  description = "The CIDR block for the VPC. Default value is a valid CIDR, but not acceptable by AWS and should be overridden"
+  description = "The IPv4 CIDR block for the VPC. CIDR can be explicitly set or it can be derived from IPAM using `ipv4_netmask_length`"
   type        = string
-  default     = "10.0.0.0/16"
+  default     = null
+}
+
+variable "ipv4_ipam_pool_id" {
+  description = "The ID of an IPv4 IPAM pool you want to use for allocating this VPC's CIDR"
+  type        = string
+  default     = null
+}
+
+variable "ipv4_netmask_length" {
+  description = "The netmask length of the IPv4 CIDR you want to allocate to this VPC. Requires specifying a `ipv4_ipam_pool_id`"
+  type        = number
+  default     = null
+}
+
+variable "ipv6_cidr_block" {
+  description = "IPv6 CIDR block to request from an IPAM Pool. Can be set explicitly or derived from IPAM using `ipv6_netmask_length`"
+  type        = string
+  default     = null
+}
+
+variable "ipv6_ipam_pool_id" {
+  description = "IPAM Pool ID for a IPv6 pool. Conflicts with `assign_generated_ipv6_cidr_block`"
+  type        = string
+  default     = null
+}
+
+variable "ipv6_netmask_length" {
+  description = "Netmask length to request from IPAM Pool. Conflicts with `ipv6_cidr_block`. This can be omitted if IPAM pool as a `allocation_default_netmask_length` set. Valid values: `56`"
+  type        = number
+  default     = null
+}
+
+variable "ipv6_cidr_block_network_border_group" {
+  description = "By default when an IPv6 CIDR is assigned to a VPC a default `ipv6_cidr_block_network_border_group` will be set to the region of the VPC"
+  type        = string
+  default     = null
+}
+
+variable "assign_generated_ipv6_cidr_block" {
+  description = "Requests an Amazon-provided IPv6 CIDR block with a `/56` prefix length for the VPC. You cannot specify the range of IP addresses, or the size of the CIDR block. Default is `false`. Conflicts with `ipv6_ipam_pool_id`"
+  type        = bool
+  default     = null
 }
 
 variable "instance_tenancy" {
   description = "A tenancy option for instances launched into the VPC. Default is `default`, which makes your instances shared on the host"
   type        = string
-  default     = "default"
+  default     = null
 }
 
 variable "enable_dns_support" {
@@ -56,23 +98,26 @@ variable "enable_classiclink_dns_support" {
   default     = null
 }
 
-variable "assign_generated_ipv6_cidr_block" {
-  description = "Requests an Amazon-provided IPv6 CIDR block with a /56 prefix length for the VPC. You cannot specify the range of IP addresses, or the size of the CIDR block. Default is `false`"
-  type        = bool
-  default     = null
-}
-
 variable "vpc_tags" {
   description = "Additional tags for the VPC"
   type        = map(string)
   default     = {}
 }
 
-# Associate additional CIDR blocks
-variable "secondary_cidr_blocks" {
-  description = "List of secondary CIDR blocks to associate with the VPC to extend the IP Address pool"
-  type        = list(string)
-  default     = []
+################################################################################
+# VPC CIDR Block Association(s)
+################################################################################
+
+variable "ipv4_cidr_block_associations" {
+  description = "Map of additional IPv4 CIDR blocks to associate with the VPC to extend the IP address pool"
+  type        = any
+  default     = {}
+}
+
+variable "ipv6_cidr_block_associations" {
+  description = "Map of additional IPv6 CIDR blocks to associate with the VPC to extend the IP address pool"
+  type        = any
+  default     = {}
 }
 
 ################################################################################

@@ -10,36 +10,36 @@ resource "aws_default_security_group" "this" {
   dynamic "ingress" {
     for_each = var.default_security_group_ingress
     content {
-      self             = lookup(ingress.value, "self", null)
-      cidr_blocks      = compact(split(",", lookup(ingress.value, "cidr_blocks", "")))
-      ipv6_cidr_blocks = compact(split(",", lookup(ingress.value, "ipv6_cidr_blocks", "")))
-      prefix_list_ids  = compact(split(",", lookup(ingress.value, "prefix_list_ids", "")))
-      security_groups  = compact(split(",", lookup(ingress.value, "security_groups", "")))
-      description      = lookup(ingress.value, "description", null)
-      from_port        = lookup(ingress.value, "from_port", 0)
-      to_port          = lookup(ingress.value, "to_port", 0)
-      protocol         = lookup(ingress.value, "protocol", "-1")
+      self             = try(ingress.value.self, null)
+      cidr_blocks      = try(ingress.value.cidr_blocks, null)
+      ipv6_cidr_blocks = try(ingress.value.ipv6_cidr_blocks, null)
+      prefix_list_ids  = try(ingress.value.prefix_list_ids, null)
+      security_groups  = try(ingress.value.security_groups, null)
+      description      = try(ingress.value.description, null)
+      from_port        = try(ingress.value.from_port, null)
+      to_port          = try(ingress.value.to_port, null)
+      protocol         = try(ingress.value.protocol, null)
     }
   }
 
   dynamic "egress" {
     for_each = var.default_security_group_egress
     content {
-      self             = lookup(egress.value, "self", null)
-      cidr_blocks      = compact(split(",", lookup(egress.value, "cidr_blocks", "")))
-      ipv6_cidr_blocks = compact(split(",", lookup(egress.value, "ipv6_cidr_blocks", "")))
-      prefix_list_ids  = compact(split(",", lookup(egress.value, "prefix_list_ids", "")))
-      security_groups  = compact(split(",", lookup(egress.value, "security_groups", "")))
-      description      = lookup(egress.value, "description", null)
-      from_port        = lookup(egress.value, "from_port", 0)
-      to_port          = lookup(egress.value, "to_port", 0)
-      protocol         = lookup(egress.value, "protocol", "-1")
+      self             = try(egress.value.self, null)
+      cidr_blocks      = try(egress.value.cidr_blocks, null)
+      ipv6_cidr_blocks = try(egress.value.ipv6_cidr_blocks, null)
+      prefix_list_ids  = try(egress.value.prefix_list_ids, null)
+      security_groups  = try(egress.value.security_groups, null)
+      description      = try(egress.value.description, null)
+      from_port        = try(egress.value.from_port, null)
+      to_port          = try(egress.value.to_port, null)
+      protocol         = try(egress.value.protocol, null)
     }
   }
 
   tags = merge(
-    { "Name" = coalesce(var.default_security_group_name, "${var.name}-default") },
     var.tags,
+    { "Name" = coalesce(var.default_security_group_name, "${var.name}-default") },
     var.default_security_group_tags,
   )
 }
@@ -69,10 +69,10 @@ resource "aws_default_network_acl" "this" {
       protocol        = ingress.value.protocol
       rule_no         = ingress.value.rule_no
       to_port         = ingress.value.to_port
-      cidr_block      = lookup(ingress.value, "cidr_block", null)
-      icmp_code       = lookup(ingress.value, "icmp_code", null)
-      icmp_type       = lookup(ingress.value, "icmp_type", null)
-      ipv6_cidr_block = lookup(ingress.value, "ipv6_cidr_block", null)
+      cidr_block      = try(ingress.value.cidr_block, null)
+      icmp_code       = try(ingress.value.icmp_code, null)
+      icmp_type       = try(ingress.value.icmp_type, null)
+      ipv6_cidr_block = try(ingress.value.ipv6_cidr_block, null)
     }
   }
   dynamic "egress" {
@@ -83,16 +83,16 @@ resource "aws_default_network_acl" "this" {
       protocol        = egress.value.protocol
       rule_no         = egress.value.rule_no
       to_port         = egress.value.to_port
-      cidr_block      = lookup(egress.value, "cidr_block", null)
-      icmp_code       = lookup(egress.value, "icmp_code", null)
-      icmp_type       = lookup(egress.value, "icmp_type", null)
-      ipv6_cidr_block = lookup(egress.value, "ipv6_cidr_block", null)
+      cidr_block      = try(egress.value.cidr_block, null)
+      icmp_code       = try(egress.value.icmp_code, null)
+      icmp_type       = try(egress.value.icmp_type, null)
+      ipv6_cidr_block = try(egress.value.ipv6_cidr_block, null)
     }
   }
 
   tags = merge(
-    { "Name" = coalesce(var.default_network_acl_name, "${var.name}-default") },
     var.tags,
+    { "Name" = coalesce(var.default_network_acl_name, "${var.name}-default") },
     var.default_network_acl_tags,
   )
 }
@@ -112,32 +112,32 @@ resource "aws_default_route_table" "this" {
     content {
       # One of the following destinations must be provided
       cidr_block                 = route.value.cidr_block
-      ipv6_cidr_block            = lookup(route.value, "ipv6_cidr_block", null)
-      destination_prefix_list_id = lookup(route.value, "destination_prefix_list_id", null)
+      ipv6_cidr_block            = try(route.value.ipv6_cidr_block, null)
+      destination_prefix_list_id = try(route.value.destination_prefix_list_id, null)
 
       # One of the following targets must be provided
-      egress_only_gateway_id    = lookup(route.value, "egress_only_gateway_id", null)
-      gateway_id                = lookup(route.value, "gateway_id", null)
-      instance_id               = lookup(route.value, "instance_id", null)
-      nat_gateway_id            = lookup(route.value, "nat_gateway_id", null)
-      network_interface_id      = lookup(route.value, "network_interface_id", null)
-      transit_gateway_id        = lookup(route.value, "transit_gateway_id", null)
-      vpc_endpoint_id           = lookup(route.value, "vpc_endpoint_id", null)
-      vpc_peering_connection_id = lookup(route.value, "vpc_peering_connection_id", null)
+      egress_only_gateway_id    = try(route.value.egress_only_gateway_id, null)
+      gateway_id                = try(route.value.gateway_id, null)
+      instance_id               = try(route.value.instance_id, null)
+      nat_gateway_id            = try(route.value.nat_gateway_id, null)
+      network_interface_id      = try(route.value.network_interface_id, null)
+      transit_gateway_id        = try(route.value.transit_gateway_id, null)
+      vpc_endpoint_id           = try(route.value.vpc_endpoint_id, null)
+      vpc_peering_connection_id = try(route.value.vpc_peering_connection_id, null)
     }
   }
 
   dynamic "timeouts" {
     for_each = var.default_route_table_timeouts
     content {
-      create = lookup(each.value, "create", null)
-      update = lookup(each.value, "update", null)
+      create = try(each.value.create, null)
+      update = try(each.value.update, null)
     }
   }
 
   tags = merge(
-    { "Name" = coalesce(var.default_route_table_name, "${var.name}-default") },
     var.tags,
+    { "Name" = coalesce(var.default_route_table_name, "${var.name}-default") },
     var.default_route_table_tags,
   )
 }
@@ -154,8 +154,8 @@ resource "aws_default_vpc_dhcp_options" "this" {
   owner_id             = var.default_dhcp_options_owner_id
 
   tags = merge(
-    { "Name" = coalesce(var.default_dhcp_options_name, "${var.name}-default") },
     var.tags,
+    { "Name" = coalesce(var.default_dhcp_options_name, "${var.name}-default") },
     var.default_dhcp_options_tags,
   )
 }
@@ -172,8 +172,8 @@ resource "aws_default_vpc" "this" {
   enable_classiclink   = var.default_vpc_enable_classiclink
 
   tags = merge(
-    { "Name" = coalesce(var.default_vpc_name, "default") },
     var.tags,
+    { "Name" = coalesce(var.default_vpc_name, "default") },
     var.default_vpc_tags,
   )
 }

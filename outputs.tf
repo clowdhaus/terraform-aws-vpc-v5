@@ -2,19 +2,14 @@
 # VPC
 ################################################################################
 
-output "id" {
-  description = "The ID of the VPC"
-  value       = try(aws_vpc.this[0].id, null)
-}
-
 output "arn" {
   description = "Amazon Resource Name (ARN) of VPC"
   value       = try(aws_vpc.this[0].arn, null)
 }
 
-output "cidr_block" {
-  description = "The CIDR block of the VPC"
-  value       = try(aws_vpc.this[0].cidr_block, null)
+output "id" {
+  description = "The ID of the VPC"
+  value       = try(aws_vpc.this[0].id, null)
 }
 
 output "main_route_table_id" {
@@ -22,29 +17,38 @@ output "main_route_table_id" {
   value       = try(aws_vpc.this[0].main_route_table_id, null)
 }
 
-output "default_network_acl_id" {
-  description = "The ID of the network ACL created by default on VPC creation"
-  value       = try(aws_vpc.this[0].default_network_acl_id, null)
-}
-
-output "default_route_table_id" {
-  description = "The ID of the route table created by default on VPC creation"
-  value       = try(aws_vpc.this[0].default_route_table_id, null)
-}
-
 output "ipv6_association_id" {
   description = "The association ID for the IPv6 CIDR block"
   value       = try(aws_vpc.this[0].ipv6_association_id, null)
 }
 
+output "ipv6_cidr_block_network_border_group" {
+  description = "The Network Border Group Zone name"
+  value       = try(aws_vpc.this[0].ipv6_cidr_block_network_border_group, null)
+}
+
+output "cidr_block" {
+  description = "The IPv4 CIDR block of the VPC"
+  value       = try(aws_vpc.this[0].cidr_block, null)
+}
+
 output "ipv6_cidr_block" {
-  description = "The IPv6 CIDR block"
+  description = "The IPv6 CIDR block of the VPC"
   value       = try(aws_vpc.this[0].ipv6_cidr_block, null)
 }
 
-output "secondary_ipv4_cidr_block_assocations" {
-  description = "Map of secondary IPV4 CIDR block associations and their attributes"
+################################################################################
+# VPC CIDR Block Association(s)
+################################################################################
+
+output "ipv4_cidr_block_associations" {
+  description = "Map of IPv4 CIDR block associations and their attributes"
   value       = aws_vpc_ipv4_cidr_block_association.this
+}
+
+output "ipv6_cidr_block_associations" {
+  description = "Map of IPv6 CIDR block associations and their attributes"
+  value       = aws_vpc_ipv6_cidr_block_association.this
 }
 
 ################################################################################
@@ -61,9 +65,13 @@ output "dhcp_options_arn" {
   value       = try(aws_vpc_dhcp_options.this[0].arn, null)
 }
 
+output "dhcp_options_association_id" {
+  description = "The ID of the DHCP Options set association"
+  value       = try(aws_vpc_dhcp_options_association.this[0].id, null)
+}
 
 ################################################################################
-# Default Security Group for VPC created
+# VPC Default Security Group
 ################################################################################
 
 output "default_security_group_arn" {
@@ -73,42 +81,39 @@ output "default_security_group_arn" {
 
 output "default_security_group_id" {
   description = "The ID of the security group created by default on VPC creation"
-  value       = try(aws_vpc.this[0].default_security_group_id, null)
+  value       = try(aws_vpc.this[0].default_security_group_id, aws_default_security_group.this[0].id, null)
 }
 
 ################################################################################
-# Default Network ACL for VPC created
+# VPC Default Network ACL
 ################################################################################
-
-# # Not enabled since its covered by the aws_vpc output already
-# output "default_network_acl_id" {
-#   description = "ID of the Default Network ACL"
-#   value       = try(aws_default_network_acl.this[0].id, null)
-# }
 
 output "default_network_acl_arn" {
   description = "ARN of the Default Network ACL"
   value       = try(aws_default_network_acl.this[0].arn, null)
 }
 
+output "default_network_acl_id" {
+  description = "ID of the Default Network ACL"
+  value       = try(aws_vpc.this[0].default_network_acl_id, aws_default_network_acl.this[0].id, null)
+}
 
 ################################################################################
-# Default Route Table for VPC created
+# VPC Default Route Table
 ################################################################################
-
-# # Not enabled since its covered by the aws_vpc output already
-# output "default_route_table_id" {
-#   description = "ID of the default route table"
-#   value       = try(aws_default_route_table.this[0].id, null)
-# }
 
 output "default_route_table_arn" {
   description = "ARN of the default route table"
   value       = try(aws_default_route_table.this[0].arn, null)
 }
 
+output "default_route_table_id" {
+  description = "ID of the default route table"
+  value       = try(aws_vpc.this[0].default_route_table_id, aws_default_route_table.this[0].id, null)
+}
+
 ################################################################################
-# Default DHCP Options
+# Account Default DHCP Options
 ################################################################################
 
 output "default_dhcp_options_id" {
