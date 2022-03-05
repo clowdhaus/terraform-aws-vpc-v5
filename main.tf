@@ -86,3 +86,47 @@ resource "aws_vpc_dhcp_options_association" "this" {
   vpc_id          = aws_vpc.this[0].id
   dhcp_options_id = aws_vpc_dhcp_options.this[0].id
 }
+
+################################################################################
+# Internet Gateway
+################################################################################
+
+resource "aws_internet_gateway" "this" {
+  count = var.create && var.create_igw ? 1 : 0
+
+  vpc_id = aws_vpc.this[0].id
+
+  tags = merge(
+    var.tags,
+    { "Name" = var.name },
+    var.igw_tags,
+  )
+}
+
+# resource "aws_route" "internet_gateway" {
+#   for_each = { for k, v in var.igw_routes : k => v if var.create && var.create_igw }
+
+#   route_table_id         = aws_route_table.this[each.value.route_table_key].id
+#   destination_cidr_block = try(each.value.destination_cidr_block, "0.0.0.0/0")
+#   gateway_id             = aws_internet_gateway.this[0].id
+# }
+
+resource "aws_egress_only_internet_gateway" "this" {
+  count = var.create && var.create_egress_only_igw ? 1 : 0
+
+  vpc_id = aws_vpc.this[0].id
+
+  tags = merge(
+    var.tags,
+    { "Name" = var.name },
+    var.igw_tags,
+  )
+}
+
+# resource "aws_route" "egress_only_internet_gateway" {
+#   for_each = var.create && var.create_egress_only_igw ? var.egress_only_igw_routes : {}
+
+#   route_table_id              = aws_route_table.this[each.value.route_table_key].id
+#   destination_ipv6_cidr_block = try(each.value.destination_ipv6_cidr_block, "::/0")
+#   gateway_id                  = aws_egress_only_internet_gateway.this[0].id
+# }

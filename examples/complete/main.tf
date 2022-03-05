@@ -43,7 +43,22 @@ module "vpc" {
   dhcp_options_netbios_node_type   = 2
   dhcp_options_tags                = { dhcp_options_tags = true }
 
-  # Defaults
+  tags = local.tags
+}
+
+module "public_subnets" {
+  source = "../../modules/subnets"
+
+  name   = "public"
+  vpc_id = module.vpc.id
+
+  subnets = {
+    one = {
+      cidr_block = "10.98.1.0/24"
+
+      tags = { subnet_tags = true }
+    }
+  }
 
   tags = local.tags
 }

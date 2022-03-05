@@ -75,37 +75,3 @@ variable "network_acl_rules" {
   type        = map(any)
   default     = {}
 }
-
-################################################################################
-# Internet Gateway
-################################################################################
-
-variable "create_igw" {
-  description = "Controls if an internet gateway set is created"
-  type        = bool
-  default     = false
-}
-
-variable "igw_routes" {
-  description = "Map of routes for the internet gateway"
-  type        = map(map(string))
-  default     = {}
-}
-
-variable "create_egress_only_igw" {
-  description = "Controls if an egress only internet gateway set is created"
-  type        = bool
-  default     = false
-}
-
-variable "egress_only_igw_routes" {
-  description = "Map of routes for the egress only internet gateway"
-  type        = map(map(string))
-  default     = {}
-}
-
-variable "igw_tags" {
-  description = "Additional tags for the internet gateway/egress only internet gateway"
-  type        = map(string)
-  default     = {}
-}

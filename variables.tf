@@ -167,6 +167,40 @@ variable "dhcp_options_tags" {
 }
 
 ################################################################################
+# Internet Gateway
+################################################################################
+
+variable "create_igw" {
+  description = "Controls if an internet gateway is created"
+  type        = bool
+  default     = true
+}
+
+# variable "igw_routes" {
+#   description = "Map of routes for the internet gateway"
+#   type        = map(map(string))
+#   default     = {}
+# }
+
+variable "create_egress_only_igw" {
+  description = "Controls if an egress only internet gateway is created"
+  type        = bool
+  default     = false
+}
+
+# variable "egress_only_igw_routes" {
+#   description = "Map of routes for the egress only internet gateway"
+#   type        = map(map(string))
+#   default     = {}
+# }
+
+variable "igw_tags" {
+  description = "Additional tags for the internet gateway/egress only internet gateway"
+  type        = map(string)
+  default     = {}
+}
+
+################################################################################
 # VPC Default Security Group
 ################################################################################
 

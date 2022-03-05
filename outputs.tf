@@ -71,6 +71,25 @@ output "dhcp_options_association_id" {
 }
 
 ################################################################################
+# Internet Gateway
+################################################################################
+
+output "igw_id" {
+  description = "The ID of the internet gateway"
+  value       = try(aws_internet_gateway.this[0].id, null)
+}
+
+output "igw_arn" {
+  description = "The ARN of the Internet Gateway"
+  value       = try(aws_internet_gateway.this[0].arn, null)
+}
+
+output "egress_only_igw_id" {
+  description = "The ID of the egress only internet gateway"
+  value       = try(aws_egress_only_internet_gateway.this[0].id, null)
+}
+
+################################################################################
 # VPC Default Security Group
 ################################################################################
 

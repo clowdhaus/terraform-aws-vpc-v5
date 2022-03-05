@@ -32,6 +32,7 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_public_subnets"></a> [public\_subnets](#module\_public\_subnets) | ../../modules/subnets | n/a |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | ../../ | n/a |
 
 ## Resources
