@@ -61,3 +61,19 @@ resource "aws_vpc_dhcp_options_association" "this" {
   vpc_id          = local.vpc_id
   dhcp_options_id = aws_vpc_dhcp_options.this[0].id
 }
+
+################################################################################
+# Subnet(s)
+################################################################################
+
+# module "subnets" {
+#   source = "./modules/subnets"
+
+#   for_each = { for k, v in var.subnets : k => v if var.create && var.create_subnets }
+
+#   name = each.value.name
+
+
+
+#   tags = merge(var.tags, try(each.value.tags, {}))
+# }

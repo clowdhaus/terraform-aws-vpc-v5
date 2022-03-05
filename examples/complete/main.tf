@@ -3,10 +3,12 @@ provider "aws" {
 }
 
 locals {
-  name          = "example-${replace(basename(path.cwd), "_", "-")}"
+  name          = "vpc-ex-${replace(basename(path.cwd), "_", "-")}"
+  region        = "eu-west-1"
+
   cidr_prefix   = "10.99"
   cidr_prefix_2 = "10.98"
-  region        = "eu-west-1"
+
   tags = {
     Owner       = "user"
     Environment = "staging"

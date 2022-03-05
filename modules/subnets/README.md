@@ -1,14 +1,29 @@
-# AWS Network ACL Terraform Module
+# AWS Subnets Terraform Module
 
-Terraform module which creates AWS Network ACL and the associated ACL rules.
+Terraform module which creates AWS VPC Subnets and their associated resources.
+
+This module is designed to create a set of one or more subnets that serve a desired purpose. For example, one module definition would be used for public subnets, another for private subnets, another for database subnets, etc. This design affords users the ability to create any desired design configuration for a set of subnets, where multiple sets of subnets are composed under the respective VPC to create the desired network topology.
 
 ## Usage
 
 See [`examples`](../../examples) directory for working examples to reference:
 
 ```hcl
-module "network_acl" {
-  source = "terraform-aws-modules/vpc/aws//modules/network-acl"
+module "public_subnets" {
+  source = "terraform-aws-modules/vpc/aws//modules/subnets"
+
+  vpc_id = "vpc-12345678"
+
+  # TODO
+
+  tags = {
+    Owner       = "user"
+    Environment = "dev"
+  }
+}
+
+module "private_subnets" {
+  source = "terraform-aws-modules/vpc/aws//modules/subnets"
 
   vpc_id = "vpc-12345678"
 
@@ -23,7 +38,7 @@ module "network_acl" {
 
 ## Examples
 
-- [Complete-VPC](../../examples/complete-vpc) with VPC Endpoints.
+- [Complete](../../examples/complete) VPC example.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
