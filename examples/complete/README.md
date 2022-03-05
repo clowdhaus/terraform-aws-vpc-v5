@@ -70,6 +70,13 @@ No inputs.
 | <a name="output_dhcp_options_arn"></a> [dhcp\_options\_arn](#output\_dhcp\_options\_arn) | The ARN of the DHCP options set |
 | <a name="output_dhcp_options_association_id"></a> [dhcp\_options\_association\_id](#output\_dhcp\_options\_association\_id) | The ID of the DHCP Options set association |
 | <a name="output_dhcp_options_id"></a> [dhcp\_options\_id](#output\_dhcp\_options\_id) | The ID of the DHCP options set |
+| <a name="output_flow_log_arn"></a> [flow\_log\_arn](#output\_flow\_log\_arn) | The VPC flow log ARN |
+| <a name="output_flow_log_cloudwatch_log_group_arn"></a> [flow\_log\_cloudwatch\_log\_group\_arn](#output\_flow\_log\_cloudwatch\_log\_group\_arn) | ARN of cloudwatch log group created |
+| <a name="output_flow_log_cloudwatch_log_group_name"></a> [flow\_log\_cloudwatch\_log\_group\_name](#output\_flow\_log\_cloudwatch\_log\_group\_name) | Name of cloudwatch log group created |
+| <a name="output_flow_log_iam_role_arn"></a> [flow\_log\_iam\_role\_arn](#output\_flow\_log\_iam\_role\_arn) | ARN of the flow log CloudWatch IAM role |
+| <a name="output_flow_log_iam_role_name"></a> [flow\_log\_iam\_role\_name](#output\_flow\_log\_iam\_role\_name) | Name of the flow log CloudWatch IAM role |
+| <a name="output_flow_log_iam_role_unique_id"></a> [flow\_log\_iam\_role\_unique\_id](#output\_flow\_log\_iam\_role\_unique\_id) | Stable and unique string identifying the flow log CloudWatch IAM role |
+| <a name="output_flow_log_id"></a> [flow\_log\_id](#output\_flow\_log\_id) | The VPC flow log ID |
 | <a name="output_id"></a> [id](#output\_id) | The ID of the VPC |
 | <a name="output_ipv4_cidr_block_associations"></a> [ipv4\_cidr\_block\_associations](#output\_ipv4\_cidr\_block\_associations) | Map of IPv4 CIDR block associations and their attributes |
 | <a name="output_ipv6_association_id"></a> [ipv6\_association\_id](#output\_ipv6\_association\_id) | The association ID for the IPv6 CIDR block |

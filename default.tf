@@ -5,7 +5,7 @@
 resource "aws_default_security_group" "this" {
   count = var.create && var.manage_default_security_group ? 1 : 0
 
-  vpc_id = aws_vpc.this[0].id
+  vpc_id = local.vpc_id
 
   dynamic "ingress" {
     for_each = var.default_security_group_ingress

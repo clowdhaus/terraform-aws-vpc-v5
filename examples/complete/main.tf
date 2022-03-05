@@ -35,6 +35,13 @@ module "vpc" {
     }
   }
 
+  # Flow Log
+  create_flow_log                                 = true
+  create_flow_log_cloudwatch_iam_role             = true
+  create_flow_log_cloudwatch_log_group            = true
+  flow_log_cloudwatch_log_group_retention_in_days = 7
+  flow_log_tags                                   = { flow_log_tags = true }
+
   # DHCP
   create_dhcp_options              = true
   dhcp_options_domain_name         = "${local.region}.compute.internal"
