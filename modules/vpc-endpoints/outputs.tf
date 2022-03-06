@@ -1,4 +1,8 @@
-output "endpoints" {
-  description = "Array containing the full resource object and attributes for all endpoints created"
+################################################################################
+# VPC Endpoint(s)
+################################################################################
+
+output "vpc_endpoints" {
+  description = "Map of VPC Endpoints and their attributes"
   value       = aws_vpc_endpoint.this
 }
