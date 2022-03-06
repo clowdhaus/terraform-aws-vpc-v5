@@ -28,7 +28,7 @@ variable "vpc_id" {
 
 variable "subnets" {
   description = "Map of subnet definitions"
-  type        = map(any)
+  type        = any
   default     = {}
 }
 
@@ -49,14 +49,14 @@ variable "route_tables" {
 }
 
 variable "route_table_timeouts" {
-  description = "Create, update, and delete timeout configurations for route tables"
+  description = "Create, update, and delete timeout configurations for route table"
   type        = map(string)
   default     = {}
 }
 
-variable "routes" {
-  description = "Map of route definitions"
-  type        = map(any)
+variable "route_timeouts" {
+  description = "Create, update, and delete timeout configurations for route table routes"
+  type        = map(string)
   default     = {}
 }
 

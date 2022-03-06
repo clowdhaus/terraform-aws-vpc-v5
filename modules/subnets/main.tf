@@ -48,7 +48,7 @@ resource "aws_ec2_subnet_cidr_reservation" "this" {
     for k, v in var.subnets : k => {
       # Add subnet map key into CIDR reservation map so we can flatten nested maps with `values()`
       for k2, v2 in v.ec2_subnet_cidr_reservations : k2 => merge({ subnet_key = k }, v2)
-    } if var.create
+    } if var.create && can(v.ec2_subnet_cidr_reservations)
   }), 0)
 
   description      = try(each.value.description, null)
@@ -58,8 +58,29 @@ resource "aws_ec2_subnet_cidr_reservation" "this" {
 }
 
 ################################################################################
-# Route Table
+# Route Table / Routes
 ################################################################################
+
+locals {
+  # We have to change:
+  # my_shared_route_table = {
+  #    associated_subnet_keys = ["subnet_key_1", "subnet_key_2"]
+  #  }
+  # Into:
+  # {
+  #   "subnet_key_1" = "my_shared_route_table"
+  #   "subnet_key_2" = "my_shared_route_table"
+  # }
+  subnet_route_table_associations = [for k, v in var.route_tables : zipmap(lookup(v, "associated_subnet_keys", []), [for i in range(length(lookup(v, "associated_subnet_keys", []))) : k])]
+  # Same approach as subnets above
+  gateway_route_table_associations = [for k, v in var.route_tables : zipmap(lookup(v, "associated_gateway_ids", []), [for i in range(length(lookup(v, "associated_gateway_ids", []))) : k])]
+
+  routes = element(values({
+    for k, v in var.route_tables : k => {
+      for k2, v2 in try(v.routes, {}) : k2 => merge({ route_table_key = k }, v2)
+    }
+  }), 0)
+}
 
 resource "aws_route_table" "this" {
   for_each = { for k, v in var.route_tables : k => v if var.create }
@@ -74,27 +95,33 @@ resource "aws_route_table" "this" {
 
   tags = merge(
     var.tags,
-    # { Name = "${var.name}-${each.key}" },
+    { Name = "${var.name}-${each.key}" },
     try(each.value.tags, {})
   )
 }
 
-# resource "aws_route_table_association" "this" {
-#   for_each = { for k, v in var.subnets : k => v if var.create }
+resource "aws_route_table_association" "subnet" {
+  for_each = { for k, v in element(local.subnet_route_table_associations, 0) : k => v if var.create }
 
-#   subnet_id = try(aws_subnet.this[each.key].id, null)
-#   # gateway_id = ""
-#   route_table_id = aws_route_table.this[each.value.route_table_key].id
-# }
+  subnet_id      = try(aws_subnet.this[each.key].id, null)
+  route_table_id = aws_route_table.this[each.value].id
+}
+
+resource "aws_route_table_association" "gateway" {
+  for_each = { for k, v in element(local.gateway_route_table_associations, 0) : k => v if var.create }
+
+  gateway_id     = each.key
+  route_table_id = aws_route_table.this[each.value].id
+}
 
 resource "aws_route" "this" {
-  for_each = { for k, v in var.routes : k => v if var.create }
+  for_each = { for k, v in local.routes : k => v if var.create }
 
   route_table_id = aws_route_table.this[each.value.route_table_key].id
 
   # One of the following destination arguments must be supplied:
-  destination_cidr_block      = try(each.value.cidr_block, null)
-  destination_ipv6_cidr_block = try(each.value.ipv6_cidr_block, null)
+  destination_cidr_block      = try(each.value.destination_cidr_block, null)
+  destination_ipv6_cidr_block = try(each.value.destination_ipv6_cidr_block, null)
   destination_prefix_list_id  = try(each.value.destination_prefix_list_id, null)
 
   # One of the following target arguments must be supplied:
@@ -107,6 +134,12 @@ resource "aws_route" "this" {
   transit_gateway_id        = try(each.value.transit_gateway_id, null)
   vpc_endpoint_id           = try(each.value.vpc_endpoint_id, null)
   vpc_peering_connection_id = try(each.value.vpc_peering_connection_id, null)
+
+  timeouts {
+    create = try(var.route_timeouts.create, null)
+    update = try(var.route_timeouts.update, null)
+    delete = try(var.route_timeouts.delete, null)
+  }
 }
 
 ################################################################################

@@ -69,6 +69,8 @@ No modules.
 | [aws_network_acl_rule.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
 | [aws_route.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
 | [aws_route_table.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table) | resource |
+| [aws_route_table_association.gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association) | resource |
+| [aws_route_table_association.subnet](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association) | resource |
 | [aws_subnet.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet) | resource |
 
 ## Inputs
@@ -80,11 +82,11 @@ No modules.
 | <a name="input_name"></a> [name](#input\_name) | Default name to be used as a prefix for the resources created (if a custom name is not provided) | `string` | `""` | no |
 | <a name="input_network_acl_rules"></a> [network\_acl\_rules](#input\_network\_acl\_rules) | Network ACL rules to be added to the Network ACL | `map(any)` | `{}` | no |
 | <a name="input_network_acl_tags"></a> [network\_acl\_tags](#input\_network\_acl\_tags) | Additional tags for the Network ACL | `map(string)` | `{}` | no |
-| <a name="input_route_table_timeouts"></a> [route\_table\_timeouts](#input\_route\_table\_timeouts) | Create, update, and delete timeout configurations for route tables | `map(string)` | `{}` | no |
+| <a name="input_route_table_timeouts"></a> [route\_table\_timeouts](#input\_route\_table\_timeouts) | Create, update, and delete timeout configurations for route table | `map(string)` | `{}` | no |
 | <a name="input_route_tables"></a> [route\_tables](#input\_route\_tables) | Map of route table definitions | `map(any)` | `{}` | no |
-| <a name="input_routes"></a> [routes](#input\_routes) | Map of route definitions | `map(any)` | `{}` | no |
+| <a name="input_route_timeouts"></a> [route\_timeouts](#input\_route\_timeouts) | Create, update, and delete timeout configurations for route table routes | `map(string)` | `{}` | no |
 | <a name="input_subnet_timeouts"></a> [subnet\_timeouts](#input\_subnet\_timeouts) | Create and delete timeout configurations for subnets | `map(string)` | `{}` | no |
-| <a name="input_subnets"></a> [subnets](#input\_subnets) | Map of subnet definitions | `map(any)` | `{}` | no |
+| <a name="input_subnets"></a> [subnets](#input\_subnets) | Map of subnet definitions | `any` | `{}` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to add to all resources | `map(string)` | `{}` | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | The ID of the VPC to create the resources in | `string` | `""` | no |
 

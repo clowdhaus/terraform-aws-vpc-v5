@@ -79,14 +79,28 @@ module "public_subnets" {
         }
       }
     }
-    # public_2 = {
-    #   cidr_block = "10.98.2.0/24"
-    #   availability_zone = "${local.region}b"
-    # }
+    "${local.region}b" = {
+      cidr_block        = "10.98.2.0/24"
+      availability_zone = "${local.region}b"
+    }
     # public_3 = {
     #   cidr_block = "10.98.3.0/24"
     #   availability_zone = "${local.region}c"
     # }
+  }
+
+  route_tables = {
+
+    shared = {
+      associated_subnet_keys = ["${local.region}a", "${local.region}b"]
+      routes = {
+        igw = {
+          destination_cidr_block = "0.0.0.0/0"
+          gateway_id             = module.vpc.internet_gateway_id
+        }
+      }
+    }
+
   }
 
   network_acl_rules = {
