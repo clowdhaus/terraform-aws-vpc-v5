@@ -33,7 +33,11 @@ resource "aws_flow_log" "this" {
     }
   }
 
-  tags = merge(var.tags, var.flow_log_tags)
+  tags = merge(
+    var.tags,
+    { Name = var.name },
+    var.flow_log_tags
+  )
 }
 
 ################################################################################

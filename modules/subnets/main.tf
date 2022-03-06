@@ -33,7 +33,7 @@ resource "aws_subnet" "this" {
 
   tags = merge(
     var.tags,
-    { Name = try(each.value.name, "${var.name}-${each.key}") },
+    { Name = "${var.name}-${each.key}" },
     try(each.value.tags, {})
   )
 }
@@ -47,18 +47,15 @@ resource "aws_route_table" "this" {
 
   vpc_id = var.vpc_id
 
-  dynamic "timeouts" {
-    for_each = var.route_table_timeouts
-    content {
-      create = try(each.value.create, null)
-      update = try(each.value.update, null)
-      delete = try(each.value.delete, null)
-    }
+  timeouts {
+    create = try(var.route_table_timeouts.create, null)
+    update = try(var.route_table_timeouts.update, null)
+    delete = try(var.route_table_timeouts.delete, null)
   }
 
   tags = merge(
     var.tags,
-    { "Name" = try(each.value.name, "${var.name}-${each.key}") },
+    { Name = "${var.name}-${each.key}" },
     try(each.value.tags, {})
   )
 }
@@ -105,7 +102,7 @@ resource "aws_network_acl" "this" {
 
   tags = merge(
     var.tags,
-    { "Name" = try(each.value.name, "${var.name}-${each.key}") },
+    { Name = "${var.name}-${each.key}" },
     try(each.value.tags, {})
   )
 }

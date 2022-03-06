@@ -35,68 +35,6 @@
 - ✅ aws_default_vpc
 - ✅ aws_default_vpc_dhcp_options
 
-### EC2 Managed Prefix
-
-- [ ] aws_ec2_managed_prefix_list
-- [ ] aws_ec2_managed_prefix_list_entry
-
-### VPC Endpoint
-
-- ✅ aws_vpc_endpoint
-- [ ] aws_vpc_endpoint_connection_accepter
-- [ ] aws_vpc_endpoint_connection_notification
-- [ ] aws_vpc_endpoint_route_table_association
-- [ ] aws_vpc_endpoint_service
-- [ ] aws_vpc_endpoint_service_allowed_principal
-- [ ] aws_vpc_endpoint_subnet_association
-- [ ] aws_vpc_endpoint_policy
-
-### IPAM
-
-- [ ] aws_vpc_ipam
-- [ ] aws_vpc_ipam_organization_admin_account
-- [ ] aws_vpc_ipam_pool
-- [ ] aws_vpc_ipam_pool_cidr
-- [ ] aws_vpc_ipam_pool_cidr_allocation
-- [ ] aws_vpc_ipam_preview_next_cidr
-- [ ] aws_vpc_ipam_scope
-
-### VPC Peering
-
-- [ ] aws_vpc_peering_connection
-- [ ] aws_vpc_peering_connection_accepter
-- [ ] aws_vpc_peering_connection_options
-
-### Subnet
-
-This is where most of the logic will captured; the design is centered around the subnet and its usage patterns
-
-- [ ] aws_ec2_subnet_cidr_reservation
-- [ ] aws_internet_gateway_attachment
-- [ ] aws_nat_gateway
-- ✅ aws_network_acl
-- [ ] aws_network_acl_association
-- ✅ aws_network_acl_rule
-- ✅ aws_route
-- ✅ aws_route_table
-- ✅ aws_route_table_association
-- ✅ aws_subnet
-- [ ] aws_ram_resource_association -> RAM
-
-### Network Interface
-
-- [ ] aws_network_interface
-- [ ] aws_network_interface_attachment
-- [ ] aws_network_interface_sg_attachment
-
-### Network Firewall
-
-- [ ] aws_networkfirewall_firewall
-- [ ] aws_networkfirewall_firewall_policy
-- [ ] aws_networkfirewall_logging_configuration
-- [ ] aws_networkfirewall_resource_policy
-- [ ] aws_networkfirewall_rule_group
-
 ### VPC (Core)
 
 - ✅ aws_vpc
@@ -109,11 +47,67 @@ This is where most of the logic will captured; the design is centered around the
 - ✅ aws_internet_gateway
 - ✅ aws_customer_gateway
 - ✅ aws_vpn_gateway
-- ❌ aws_main_route_table_association
+- ❌ aws_main_route_table_association -> conflicts with aws_default_route_table
 - [ ] aws_route53_resolver_dnssec_config -> https://github.com/terraform-aws-modules/terraform-aws-vpc/issues/559
 - [ ] aws_route53_resolver_firewall_config
 - [ ] aws_route53_resolver_rule_association
 - [ ] aws_ram_resource_share -> RAM ties in with aws_ram_resource_association from `subnet`
+
+### Subnet
+
+This is where most of the logic will captured; the design is centered around the subnet and its usage patterns
+
+- ✅ aws_subnet
+- ✅ aws_network_acl
+- [ ] aws_network_acl_association
+- ✅ aws_network_acl_rule
+- ✅ aws_route
+- ✅ aws_route_table
+- ✅ aws_route_table_association
+- [ ] aws_nat_gateway
+- [ ] aws_ec2_subnet_cidr_reservation
+- [ ] aws_internet_gateway_attachment
+- [ ] aws_ram_resource_association -> RAM
+
+### VPC Endpoint
+
+- ✅ aws_vpc_endpoint
+- [ ] aws_vpc_endpoint_connection_accepter
+- [ ] aws_vpc_endpoint_connection_notification
+- [ ] aws_vpc_endpoint_route_table_association
+- [ ] aws_vpc_endpoint_service
+- [ ] aws_vpc_endpoint_service_allowed_principal
+- [ ] aws_vpc_endpoint_subnet_association
+- [ ] aws_vpc_endpoint_policy
+
+### VPC Peering
+
+- [ ] aws_vpc_peering_connection
+- [ ] aws_vpc_peering_connection_accepter
+- [ ] aws_vpc_peering_connection_options
+
+### Network Firewall
+
+- [ ] aws_networkfirewall_firewall
+- [ ] aws_networkfirewall_firewall_policy
+- [ ] aws_networkfirewall_logging_configuration
+- [ ] aws_networkfirewall_resource_policy
+- [ ] aws_networkfirewall_rule_group
+
+### EC2 Managed Prefix
+
+- [ ] aws_ec2_managed_prefix_list
+- [ ] aws_ec2_managed_prefix_list_entry
+
+### IPAM
+
+- [ ] aws_vpc_ipam
+- [ ] aws_vpc_ipam_organization_admin_account
+- [ ] aws_vpc_ipam_pool
+- [ ] aws_vpc_ipam_pool_cidr
+- [ ] aws_vpc_ipam_pool_cidr_allocation
+- [ ] aws_vpc_ipam_preview_next_cidr
+- [ ] aws_vpc_ipam_scope
 
 ## Resources Not Supported
 
@@ -151,6 +145,12 @@ See https://github.com/terraform-aws-modules/terraform-aws-security-group
 
 - ❌ aws_security_group
 - ❌ aws_security_group_rule
+
+### Network Interface
+
+- ❌ aws_network_interface
+- ❌ aws_network_interface_attachment
+- ❌ aws_network_interface_sg_attachment
 
 ### Route53 Resolver
 

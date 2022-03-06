@@ -131,7 +131,7 @@ resource "aws_customer_gateway" "this" {
 
   bgp_asn    = each.value.bgp_asn
   ip_address = each.value.ip_address
-  type       = "ipsec.1"
+  type       = try(each.value.type, "ipsec.1") # required but only one value accepted
 
   certificate_arn = try(each.value.certificate_arn, null)
   device_name     = try(each.value.device_name, null)
