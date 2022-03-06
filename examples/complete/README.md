@@ -88,6 +88,12 @@ No inputs.
 | <a name="output_ipv6_cidr_block_associations"></a> [ipv6\_cidr\_block\_associations](#output\_ipv6\_cidr\_block\_associations) | Map of IPv6 CIDR block associations and their attributes |
 | <a name="output_ipv6_cidr_block_network_border_group"></a> [ipv6\_cidr\_block\_network\_border\_group](#output\_ipv6\_cidr\_block\_network\_border\_group) | The Network Border Group Zone name |
 | <a name="output_main_route_table_id"></a> [main\_route\_table\_id](#output\_main\_route\_table\_id) | The ID of the main route table associated with this VPC. Note that you can change a VPC's main route table by using an `aws_main_route_table_association` |
+| <a name="output_public_subnets"></a> [public\_subnets](#output\_public\_subnets) | Map of public subnets created and their attributes |
+| <a name="output_public_subnets_network_acl_arn"></a> [public\_subnets\_network\_acl\_arn](#output\_public\_subnets\_network\_acl\_arn) | The ID of the network ACL |
+| <a name="output_public_subnets_network_acl_id"></a> [public\_subnets\_network\_acl\_id](#output\_public\_subnets\_network\_acl\_id) | The ARN of the network ACL |
+| <a name="output_public_subnets_network_acl_rules"></a> [public\_subnets\_network\_acl\_rules](#output\_public\_subnets\_network\_acl\_rules) | Map of network ACL rules created and their attributes |
+| <a name="output_public_subnets_route_tables"></a> [public\_subnets\_route\_tables](#output\_public\_subnets\_route\_tables) | Map of route tables created and their attributes |
+| <a name="output_public_subnets_routes"></a> [public\_subnets\_routes](#output\_public\_subnets\_routes) | Map of routes created and their attributes |
 | <a name="output_vpn_gateways"></a> [vpn\_gateways](#output\_vpn\_gateways) | Map of VPN Gateways and their attributes |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 

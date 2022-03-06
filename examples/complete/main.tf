@@ -56,14 +56,35 @@ module "vpc" {
 module "public_subnets" {
   source = "../../modules/subnets"
 
-  name   = "public"
+  # Because IGW exists in `module.vpc`, we implictly depend on that first (for NAT Gateway/EIP requirements)
+
+  name   = "${local.name}-public"
   vpc_id = module.vpc.id
 
   subnets = {
-    one = {
-      cidr_block = "10.98.1.0/24"
+    "${local.region}a" = {
+      cidr_block         = "10.98.1.0/24"
+      availability_zone  = "${local.region}a"
+      create_nat_gateway = true
+    }
+    # public_2 = {
+    #   cidr_block = "10.98.2.0/24"
+    #   availability_zone = "${local.region}b"
+    # }
+    # public_3 = {
+    #   cidr_block = "10.98.3.0/24"
+    #   availability_zone = "${local.region}c"
+    # }
+  }
 
-      tags = { subnet_tags = true }
+  network_acl_rules = {
+    100 = {
+      egress      = true
+      protocol    = "-1"
+      rule_action = "Allow"
+      cidr_block  = "0.0.0.0/0"
+      from_port   = 0
+      to_port     = 0
     }
   }
 

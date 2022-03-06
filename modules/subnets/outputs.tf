@@ -25,9 +25,14 @@ output "routes" {
 # Network ACL
 ################################################################################
 
-output "network_acls" {
-  description = "Map of network ACLs created and their attributes"
-  value       = aws_network_acl.this
+output "network_acl_arn" {
+  description = "The ID of the network ACL"
+  value       = try(aws_network_acl.this[0].arn, null)
+}
+
+output "network_acl_id" {
+  description = "The ARN of the network ACL"
+  value       = try(aws_network_acl.this[0].id, null)
 }
 
 output "network_acl_rules" {

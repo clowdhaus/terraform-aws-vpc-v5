@@ -64,14 +64,24 @@ variable "routes" {
 # Network ACL
 ################################################################################
 
-variable "network_acls" {
-  description = "Map of network ACLs"
-  type        = any
-  default     = {}
+variable "create_network_acl" {
+  description = "Controls creation of Network ACL resources"
+  type        = bool
+  default     = true
 }
 
 variable "network_acl_rules" {
-  description = "Map of network ACL rules"
+  description = "Network ACL rules to be added to the Network ACL"
   type        = map(any)
   default     = {}
 }
+
+variable "network_acl_tags" {
+  description = "Additional tags for the Network ACL"
+  type        = map(string)
+  default     = {}
+}
+
+################################################################################
+# NAT Gateway
+################################################################################

@@ -45,6 +45,7 @@
 - ✅ aws_vpc_ipv6_cidr_block_association
 - ✅ aws_egress_only_internet_gateway
 - ✅ aws_internet_gateway
+- ❌ aws_internet_gateway_attachment -> VPC association handled in `aws_internet_gateway`
 - ✅ aws_customer_gateway
 - ✅ aws_vpn_gateway
 - ❌ aws_main_route_table_association -> conflicts with aws_default_route_table
@@ -59,14 +60,13 @@ This is where most of the logic will captured; the design is centered around the
 
 - ✅ aws_subnet
 - ✅ aws_network_acl
-- [ ] aws_network_acl_association
+- ❌ aws_network_acl_association -> subnet association handled in `aws_subnet_acl`
 - ✅ aws_network_acl_rule
 - ✅ aws_route
 - ✅ aws_route_table
 - ✅ aws_route_table_association
-- [ ] aws_nat_gateway
+- ✅ aws_nat_gateway
 - [ ] aws_ec2_subnet_cidr_reservation
-- [ ] aws_internet_gateway_attachment
 - [ ] aws_ram_resource_association -> RAM
 
 ### VPC Endpoint

@@ -263,3 +263,45 @@ output "default_vpc_main_route_table_id" {
   description = "The ID of the main route table associated with the Default VPC"
   value       = module.vpc.default_vpc_main_route_table_id
 }
+
+################################################################################
+# Subnet
+################################################################################
+
+output "public_subnets" {
+  description = "Map of public subnets created and their attributes"
+  value       = module.public_subnets.subnets
+}
+
+################################################################################
+# Route Table
+################################################################################
+
+output "public_subnets_route_tables" {
+  description = "Map of route tables created and their attributes"
+  value       = module.public_subnets.route_tables
+}
+
+output "public_subnets_routes" {
+  description = "Map of routes created and their attributes"
+  value       = module.public_subnets.routes
+}
+
+################################################################################
+# Network ACL
+################################################################################
+
+output "public_subnets_network_acl_arn" {
+  description = "The ID of the network ACL"
+  value       = module.public_subnets.network_acl_arn
+}
+
+output "public_subnets_network_acl_id" {
+  description = "The ARN of the network ACL"
+  value       = module.public_subnets.network_acl_id
+}
+
+output "public_subnets_network_acl_rules" {
+  description = "Map of network ACL rules created and their attributes"
+  value       = module.public_subnets.network_acl_rules
+}

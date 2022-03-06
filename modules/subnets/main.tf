@@ -13,7 +13,7 @@ resource "aws_subnet" "this" {
   map_public_ip_on_launch             = try(each.value.map_public_ip_on_launch, null)
   private_dns_hostname_type_on_launch = try(each.value.private_dns_hostname_type_on_launch, null)
 
-  cidr_block               = each.value.cidr_block
+  cidr_block               = try(each.value.cidr_block, null)
   customer_owned_ipv4_pool = try(each.value.customer_owned_ipv4_pool, null)
 
   ipv6_cidr_block                 = try(each.value.ipv6_cidr_block, null)
@@ -55,7 +55,7 @@ resource "aws_route_table" "this" {
 
   tags = merge(
     var.tags,
-    { Name = "${var.name}-${each.key}" },
+    # { Name = "${var.name}-${each.key}" },
     try(each.value.tags, {})
   )
 }
@@ -95,24 +95,24 @@ resource "aws_route" "this" {
 ################################################################################
 
 resource "aws_network_acl" "this" {
-  for_each = { for k, v in var.network_acls : k => v if var.create }
+  count = var.create && var.create_network_acl ? 1 : 0
 
   vpc_id     = var.vpc_id
-  subnet_ids = try(each.value.subnet_ids, null)
+  subnet_ids = [for subnet in aws_subnet.this : subnet.id]
 
   tags = merge(
     var.tags,
-    { Name = "${var.name}-${each.key}" },
-    try(each.value.tags, {})
+    { Name = var.name },
+    try(var.network_acl_tags, {})
   )
 }
 
 resource "aws_network_acl_rule" "this" {
-  for_each = { for k, v in var.network_acl_rules : k => v if var.create }
+  for_each = { for k, v in var.network_acl_rules : k => v if var.create && var.create_network_acl }
 
-  network_acl_id = aws_network_acl.this[each.value.network_acl_key].id
+  network_acl_id = aws_network_acl.this[0].id
 
-  rule_number     = each.value.rule_number
+  rule_number     = each.key
   egress          = try(each.value.egress, null)
   protocol        = each.value.protocol
   rule_action     = each.value.rule_action
@@ -122,4 +122,39 @@ resource "aws_network_acl_rule" "this" {
   to_port         = try(each.value.to_port, null)
   icmp_type       = try(each.value.icmp_type, null)
   icmp_code       = try(each.value.icmp_code, null)
+}
+
+################################################################################
+# NAT Gateway
+################################################################################
+
+resource "aws_eip" "this" {
+  for_each = { for k, v in var.subnets : k => v if var.create && try(v.create_nat_gateway, false) && !can(v.allocation_id) }
+
+  address                   = try(each.value.address, null)
+  associate_with_private_ip = try(each.value.associate_with_private_ip, null)
+  customer_owned_ipv4_pool  = try(each.value.customer_owned_ipv4_pool, null)
+  network_border_group      = try(each.value.network_border_group, null)
+  public_ipv4_pool          = try(each.value.public_ipv4_pool, null)
+  vpc                       = true
+
+  tags = merge(
+    var.tags,
+    { Name = "${var.name}-${each.key}" },
+    try(each.value.tags, {})
+  )
+}
+
+resource "aws_nat_gateway" "this" {
+  for_each = { for k, v in var.subnets : k => v if var.create && try(v.create_nat_gateway, false) }
+
+  allocation_id     = try(each.value.allocation_id, aws_eip.this[each.key].id, null)
+  connectivity_type = try(each.value.connectivity_type, null)
+  subnet_id         = aws_subnet.this[each.key].id
+
+  tags = merge(
+    var.tags,
+    { Name = "${var.name}-${each.key}" },
+    try(each.value.tags, {})
+  )
 }

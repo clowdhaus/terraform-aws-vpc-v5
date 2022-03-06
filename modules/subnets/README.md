@@ -62,6 +62,8 @@ No modules.
 
 | Name | Type |
 |------|------|
+| [aws_eip.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eip) | resource |
+| [aws_nat_gateway.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/nat_gateway) | resource |
 | [aws_network_acl.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl) | resource |
 | [aws_network_acl_rule.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
 | [aws_route.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
@@ -73,9 +75,10 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_create"></a> [create](#input\_create) | Controls if network ACL resources should be created | `bool` | `true` | no |
+| <a name="input_create_network_acl"></a> [create\_network\_acl](#input\_create\_network\_acl) | Controls creation of Network ACL resources | `bool` | `true` | no |
 | <a name="input_name"></a> [name](#input\_name) | Default name to be used as a prefix for the resources created (if a custom name is not provided) | `string` | `""` | no |
-| <a name="input_network_acl_rules"></a> [network\_acl\_rules](#input\_network\_acl\_rules) | Map of network ACL rules | `map(any)` | `{}` | no |
-| <a name="input_network_acls"></a> [network\_acls](#input\_network\_acls) | Map of network ACLs | `any` | `{}` | no |
+| <a name="input_network_acl_rules"></a> [network\_acl\_rules](#input\_network\_acl\_rules) | Network ACL rules to be added to the Network ACL | `map(any)` | `{}` | no |
+| <a name="input_network_acl_tags"></a> [network\_acl\_tags](#input\_network\_acl\_tags) | Additional tags for the Network ACL | `map(string)` | `{}` | no |
 | <a name="input_route_table_timeouts"></a> [route\_table\_timeouts](#input\_route\_table\_timeouts) | Create, update, and delete timeout configurations for route tables | `map(string)` | `{}` | no |
 | <a name="input_route_tables"></a> [route\_tables](#input\_route\_tables) | Map of route table definitions | `map(any)` | `{}` | no |
 | <a name="input_routes"></a> [routes](#input\_routes) | Map of route definitions | `map(any)` | `{}` | no |
@@ -88,8 +91,9 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_network_acl_arn"></a> [network\_acl\_arn](#output\_network\_acl\_arn) | The ID of the network ACL |
+| <a name="output_network_acl_id"></a> [network\_acl\_id](#output\_network\_acl\_id) | The ARN of the network ACL |
 | <a name="output_network_acl_rules"></a> [network\_acl\_rules](#output\_network\_acl\_rules) | Map of network ACL rules created and their attributes |
-| <a name="output_network_acls"></a> [network\_acls](#output\_network\_acls) | Map of network ACLs created and their attributes |
 | <a name="output_route_tables"></a> [route\_tables](#output\_route\_tables) | Map of route tables created and their attributes |
 | <a name="output_routes"></a> [routes](#output\_routes) | Map of routes created and their attributes |
 | <a name="output_subnets"></a> [subnets](#output\_subnets) | Map of subnets created and their attributes |
