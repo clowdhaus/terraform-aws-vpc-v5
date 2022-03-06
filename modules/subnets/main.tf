@@ -116,6 +116,7 @@ resource "aws_route_table_association" "gateway" {
 
 resource "aws_route" "this" {
   for_each = { for k, v in local.routes : k => v if var.create }
+  # for_each = {}
 
   route_table_id = aws_route_table.this[each.value.route_table_key].id
 
@@ -159,13 +160,30 @@ resource "aws_network_acl" "this" {
   )
 }
 
-resource "aws_network_acl_rule" "this" {
-  for_each = { for k, v in var.network_acl_rules : k => v if var.create && var.create_network_acl }
+resource "aws_network_acl_rule" "ingress" {
+  for_each = { for k, v in var.ingress_network_acl_rules : k => v if var.create && var.create_network_acl }
 
   network_acl_id = aws_network_acl.this[0].id
 
   rule_number     = each.key
-  egress          = try(each.value.egress, null)
+  egress          = false
+  protocol        = each.value.protocol
+  rule_action     = each.value.rule_action
+  cidr_block      = try(each.value.cidr_block, null)
+  ipv6_cidr_block = try(each.value.ipv6_cidr_block, null)
+  from_port       = try(each.value.from_port, null)
+  to_port         = try(each.value.to_port, null)
+  icmp_type       = try(each.value.icmp_type, null)
+  icmp_code       = try(each.value.icmp_code, null)
+}
+
+resource "aws_network_acl_rule" "egress" {
+  for_each = { for k, v in var.egress_network_acl_rules : k => v if var.create && var.create_network_acl }
+
+  network_acl_id = aws_network_acl.this[0].id
+
+  rule_number     = each.key
+  egress          = true
   protocol        = each.value.protocol
   rule_action     = each.value.rule_action
   cidr_block      = try(each.value.cidr_block, null)

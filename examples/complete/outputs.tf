@@ -273,6 +273,26 @@ output "public_subnets" {
   value       = module.public_subnets.subnets
 }
 
+output "public_subnet_arns" {
+  description = "List of subnet ARNs"
+  value       = module.public_subnets.subnet_arns
+}
+
+output "public_subnet_ids" {
+  description = "List of subnet IDs"
+  value       = module.public_subnets.subnet_ids
+}
+
+output "public_subnet_ipv4_cidr_blocks" {
+  description = "List of subnet IPv4 CIDR blocks"
+  value       = module.public_subnets.subnet_ipv4_cidr_blocks
+}
+
+output "public_subnet_ipv6_cidr_blocks" {
+  description = "List of subnet IPv6 CIDR blocks"
+  value       = module.public_subnets.subnet_ipv6_cidr_blocks
+}
+
 ################################################################################
 # EC2 Subnet CIDR Reservation
 ################################################################################
@@ -291,9 +311,29 @@ output "public_subnets_route_tables" {
   value       = module.public_subnets.route_tables
 }
 
-output "public_subnets_routes" {
+output "public_subnets_route_table_ids" {
+  description = "List of route table IDs"
+  value       = module.public_subnets.route_table_ids
+}
+
+output "public_subnets_public_subnets_routes" {
   description = "Map of routes created and their attributes"
   value       = module.public_subnets.routes
+}
+
+output "public_subnets_route_ids" {
+  description = "List of route IDs"
+  value       = module.public_subnets.route_ids
+}
+
+output "public_subnets_route_table_subnet_association_ids" {
+  description = "List of subnet route table association IDs"
+  value       = module.public_subnets.route_table_subnet_association_ids
+}
+
+output "public_subnets_route_table_gateway_association_ids" {
+  description = "List of subnet route table association IDs"
+  value       = module.public_subnets.route_table_gateway_association_ids
 }
 
 ################################################################################
@@ -310,7 +350,12 @@ output "public_subnets_network_acl_id" {
   value       = module.public_subnets.network_acl_id
 }
 
-output "public_subnets_network_acl_rules" {
-  description = "Map of network ACL rules created and their attributes"
-  value       = module.public_subnets.network_acl_rules
+output "public_subnets_network_acl_rules_ingress" {
+  description = "Map of ingress network ACL rules created and their attributes"
+  value       = module.public_subnets.network_acl_rules_ingress
+}
+
+output "public_subnets_network_acl_rules_egress" {
+  description = "Map of egress network ACL rules created and their attributes"
+  value       = module.public_subnets.network_acl_rules_egress
 }

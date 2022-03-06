@@ -88,13 +88,22 @@ No inputs.
 | <a name="output_ipv6_cidr_block_associations"></a> [ipv6\_cidr\_block\_associations](#output\_ipv6\_cidr\_block\_associations) | Map of IPv6 CIDR block associations and their attributes |
 | <a name="output_ipv6_cidr_block_network_border_group"></a> [ipv6\_cidr\_block\_network\_border\_group](#output\_ipv6\_cidr\_block\_network\_border\_group) | The Network Border Group Zone name |
 | <a name="output_main_route_table_id"></a> [main\_route\_table\_id](#output\_main\_route\_table\_id) | The ID of the main route table associated with this VPC. Note that you can change a VPC's main route table by using an `aws_main_route_table_association` |
+| <a name="output_public_subnet_arns"></a> [public\_subnet\_arns](#output\_public\_subnet\_arns) | List of subnet ARNs |
+| <a name="output_public_subnet_ids"></a> [public\_subnet\_ids](#output\_public\_subnet\_ids) | List of subnet IDs |
+| <a name="output_public_subnet_ipv4_cidr_blocks"></a> [public\_subnet\_ipv4\_cidr\_blocks](#output\_public\_subnet\_ipv4\_cidr\_blocks) | List of subnet IPv4 CIDR blocks |
+| <a name="output_public_subnet_ipv6_cidr_blocks"></a> [public\_subnet\_ipv6\_cidr\_blocks](#output\_public\_subnet\_ipv6\_cidr\_blocks) | List of subnet IPv6 CIDR blocks |
 | <a name="output_public_subnets"></a> [public\_subnets](#output\_public\_subnets) | Map of public subnets created and their attributes |
 | <a name="output_public_subnets_ec2_subnet_cidr_reservations"></a> [public\_subnets\_ec2\_subnet\_cidr\_reservations](#output\_public\_subnets\_ec2\_subnet\_cidr\_reservations) | Map of EC2 subnet CIDR reservations created and their attributes |
 | <a name="output_public_subnets_network_acl_arn"></a> [public\_subnets\_network\_acl\_arn](#output\_public\_subnets\_network\_acl\_arn) | The ID of the network ACL |
 | <a name="output_public_subnets_network_acl_id"></a> [public\_subnets\_network\_acl\_id](#output\_public\_subnets\_network\_acl\_id) | The ARN of the network ACL |
-| <a name="output_public_subnets_network_acl_rules"></a> [public\_subnets\_network\_acl\_rules](#output\_public\_subnets\_network\_acl\_rules) | Map of network ACL rules created and their attributes |
+| <a name="output_public_subnets_network_acl_rules_egress"></a> [public\_subnets\_network\_acl\_rules\_egress](#output\_public\_subnets\_network\_acl\_rules\_egress) | Map of egress network ACL rules created and their attributes |
+| <a name="output_public_subnets_network_acl_rules_ingress"></a> [public\_subnets\_network\_acl\_rules\_ingress](#output\_public\_subnets\_network\_acl\_rules\_ingress) | Map of ingress network ACL rules created and their attributes |
+| <a name="output_public_subnets_public_subnets_routes"></a> [public\_subnets\_public\_subnets\_routes](#output\_public\_subnets\_public\_subnets\_routes) | Map of routes created and their attributes |
+| <a name="output_public_subnets_route_ids"></a> [public\_subnets\_route\_ids](#output\_public\_subnets\_route\_ids) | List of route IDs |
+| <a name="output_public_subnets_route_table_gateway_association_ids"></a> [public\_subnets\_route\_table\_gateway\_association\_ids](#output\_public\_subnets\_route\_table\_gateway\_association\_ids) | List of subnet route table association IDs |
+| <a name="output_public_subnets_route_table_ids"></a> [public\_subnets\_route\_table\_ids](#output\_public\_subnets\_route\_table\_ids) | List of route table IDs |
+| <a name="output_public_subnets_route_table_subnet_association_ids"></a> [public\_subnets\_route\_table\_subnet\_association\_ids](#output\_public\_subnets\_route\_table\_subnet\_association\_ids) | List of subnet route table association IDs |
 | <a name="output_public_subnets_route_tables"></a> [public\_subnets\_route\_tables](#output\_public\_subnets\_route\_tables) | Map of route tables created and their attributes |
-| <a name="output_public_subnets_routes"></a> [public\_subnets\_routes](#output\_public\_subnets\_routes) | Map of routes created and their attributes |
 | <a name="output_vpn_gateways"></a> [vpn\_gateways](#output\_vpn\_gateways) | Map of VPN Gateways and their attributes |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 

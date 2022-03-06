@@ -70,8 +70,14 @@ variable "create_network_acl" {
   default     = true
 }
 
-variable "network_acl_rules" {
-  description = "Network ACL rules to be added to the Network ACL"
+variable "ingress_network_acl_rules" {
+  description = "Ingress Network ACL rules to be added to the Network ACL"
+  type        = map(any)
+  default     = {}
+}
+
+variable "egress_network_acl_rules" {
+  description = "Egress Network ACL rules to be added to the Network ACL"
   type        = map(any)
   default     = {}
 }

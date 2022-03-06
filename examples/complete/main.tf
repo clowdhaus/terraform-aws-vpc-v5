@@ -90,7 +90,6 @@ module "public_subnets" {
   }
 
   route_tables = {
-
     shared = {
       associated_subnet_keys = ["${local.region}a", "${local.region}b"]
       routes = {
@@ -100,12 +99,20 @@ module "public_subnets" {
         }
       }
     }
-
   }
 
-  network_acl_rules = {
+  ingress_network_acl_rules = {
     100 = {
-      egress      = true
+      protocol    = "-1"
+      rule_action = "Allow"
+      cidr_block  = module.vpc.cidr_block
+      from_port   = 0
+      to_port     = 0
+    }
+  }
+
+  egress_network_acl_rules = {
+    100 = {
       protocol    = "-1"
       rule_action = "Allow"
       cidr_block  = "0.0.0.0/0"
