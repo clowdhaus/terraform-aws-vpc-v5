@@ -99,41 +99,64 @@ resource "aws_vpc_dhcp_options_association" "this" {
 ################################################################################
 
 resource "aws_internet_gateway" "this" {
-  count = var.create && var.create_igw ? 1 : 0
+  count = var.create && var.create_internet_gateway ? 1 : 0
 
   vpc_id = local.vpc_id
 
   tags = merge(
     var.tags,
-    { "Name" = var.name },
-    var.igw_tags,
+    { Name = var.name },
+    var.internet_gateway_tags,
   )
 }
-
-# resource "aws_route" "internet_gateway" {
-#   for_each = { for k, v in var.igw_routes : k => v if var.create && var.create_igw }
-
-#   route_table_id         = aws_route_table.this[each.value.route_table_key].id
-#   destination_cidr_block = try(each.value.destination_cidr_block, "0.0.0.0/0")
-#   gateway_id             = aws_internet_gateway.this[0].id
-# }
 
 resource "aws_egress_only_internet_gateway" "this" {
-  count = var.create && var.create_egress_only_igw ? 1 : 0
+  count = var.create && var.create_egress_only_internet_gateway ? 1 : 0
 
   vpc_id = local.vpc_id
 
   tags = merge(
     var.tags,
-    { "Name" = var.name },
-    var.igw_tags,
+    { Name = var.name },
+    var.internet_gateway_tags,
   )
 }
 
-# resource "aws_route" "egress_only_internet_gateway" {
-#   for_each = var.create && var.create_egress_only_igw ? var.egress_only_igw_routes : {}
+################################################################################
+# Customer Gateway(s)
+################################################################################
 
-#   route_table_id              = aws_route_table.this[each.value.route_table_key].id
-#   destination_ipv6_cidr_block = try(each.value.destination_ipv6_cidr_block, "::/0")
-#   gateway_id                  = aws_egress_only_internet_gateway.this[0].id
-# }
+resource "aws_customer_gateway" "this" {
+  for_each = { for k, v in var.customer_gateways : k => v if var.create }
+
+  bgp_asn    = each.value.bgp_asn
+  ip_address = each.value.ip_address
+  type       = "ipsec.1"
+
+  certificate_arn = try(each.value.certificate_arn, null)
+  device_name     = try(each.value.device_name, null)
+
+  tags = merge(
+    var.tags,
+    { Name = "${var.name}-${each.key}" },
+    var.customer_gateway_tags,
+  )
+}
+
+################################################################################
+# VPN Gateway(s)
+################################################################################
+
+resource "aws_vpn_gateway" "this" {
+  for_each = { for k, v in var.vpn_gateways : k => v if var.create }
+
+  vpc_id            = local.vpc_id
+  amazon_side_asn   = try(each.value.vpn_gateway_amazon_side_asn, null)
+  availability_zone = try(each.value.availability_zone, null)
+
+  tags = merge(
+    var.tags,
+    { Name = "${var.name}-${each.key}" },
+    var.vpn_gateway_tags,
+  )
+}

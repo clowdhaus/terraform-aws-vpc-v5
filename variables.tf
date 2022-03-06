@@ -296,20 +296,52 @@ variable "dhcp_options_tags" {
 # Internet Gateway
 ################################################################################
 
-variable "create_igw" {
+variable "create_internet_gateway" {
   description = "Controls if an internet gateway is created"
   type        = bool
   default     = true
 }
 
-variable "create_egress_only_igw" {
+variable "create_egress_only_internet_gateway" {
   description = "Controls if an egress only internet gateway is created"
   type        = bool
   default     = false
 }
 
-variable "igw_tags" {
+variable "internet_gateway_tags" {
   description = "Additional tags for the internet gateway/egress only internet gateway"
+  type        = map(string)
+  default     = {}
+}
+
+################################################################################
+# Customer Gateway(s)
+################################################################################
+
+variable "customer_gateways" {
+  description = "Map of Customer Gateway definitions to create"
+  type        = any
+  default     = {}
+}
+
+variable "customer_gateway_tags" {
+  description = "Additional tags for the Customer Gateway(s)"
+  type        = map(string)
+  default     = {}
+}
+
+################################################################################
+# VPN Gateway(s)
+################################################################################
+
+variable "vpn_gateways" {
+  description = "Map of VPN Gateway definitions to create"
+  type        = any
+  default     = {}
+}
+
+variable "vpn_gateway_tags" {
+  description = "Additional tags for the VPN Gateway(s)"
   type        = map(string)
   default     = {}
 }

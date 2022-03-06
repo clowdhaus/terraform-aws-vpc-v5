@@ -121,19 +121,37 @@ output "dhcp_options_association_id" {
 # Internet Gateway
 ################################################################################
 
-output "igw_id" {
-  description = "The ID of the internet gateway"
+output "internet_gateway_id" {
+  description = "The ID of the Internet Gateway"
   value       = try(aws_internet_gateway.this[0].id, null)
 }
 
-output "igw_arn" {
+output "internet_gateway_arn" {
   description = "The ARN of the Internet Gateway"
   value       = try(aws_internet_gateway.this[0].arn, null)
 }
 
-output "egress_only_igw_id" {
-  description = "The ID of the egress only internet gateway"
+output "egress_only_internet_gateway_id" {
+  description = "The ID of the Egress-Only Internet Gateway"
   value       = try(aws_egress_only_internet_gateway.this[0].id, null)
+}
+
+################################################################################
+# Customer Gateway(s)
+################################################################################
+
+output "customer_gateways" {
+  description = "Map of Customer Gateways and their attributes"
+  value       = aws_customer_gateway.this
+}
+
+################################################################################
+# VPN Gateway(s)
+################################################################################
+
+output "vpn_gateways" {
+  description = "Map of VPN Gateways and their attributes"
+  value       = aws_customer_gateway.this
 }
 
 ################################################################################

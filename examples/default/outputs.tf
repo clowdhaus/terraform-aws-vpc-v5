@@ -118,6 +118,43 @@ output "dhcp_options_association_id" {
 }
 
 ################################################################################
+# Internet Gateway
+################################################################################
+
+output "internet_gateway_id" {
+  description = "The ID of the Internet Gateway"
+  value       = module.vpc.internet_gateway_id
+}
+
+output "internet_gateway_arn" {
+  description = "The ARN of the Internet Gateway"
+  value       = module.vpc.internet_gateway_arn
+}
+
+output "egress_only_internet_gateway_id" {
+  description = "The ID of the Egress-Only Internet Gateway"
+  value       = module.vpc.egress_only_internet_gateway_id
+}
+
+################################################################################
+# Customer Gateway(s)
+################################################################################
+
+output "customer_gateways" {
+  description = "Map of Customer Gateways and their attributes"
+  value       = module.vpc.customer_gateways
+}
+
+################################################################################
+# VPN Gateway(s)
+################################################################################
+
+output "vpn_gateways" {
+  description = "Map of VPN Gateways and their attributes"
+  value       = module.vpc.vpn_gateways
+}
+
+################################################################################
 # VPC Default Security Group
 ################################################################################
 
