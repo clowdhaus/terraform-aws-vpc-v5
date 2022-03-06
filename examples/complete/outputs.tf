@@ -274,6 +274,15 @@ output "public_subnets" {
 }
 
 ################################################################################
+# EC2 Subnet CIDR Reservation
+################################################################################
+
+output "public_subnets_ec2_subnet_cidr_reservations" {
+  description = "Map of EC2 subnet CIDR reservations created and their attributes"
+  value       = module.public_subnets.ec2_subnet_cidr_reservations
+}
+
+################################################################################
 # Route Table
 ################################################################################
 

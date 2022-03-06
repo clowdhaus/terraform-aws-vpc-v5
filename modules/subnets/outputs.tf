@@ -8,6 +8,15 @@ output "subnets" {
 }
 
 ################################################################################
+# EC2 Subnet CIDR Reservation
+################################################################################
+
+output "ec2_subnet_cidr_reservations" {
+  description = "Map of EC2 subnet CIDR reservations created and their attributes"
+  value       = aws_ec2_subnet_cidr_reservation.this
+}
+
+################################################################################
 # Route Table
 ################################################################################
 

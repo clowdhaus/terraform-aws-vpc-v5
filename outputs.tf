@@ -9,7 +9,7 @@ output "arn" {
 
 output "id" {
   description = "The ID of the VPC"
-  value       = try(aws_vpc.this[0].id, null)
+  value       = local.vpc_id
 }
 
 output "main_route_table_id" {

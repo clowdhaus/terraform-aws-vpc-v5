@@ -66,7 +66,7 @@ This is where most of the logic will captured; the design is centered around the
 - ✅ aws_route_table
 - ✅ aws_route_table_association
 - ✅ aws_nat_gateway
-- [ ] aws_ec2_subnet_cidr_reservation
+- ✅ aws_ec2_subnet_cidr_reservation
 - [ ] aws_ram_resource_association -> RAM
 
 ### VPC Endpoint

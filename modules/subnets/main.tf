@@ -39,6 +39,25 @@ resource "aws_subnet" "this" {
 }
 
 ################################################################################
+# EC2 Subnet CIDR Reservation
+################################################################################
+
+resource "aws_ec2_subnet_cidr_reservation" "this" {
+  # Ugly, but it works as intended - TODO: make it less ugly
+  for_each = element(values({
+    for k, v in var.subnets : k => {
+      # Add subnet map key into CIDR reservation map so we can flatten nested maps with `values()`
+      for k2, v2 in v.ec2_subnet_cidr_reservations : k2 => merge({ subnet_key = k }, v2)
+    } if var.create
+  }), 0)
+
+  description      = try(each.value.description, null)
+  cidr_block       = each.value.cidr_block
+  reservation_type = each.value.reservation_type
+  subnet_id        = aws_subnet.this[each.value.subnet_key].id
+}
+
+################################################################################
 # Route Table
 ################################################################################
 

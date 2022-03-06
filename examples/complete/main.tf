@@ -66,6 +66,18 @@ module "public_subnets" {
       cidr_block         = "10.98.1.0/24"
       availability_zone  = "${local.region}a"
       create_nat_gateway = true
+      ec2_subnet_cidr_reservations = {
+        one = {
+          description      = "Example EC2 subnet CIDR reservation"
+          cidr_block       = "10.98.1.0/28"
+          reservation_type = "prefix"
+        }
+        two = {
+          description      = "Example EC2 subnet CIDR reservation"
+          cidr_block       = "10.98.1.16/28"
+          reservation_type = "prefix"
+        }
+      }
     }
     # public_2 = {
     #   cidr_block = "10.98.2.0/24"
