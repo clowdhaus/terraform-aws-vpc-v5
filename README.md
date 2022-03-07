@@ -48,11 +48,11 @@
 - ❌ aws_internet_gateway_attachment -> VPC association handled in `aws_internet_gateway`
 - ✅ aws_customer_gateway
 - ✅ aws_vpn_gateway
-- ❌ aws_main_route_table_association -> conflicts with aws_default_route_table
+- ❌ aws_main_route_table_association -> conflicts with `aws_default_route_table`
 - [ ] aws_route53_resolver_dnssec_config -> https://github.com/terraform-aws-modules/terraform-aws-vpc/issues/559
 - [ ] aws_route53_resolver_firewall_config
 - [ ] aws_route53_resolver_rule_association
-- [ ] aws_ram_resource_share -> RAM ties in with aws_ram_resource_association from `subnet`
+- [ ] aws_ram_resource_share -> RAM ties in with `aws_ram_resource_association` from `subnet`
 
 ### Subnet
 
@@ -62,7 +62,7 @@ This is where most of the logic will captured; the design is centered around the
 - ✅ aws_network_acl
 - ❌ aws_network_acl_association -> subnet association handled in `aws_subnet_acl`
 - ✅ aws_network_acl_rule
-- ✅ aws_route
+- ❌ aws_route -> handled within `aws_route_table` due to lifecycle conflict error
 - ✅ aws_route_table
 - ✅ aws_route_table_association
 - ✅ aws_nat_gateway

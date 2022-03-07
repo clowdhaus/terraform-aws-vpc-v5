@@ -98,8 +98,6 @@ No inputs.
 | <a name="output_public_subnets_network_acl_id"></a> [public\_subnets\_network\_acl\_id](#output\_public\_subnets\_network\_acl\_id) | The ARN of the network ACL |
 | <a name="output_public_subnets_network_acl_rules_egress"></a> [public\_subnets\_network\_acl\_rules\_egress](#output\_public\_subnets\_network\_acl\_rules\_egress) | Map of egress network ACL rules created and their attributes |
 | <a name="output_public_subnets_network_acl_rules_ingress"></a> [public\_subnets\_network\_acl\_rules\_ingress](#output\_public\_subnets\_network\_acl\_rules\_ingress) | Map of ingress network ACL rules created and their attributes |
-| <a name="output_public_subnets_public_subnets_routes"></a> [public\_subnets\_public\_subnets\_routes](#output\_public\_subnets\_public\_subnets\_routes) | Map of routes created and their attributes |
-| <a name="output_public_subnets_route_ids"></a> [public\_subnets\_route\_ids](#output\_public\_subnets\_route\_ids) | List of route IDs |
 | <a name="output_public_subnets_route_table_gateway_association_ids"></a> [public\_subnets\_route\_table\_gateway\_association\_ids](#output\_public\_subnets\_route\_table\_gateway\_association\_ids) | List of subnet route table association IDs |
 | <a name="output_public_subnets_route_table_ids"></a> [public\_subnets\_route\_table\_ids](#output\_public\_subnets\_route\_table\_ids) | List of route table IDs |
 | <a name="output_public_subnets_route_table_subnet_association_ids"></a> [public\_subnets\_route\_table\_subnet\_association\_ids](#output\_public\_subnets\_route\_table\_subnet\_association\_ids) | List of subnet route table association IDs |

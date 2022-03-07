@@ -50,16 +50,6 @@ output "route_table_ids" {
   value       = [for table in aws_route_table.this : table.id]
 }
 
-output "routes" {
-  description = "Map of routes created and their attributes"
-  value       = aws_route.this
-}
-
-output "route_ids" {
-  description = "List of route IDs"
-  value       = [for route in aws_route.this : route.id]
-}
-
 output "route_table_subnet_association_ids" {
   description = "List of subnet route table association IDs"
   value       = [for association in aws_route_table_association.subnet : association.id]

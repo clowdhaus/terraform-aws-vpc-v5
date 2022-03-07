@@ -74,18 +74,33 @@ locals {
   subnet_route_table_associations = [for k, v in var.route_tables : zipmap(lookup(v, "associated_subnet_keys", []), [for i in range(length(lookup(v, "associated_subnet_keys", []))) : k])]
   # Same approach as subnets above
   gateway_route_table_associations = [for k, v in var.route_tables : zipmap(lookup(v, "associated_gateway_ids", []), [for i in range(length(lookup(v, "associated_gateway_ids", []))) : k])]
-
-  routes = element(values({
-    for k, v in var.route_tables : k => {
-      for k2, v2 in try(v.routes, {}) : k2 => merge({ route_table_key = k }, v2)
-    }
-  }), 0)
 }
 
 resource "aws_route_table" "this" {
   for_each = { for k, v in var.route_tables : k => v if var.create }
 
   vpc_id = var.vpc_id
+
+  dynamic "route" {
+    for_each = try(var.route_tables.routes, {})
+    content {
+      # One of the following destination arguments must be supplied:
+      cidr_block                 = try(route.value.cidr_block, null)
+      ipv6_cidr_block            = try(route.value.ipv6_cidr_block, null)
+      destination_prefix_list_id = try(route.value.destination_prefix_list_id, null)
+
+      # One of the following target arguments must be supplied:
+      carrier_gateway_id        = try(route.value.carrier_gateway_id, null)
+      egress_only_gateway_id    = try(route.value.egress_only_gateway_id, null)
+      gateway_id                = try(route.value.gateway_id, null)
+      nat_gateway_id            = try(route.value.nat_gateway_id, null)
+      local_gateway_id          = try(route.value.local_gateway_id, null)
+      network_interface_id      = try(route.value.network_interface_id, null)
+      transit_gateway_id        = try(route.value.transit_gateway_id, null)
+      vpc_endpoint_id           = try(route.value.vpc_endpoint_id, null)
+      vpc_peering_connection_id = try(route.value.vpc_peering_connection_id, null)
+    }
+  }
 
   timeouts {
     create = try(var.route_table_timeouts.create, null)
@@ -112,35 +127,6 @@ resource "aws_route_table_association" "gateway" {
 
   gateway_id     = each.key
   route_table_id = aws_route_table.this[each.value].id
-}
-
-resource "aws_route" "this" {
-  for_each = { for k, v in local.routes : k => v if var.create }
-  # for_each = {}
-
-  route_table_id = aws_route_table.this[each.value.route_table_key].id
-
-  # One of the following destination arguments must be supplied:
-  destination_cidr_block      = try(each.value.destination_cidr_block, null)
-  destination_ipv6_cidr_block = try(each.value.destination_ipv6_cidr_block, null)
-  destination_prefix_list_id  = try(each.value.destination_prefix_list_id, null)
-
-  # One of the following target arguments must be supplied:
-  carrier_gateway_id        = try(each.value.carrier_gateway_id, null)
-  egress_only_gateway_id    = try(each.value.egress_only_gateway_id, null)
-  gateway_id                = try(each.value.gateway_id, null)
-  nat_gateway_id            = try(each.value.nat_gateway_id, null)
-  local_gateway_id          = try(each.value.local_gateway_id, null)
-  network_interface_id      = try(each.value.network_interface_id, null)
-  transit_gateway_id        = try(each.value.transit_gateway_id, null)
-  vpc_endpoint_id           = try(each.value.vpc_endpoint_id, null)
-  vpc_peering_connection_id = try(each.value.vpc_peering_connection_id, null)
-
-  timeouts {
-    create = try(var.route_timeouts.create, null)
-    update = try(var.route_timeouts.update, null)
-    delete = try(var.route_timeouts.delete, null)
-  }
 }
 
 ################################################################################

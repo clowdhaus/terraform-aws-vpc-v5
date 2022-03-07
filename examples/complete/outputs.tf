@@ -316,16 +316,6 @@ output "public_subnets_route_table_ids" {
   value       = module.public_subnets.route_table_ids
 }
 
-output "public_subnets_public_subnets_routes" {
-  description = "Map of routes created and their attributes"
-  value       = module.public_subnets.routes
-}
-
-output "public_subnets_route_ids" {
-  description = "List of route IDs"
-  value       = module.public_subnets.route_ids
-}
-
 output "public_subnets_route_table_subnet_association_ids" {
   description = "List of subnet route table association IDs"
   value       = module.public_subnets.route_table_subnet_association_ids

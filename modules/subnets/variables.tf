@@ -54,12 +54,6 @@ variable "route_table_timeouts" {
   default     = {}
 }
 
-variable "route_timeouts" {
-  description = "Create, update, and delete timeout configurations for route table routes"
-  type        = map(string)
-  default     = {}
-}
-
 ################################################################################
 # Network ACL
 ################################################################################
