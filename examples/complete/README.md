@@ -42,6 +42,9 @@ Note that this example may create resources which will incur monetary charges on
 
 | Name | Type |
 |------|------|
+| [aws_cloudwatch_log_group.logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
+| [aws_s3_bucket.logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
+| [aws_s3_bucket_policy.logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 
 ## Inputs
@@ -95,6 +98,7 @@ No inputs.
 | <a name="output_main_route_table_id"></a> [main\_route\_table\_id](#output\_main\_route\_table\_id) | The ID of the main route table associated with this VPC. Note that you can change a VPC's main route table by using an `aws_main_route_table_association` |
 | <a name="output_network_firewall_arn"></a> [network\_firewall\_arn](#output\_network\_firewall\_arn) | The Amazon Resource Name (ARN) that identifies the firewall |
 | <a name="output_network_firewall_id"></a> [network\_firewall\_id](#output\_network\_firewall\_id) | The Amazon Resource Name (ARN) that identifies the firewall |
+| <a name="output_network_firewall_logging_configuration_id"></a> [network\_firewall\_logging\_configuration\_id](#output\_network\_firewall\_logging\_configuration\_id) | The Amazon Resource Name (ARN) of the associated firewall |
 | <a name="output_network_firewall_policy_arn"></a> [network\_firewall\_policy\_arn](#output\_network\_firewall\_policy\_arn) | The Amazon Resource Name (ARN) that identifies the firewall policy |
 | <a name="output_network_firewall_policy_id"></a> [network\_firewall\_policy\_id](#output\_network\_firewall\_policy\_id) | The Amazon Resource Name (ARN) that identifies the firewall policy |
 | <a name="output_network_firewall_policy_resource_policy_id"></a> [network\_firewall\_policy\_resource\_policy\_id](#output\_network\_firewall\_policy\_resource\_policy\_id) | The Amazon Resource Name (ARN) of the firewall policy associated with the resource policy |

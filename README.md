@@ -92,7 +92,7 @@ This is where most of the logic will captured; the design is centered around the
 - ✅ aws_networkfirewall_firewall_policy
 - ✅ aws_networkfirewall_rule_group
 - ✅ aws_networkfirewall_resource_policy
-- [ ] aws_networkfirewall_logging_configuration
+- ✅ aws_networkfirewall_logging_configuration
 
 ### DNS Firewall
 

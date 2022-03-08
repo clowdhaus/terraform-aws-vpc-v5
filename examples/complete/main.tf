@@ -3,8 +3,9 @@ provider "aws" {
 }
 
 locals {
-  name   = "vpc-ex-${replace(basename(path.cwd), "_", "-")}"
-  region = "eu-west-1"
+  name       = "vpc-ex-${replace(basename(path.cwd), "_", "-")}"
+  region     = "eu-west-1"
+  account_id = data.aws_caller_identity.current.account_id
 
   tags = {
     Example    = local.name
@@ -142,6 +143,10 @@ module "network_firewall" {
 
   vpc_id         = module.vpc.id
   subnet_mapping = module.public_subnets.ids
+
+  # Disable for testing
+  delete_protection        = false
+  subnet_change_protection = false
 
   # Policy
   policy_description = "Example network firewall policy"
@@ -335,16 +340,89 @@ module "network_firewall" {
   attach_firewall_policy_resource_policy     = true
   firewall_policy_resource_policy_principals = [data.aws_caller_identity.current.arn]
 
+  # Logging configuration
+  create_logging_configuration = true
+  logging_configuration_destination_config = [
+    {
+      log_destination = {
+        logGroup = aws_cloudwatch_log_group.logs.name
+      }
+      log_destination_type = "CloudWatchLogs"
+      log_type             = "ALERT"
+    },
+    {
+      log_destination = {
+        bucketName = aws_s3_bucket.logs.id
+        prefix     = local.name
+      }
+      log_destination_type = "S3"
+      log_type             = "FLOW"
+    }
+  ]
 
-  # resource_policies = {
-  #   firewall_policy = {
-  #     policy =
-  #   }
-  #   stateful_ex1_rule_group = {
-  #     rule_group_key = "stateful_ex1"
-  #     policy =
-  #   }
-  # }
 
   tags = local.tags
+}
+
+################################################################################
+# Supporting Resources
+################################################################################
+
+resource "aws_cloudwatch_log_group" "logs" {
+  name              = "${local.name}-logs"
+  retention_in_days = 7
+
+  tags = local.tags
+}
+
+resource "aws_s3_bucket" "logs" {
+  bucket        = "${local.name}-logs-${local.account_id}"
+  force_destroy = true
+
+  tags = local.tags
+}
+
+# Logging configuration automatically adds this policy if not present
+resource "aws_s3_bucket_policy" "logs" {
+  bucket = aws_s3_bucket.logs.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "s3:PutObject"
+        Condition = {
+          ArnLike = {
+            "aws:SourceArn" = "arn:aws:logs:${local.region}:${local.account_id}:*"
+          }
+          StringEquals = {
+            "aws:SourceAccount" = local.account_id
+            "s3:x-amz-acl"      = "bucket-owner-full-control"
+          }
+        }
+        Effect = "Allow"
+        Principal = {
+          Service = "delivery.logs.amazonaws.com"
+        }
+        Resource = "${aws_s3_bucket.logs.arn}/${local.name}/AWSLogs/${local.account_id}/*"
+        Sid      = "AWSLogDeliveryWrite"
+      },
+      {
+        Action = "s3:GetBucketAcl"
+        Condition = {
+          ArnLike = {
+            "aws:SourceArn" = "arn:aws:logs:${local.region}:${local.account_id}:*"
+          }
+          StringEquals = {
+            "aws:SourceAccount" = local.account_id
+          }
+        }
+        Effect = "Allow"
+        Principal = {
+          Service = "delivery.logs.amazonaws.com"
+        }
+        Resource = aws_s3_bucket.logs.arn
+        Sid      = "AWSLogDeliveryAclCheck"
+      },
+    ]
+  })
 }

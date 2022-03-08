@@ -27,9 +27,9 @@ variable "description" {
 }
 
 variable "delete_protection" {
-  description = "A boolean flag indicating whether it is possible to delete the firewall. Defaults to `false`"
+  description = "A boolean flag indicating whether it is possible to delete the firewall. Defaults to `true`"
   type        = bool
-  default     = null
+  default     = true
 }
 
 variable "create_firewall_policy" {
@@ -63,9 +63,9 @@ variable "subnet_mapping" {
 }
 
 variable "subnet_change_protection" {
-  description = "A boolean flag indicating whether it is possible to change the associated subnet(s). Defaults to `false`"
+  description = "A boolean flag indicating whether it is possible to change the associated subnet(s). Defaults to `true`"
   type        = bool
-  default     = null
+  default     = true
 }
 
 ################################################################################
@@ -171,3 +171,19 @@ variable "firewall_policy_resource_policy" {
 }
 
 # Note: Rule group policies are captured under `rule_groups`
+
+################################################################################
+# Firewall Logging Configuration
+################################################################################
+
+variable "create_logging_configuration" {
+  description = "Controls if a Logging Configuration should be created"
+  type        = bool
+  default     = false
+}
+
+variable "logging_configuration_destination_config" {
+  description = "A list of min 1, max 2 configuration blocks describing the destination for the logging configuration"
+  type        = any
+  default     = []
+}
