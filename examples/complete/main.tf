@@ -12,6 +12,8 @@ locals {
   }
 }
 
+data "aws_caller_identity" "current" {}
+
 ################################################################################
 # VPC Module
 ################################################################################
@@ -142,14 +144,21 @@ module "network_firewall" {
   subnet_mapping = module.public_subnets.ids
 
   # Policy
+  policy_description = "Example network firewall policy"
   policy_stateful_rule_group_reference = [
     { rule_group_key = "stateful_ex1" },
     { rule_group_key = "stateful_ex2" },
     { rule_group_key = "stateful_ex3" },
     { rule_group_key = "stateful_ex4" },
   ]
+
+  policy_stateless_default_actions          = ["aws:pass"]
+  policy_stateless_fragment_default_actions = ["aws:drop"]
   policy_stateless_rule_group_reference = [
-    { rule_group_key = "stateless_ex1" },
+    {
+      priority       = 1
+      rule_group_key = "stateless_ex1"
+    },
   ]
 
   # Rule Group(s)
@@ -170,6 +179,11 @@ module "network_firewall" {
           }
         }
       }
+
+      # Resource Policy - Rule Group
+      create_resource_policy     = true
+      attach_resource_policy     = true
+      resource_policy_principals = [data.aws_caller_identity.current.arn]
     }
 
     stateful_ex2 = {
@@ -308,10 +322,20 @@ module "network_firewall" {
           }
         }
       }
+
+      # Resource Policy - Rule Group
+      create_resource_policy     = true
+      attach_resource_policy     = true
+      resource_policy_principals = [data.aws_caller_identity.current.arn]
     }
   }
 
-  # # Resource Policy
+  # Resource Policy - Firewall Policy
+  create_firewall_policy_resource_policy     = true
+  attach_firewall_policy_resource_policy     = true
+  firewall_policy_resource_policy_principals = [data.aws_caller_identity.current.arn]
+
+
   # resource_policies = {
   #   firewall_policy = {
   #     policy =

@@ -131,23 +131,43 @@ variable "rule_groups" {
 }
 
 ################################################################################
-# Firewall Resource Policy
+# Firewall Resource Policies
 ################################################################################
 
+# Firewall Policy
 variable "create_firewall_policy_resource_policy" {
-  description = "Controls if a Firewall Policy resource policy should be created"
+  description = "Controls if a Firewall Policy Resource Policy should be created"
   type        = bool
   default     = false
 }
 
-variable "firewall_policy_resource_policy_template_path" {
-  description = "The path to the Firewall Policy IAM resource policy template"
+variable "firewall_policy_resource_policy_actions" {
+  description = "A list of IAM actions allowed in the Firewall Policy Resource Policy"
+  type        = list(string)
+  default = [
+    "network-firewall:ListFirewallPolicies",
+    "network-firewall:CreateFirewall",
+    "network-firewall:UpdateFirewall",
+    "network-firewall:AssociateFirewallPolicy",
+  ]
+}
+
+variable "firewall_policy_resource_policy_principals" {
+  description = "A list of IAM principals allowed in the Firewall Policy Resource Policy"
+  type        = list(string)
+  default     = []
+}
+
+variable "attach_firewall_policy_resource_policy" {
+  description = "Controls if a Resource Policy should be attached to the Firewall Policy"
+  type        = bool
+  default     = false
+}
+
+variable "firewall_policy_resource_policy" {
+  description = "The policy JSON to use for the Firewall Policy Resource Policy; required when `create_firewall_policy_resource_policy` is `false`"
   type        = string
   default     = ""
 }
 
-variable "rule_group_resource_policies" {
-  description = "A map of Firewall Rule Group resource policies to be created"
-  type        = any
-  default     = {}
-}
+# Note: Rule group policies are captured under `rule_groups`

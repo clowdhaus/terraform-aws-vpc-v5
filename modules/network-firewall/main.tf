@@ -301,25 +301,55 @@ resource "aws_networkfirewall_rule_group" "this" {
 }
 
 ################################################################################
-# Firewall Resource Policy
+# Firewall Resource Policies
 ################################################################################
 
-resource "aws_networkfirewall_resource_policy" "firewall_policy" {
+# Firewall Policy
+data "aws_iam_policy_document" "firewall_policy" {
   count = var.create && var.create_firewall_policy && var.create_firewall_policy_resource_policy ? 1 : 0
 
+  statement {
+    sid       = "NetworkFirewallResourcePolicy"
+    actions   = var.firewall_policy_resource_policy_actions
+    resources = [aws_networkfirewall_firewall_policy.this[0].arn]
+
+    principals {
+      type        = "AWS"
+      identifiers = var.firewall_policy_resource_policy_principals
+    }
+  }
+}
+
+resource "aws_networkfirewall_resource_policy" "firewall_policy" {
+  count = var.create && var.create_firewall_policy && var.attach_firewall_policy_resource_policy ? 1 : 0
+
   resource_arn = aws_networkfirewall_firewall_policy.this[0].arn
-  # Hacky work-around to be able to use ARN at time of creation
-  policy = jsonencode(templatefile(var.firewall_policy_resource_policy_template_path, {
-    firewall_policy_arn = aws_networkfirewall_firewall_policy.this[0].arn
-  }))
+  policy       = var.create_firewall_policy_resource_policy ? data.aws_iam_policy_document.firewall_policy[0].json : var.firewall_policy_resource_policy
+}
+
+# Rule Group(s)
+data "aws_iam_policy_document" "rule_group" {
+  for_each = { for k, v in var.rule_groups : k => v if var.create && try(v.create_resource_policy, false) }
+
+  statement {
+    sid = "RuleGroupResourcePolicy"
+    actions = try(each.value.resource_policy_actions, [
+      "network-firewall:ListRuleGroups",
+      "network-firewall:CreateFirewallPolicy",
+      "network-firewall:UpdateFirewallPolicy"
+    ])
+    resources = [aws_networkfirewall_rule_group.this[each.key].arn]
+
+    principals {
+      type        = "AWS"
+      identifiers = try(each.value.resource_policy_principals, [])
+    }
+  }
 }
 
 resource "aws_networkfirewall_resource_policy" "rule_group" {
-  for_each = { for k, v in var.rule_group_resource_policies : k => v if var.create }
+  for_each = { for k, v in var.rule_groups : k => v if var.create && try(v.attach_resource_policy, false) }
 
-  resource_arn = aws_networkfirewall_rule_group.this[each.value.rule_group_key].arn
-  # Hacky work-around to be able to use ARN at time of creation
-  policy = jsonencode(templatefile(each.value.rule_group_policy_template_path, {
-    rule_group_arn = aws_networkfirewall_rule_group.this[each.value.rule_group_key].arn
-  }))
+  resource_arn = aws_networkfirewall_rule_group.this[each.key].arn
+  policy       = try(each.value.create_resource_policy, false) ? data.aws_iam_policy_document.rule_group[each.key].json : each.value.resource_policy
 }

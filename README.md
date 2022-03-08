@@ -91,8 +91,16 @@ This is where most of the logic will captured; the design is centered around the
 - ✅ aws_networkfirewall_firewall
 - ✅ aws_networkfirewall_firewall_policy
 - ✅ aws_networkfirewall_rule_group
-- [ ] aws_networkfirewall_resource_policy
+- ✅ aws_networkfirewall_resource_policy
 - [ ] aws_networkfirewall_logging_configuration
+
+### DNS Firewall
+
+- [ ] aws_route53_resolver_firewall_config
+- [ ] aws_route53_resolver_firewall_domain_list
+- [ ] aws_route53_resolver_firewall_rule
+- [ ] aws_route53_resolver_firewall_rule_group
+- [ ] aws_route53_resolver_firewall_rule_group_association
 
 ### EC2 Managed Prefix
 
