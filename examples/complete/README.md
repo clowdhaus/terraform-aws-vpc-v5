@@ -32,6 +32,7 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_network_firewall"></a> [network\_firewall](#module\_network\_firewall) | ../../modules/network-firewall | n/a |
 | <a name="module_public_subnets"></a> [public\_subnets](#module\_public\_subnets) | ../../modules/subnets | n/a |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | ../../ | n/a |
 
@@ -88,6 +89,14 @@ No inputs.
 | <a name="output_ipv6_cidr_block_associations"></a> [ipv6\_cidr\_block\_associations](#output\_ipv6\_cidr\_block\_associations) | Map of IPv6 CIDR block associations and their attributes |
 | <a name="output_ipv6_cidr_block_network_border_group"></a> [ipv6\_cidr\_block\_network\_border\_group](#output\_ipv6\_cidr\_block\_network\_border\_group) | The Network Border Group Zone name |
 | <a name="output_main_route_table_id"></a> [main\_route\_table\_id](#output\_main\_route\_table\_id) | The ID of the main route table associated with this VPC. Note that you can change a VPC's main route table by using an `aws_main_route_table_association` |
+| <a name="output_network_firewall_arn"></a> [network\_firewall\_arn](#output\_network\_firewall\_arn) | The Amazon Resource Name (ARN) that identifies the firewall |
+| <a name="output_network_firewall_id"></a> [network\_firewall\_id](#output\_network\_firewall\_id) | The Amazon Resource Name (ARN) that identifies the firewall |
+| <a name="output_network_firewall_policy_arn"></a> [network\_firewall\_policy\_arn](#output\_network\_firewall\_policy\_arn) | The Amazon Resource Name (ARN) that identifies the firewall policy |
+| <a name="output_network_firewall_policy_id"></a> [network\_firewall\_policy\_id](#output\_network\_firewall\_policy\_id) | The Amazon Resource Name (ARN) that identifies the firewall policy |
+| <a name="output_network_firewall_policy_update_token"></a> [network\_firewall\_policy\_update\_token](#output\_network\_firewall\_policy\_update\_token) | A string token used when updating a firewall policy |
+| <a name="output_network_firewall_rule_groups"></a> [network\_firewall\_rule\_groups](#output\_network\_firewall\_rule\_groups) | A map of the rule groups created and their attributes |
+| <a name="output_network_firewall_status"></a> [network\_firewall\_status](#output\_network\_firewall\_status) | Nested list of information about the current status of the firewall |
+| <a name="output_network_firewall_update_token"></a> [network\_firewall\_update\_token](#output\_network\_firewall\_update\_token) | A string token used when updating a firewall |
 | <a name="output_public_subnet_arns"></a> [public\_subnet\_arns](#output\_public\_subnet\_arns) | List of subnet ARNs |
 | <a name="output_public_subnet_ids"></a> [public\_subnet\_ids](#output\_public\_subnet\_ids) | List of subnet IDs |
 | <a name="output_public_subnet_ipv4_cidr_blocks"></a> [public\_subnet\_ipv4\_cidr\_blocks](#output\_public\_subnet\_ipv4\_cidr\_blocks) | List of subnet IPv4 CIDR blocks |

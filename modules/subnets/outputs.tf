@@ -7,22 +7,22 @@ output "subnets" {
   value       = aws_subnet.this
 }
 
-output "subnet_arns" {
+output "arns" {
   description = "List of subnet ARNs"
   value       = [for subnet in aws_subnet.this : subnet.arn]
 }
 
-output "subnet_ids" {
+output "ids" {
   description = "List of subnet IDs"
   value       = [for subnet in aws_subnet.this : subnet.id]
 }
 
-output "subnet_ipv4_cidr_blocks" {
+output "ipv4_cidr_blocks" {
   description = "List of subnet IPv4 CIDR blocks"
   value       = compact([for subnet in aws_subnet.this : subnet.cidr_block])
 }
 
-output "subnet_ipv6_cidr_blocks" {
+output "ipv6_cidr_blocks" {
   description = "List of subnet IPv6 CIDR blocks"
   value       = compact([for subnet in aws_subnet.this : subnet.ipv6_cidr_block])
 }

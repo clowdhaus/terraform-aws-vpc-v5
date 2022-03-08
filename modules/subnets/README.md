@@ -94,7 +94,11 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_arns"></a> [arns](#output\_arns) | List of subnet ARNs |
 | <a name="output_ec2_subnet_cidr_reservations"></a> [ec2\_subnet\_cidr\_reservations](#output\_ec2\_subnet\_cidr\_reservations) | Map of EC2 subnet CIDR reservations created and their attributes |
+| <a name="output_ids"></a> [ids](#output\_ids) | List of subnet IDs |
+| <a name="output_ipv4_cidr_blocks"></a> [ipv4\_cidr\_blocks](#output\_ipv4\_cidr\_blocks) | List of subnet IPv4 CIDR blocks |
+| <a name="output_ipv6_cidr_blocks"></a> [ipv6\_cidr\_blocks](#output\_ipv6\_cidr\_blocks) | List of subnet IPv6 CIDR blocks |
 | <a name="output_network_acl_arn"></a> [network\_acl\_arn](#output\_network\_acl\_arn) | The ID of the network ACL |
 | <a name="output_network_acl_id"></a> [network\_acl\_id](#output\_network\_acl\_id) | The ARN of the network ACL |
 | <a name="output_network_acl_rules_egress"></a> [network\_acl\_rules\_egress](#output\_network\_acl\_rules\_egress) | Map of egress network ACL rules created and their attributes |
@@ -103,9 +107,5 @@ No modules.
 | <a name="output_route_table_ids"></a> [route\_table\_ids](#output\_route\_table\_ids) | List of route table IDs |
 | <a name="output_route_table_subnet_association_ids"></a> [route\_table\_subnet\_association\_ids](#output\_route\_table\_subnet\_association\_ids) | List of subnet route table association IDs |
 | <a name="output_route_tables"></a> [route\_tables](#output\_route\_tables) | Map of route tables created and their attributes |
-| <a name="output_subnet_arns"></a> [subnet\_arns](#output\_subnet\_arns) | List of subnet ARNs |
-| <a name="output_subnet_ids"></a> [subnet\_ids](#output\_subnet\_ids) | List of subnet IDs |
-| <a name="output_subnet_ipv4_cidr_blocks"></a> [subnet\_ipv4\_cidr\_blocks](#output\_subnet\_ipv4\_cidr\_blocks) | List of subnet IPv4 CIDR blocks |
-| <a name="output_subnet_ipv6_cidr_blocks"></a> [subnet\_ipv6\_cidr\_blocks](#output\_subnet\_ipv6\_cidr\_blocks) | List of subnet IPv6 CIDR blocks |
 | <a name="output_subnets"></a> [subnets](#output\_subnets) | Map of subnets created and their attributes |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

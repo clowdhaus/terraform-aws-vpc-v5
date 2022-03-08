@@ -53,6 +53,10 @@ module "vpc" {
   tags = local.tags
 }
 
+################################################################################
+# Subnets Module
+################################################################################
+
 module "public_subnets" {
   source = "../../modules/subnets"
 
@@ -118,6 +122,192 @@ module "public_subnets" {
       cidr_block  = "0.0.0.0/0"
       from_port   = 0
       to_port     = 0
+    }
+  }
+
+  tags = local.tags
+}
+
+################################################################################
+# Network Firewall Module
+################################################################################
+
+module "network_firewall" {
+  source = "../../modules/network-firewall"
+
+  name        = local.name
+  description = "Example network firewall"
+
+  vpc_id         = module.vpc.id
+  subnet_mapping = module.public_subnets.ids
+
+  # Policy
+  policy_stateful_rule_group_reference = [
+    { rule_group_key = "stateful_ex1" },
+    { rule_group_key = "stateful_ex2" },
+    { rule_group_key = "stateful_ex3" },
+    { rule_group_key = "stateful_ex4" },
+  ]
+  policy_stateless_rule_group_reference = [
+    { rule_group_key = "stateless_ex1" },
+  ]
+
+  # Rule Group(s)
+  rule_groups = {
+
+    stateful_ex1 = {
+      name        = "${local.name}-stateful-ex1"
+      description = "Stateful Inspection for denying access to a domain"
+      type        = "STATEFUL"
+      capacity    = 100
+
+      rule_group = {
+        rules_source = {
+          rules_source_list = {
+            generated_rules_type = "DENYLIST"
+            target_types         = ["HTTP_HOST"]
+            targets              = ["test.example.com"]
+          }
+        }
+      }
+    }
+
+    stateful_ex2 = {
+      name        = "${local.name}-stateful-ex2"
+      description = "Stateful Inspection for permitting packets from a source IP address"
+      type        = "STATEFUL"
+      capacity    = 50
+
+      rule_group = {
+        rules_source = {
+          stateful_rule = [{
+            action = "PASS"
+            header = {
+              destination      = "ANY"
+              destination_port = "ANY"
+              protocol         = "HTTP"
+              direction        = "ANY"
+              source_port      = "ANY"
+              source           = "1.2.3.4"
+            }
+            rule_option = [{
+              keyword = "sid:1"
+            }]
+          }]
+        }
+      }
+    }
+
+    stateful_ex3 = {
+      name        = "${local.name}-stateful-ex3"
+      description = "Stateful Inspection for blocking packets from going to an intended destination"
+      type        = "STATEFUL"
+      capacity    = 100
+
+      rule_group = {
+        rules_source = {
+          stateful_rule = [{
+            action = "DROP"
+            header = {
+              destination      = "124.1.1.24/32"
+              destination_port = 53
+              direction        = "ANY"
+              protocol         = "TCP"
+              source           = "1.2.3.4/32"
+              source_port      = 53
+            }
+            rule_option = [{
+              keyword = "sid:1"
+            }]
+          }]
+        }
+      }
+    }
+
+    stateful_ex4 = {
+      name        = "${local.name}-stateful-ex4"
+      description = "Stateful Inspection from rule group specifications using rule variables and Suricata format rules"
+      type        = "STATEFUL"
+      capacity    = 100
+
+      rule_group = {
+        rule_variables = {
+          ip_sets = [{
+            key = "WEBSERVERS_HOSTS"
+            ip_set = {
+              definition = ["10.0.0.0/16", "10.0.1.0/24", "192.168.0.0/16"]
+            }
+            }, {
+            key = "EXTERNAL_HOST"
+            ip_set = {
+              definition = ["1.2.3.4/32"]
+            }
+          }]
+          port_sets = [{
+            key = "HTTP_PORTS"
+            port_set = {
+              definition = ["443", "80"]
+            }
+          }]
+        }
+        rules_source = {
+          rules_string = <<-EOT
+          alert icmp any any -> any any (msg: "Allowing ICMP packets"; sid:1; rev:1;)
+          pass icmp any any -> any any (msg: "Allowing ICMP packets"; sid:2; rev:1;)
+          EOT
+        }
+      }
+    }
+
+    stateless_ex1 = {
+      name        = "${local.name}-stateless-ex1"
+      description = "Stateless Inspection with a Custom Action"
+      type        = "STATELESS"
+      capacity    = 100
+
+      rule_group = {
+        rules_source = {
+          stateless_rules_and_custom_actions = {
+            custom_action = [{
+              action_definition = {
+                publish_metric_action = {
+                  dimension = [{
+                    value = "2"
+                  }]
+                }
+              }
+              action_name = "ExampleMetricsAction"
+            }]
+            stateless_rule = [{
+              priority = 1
+              rule_definition = {
+                actions = ["aws:pass", "ExampleMetricsAction"]
+                match_attributes = {
+                  source = [{
+                    address_definition = "1.2.3.4/32"
+                  }]
+                  source_port = [{
+                    from_port = 443
+                    to_port   = 443
+                  }]
+                  destination = [{
+                    address_definition = "124.1.1.5/32"
+                  }]
+                  destination_port = [{
+                    from_port = 443
+                    to_port   = 443
+                  }]
+                  protocols = [6]
+                  tcp_flag = [{
+                    flags = ["SYN"]
+                    masks = ["SYN", "ACK"]
+                  }]
+                }
+              }
+            }]
+          }
+        }
+      }
     }
   }
 

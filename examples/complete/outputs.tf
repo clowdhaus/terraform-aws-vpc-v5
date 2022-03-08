@@ -275,22 +275,22 @@ output "public_subnets" {
 
 output "public_subnet_arns" {
   description = "List of subnet ARNs"
-  value       = module.public_subnets.subnet_arns
+  value       = module.public_subnets.arns
 }
 
 output "public_subnet_ids" {
   description = "List of subnet IDs"
-  value       = module.public_subnets.subnet_ids
+  value       = module.public_subnets.ids
 }
 
 output "public_subnet_ipv4_cidr_blocks" {
   description = "List of subnet IPv4 CIDR blocks"
-  value       = module.public_subnets.subnet_ipv4_cidr_blocks
+  value       = module.public_subnets.ipv4_cidr_blocks
 }
 
 output "public_subnet_ipv6_cidr_blocks" {
   description = "List of subnet IPv6 CIDR blocks"
-  value       = module.public_subnets.subnet_ipv6_cidr_blocks
+  value       = module.public_subnets.ipv6_cidr_blocks
 }
 
 ################################################################################
@@ -348,4 +348,56 @@ output "public_subnets_network_acl_rules_ingress" {
 output "public_subnets_network_acl_rules_egress" {
   description = "Map of egress network ACL rules created and their attributes"
   value       = module.public_subnets.network_acl_rules_egress
+}
+
+################################################################################
+# Firewall
+################################################################################
+
+output "network_firewall_id" {
+  description = "The Amazon Resource Name (ARN) that identifies the firewall"
+  value       = module.network_firewall.id
+}
+
+output "network_firewall_arn" {
+  description = "The Amazon Resource Name (ARN) that identifies the firewall"
+  value       = module.network_firewall.arn
+}
+
+output "network_firewall_status" {
+  description = "Nested list of information about the current status of the firewall"
+  value       = module.network_firewall.status
+}
+
+output "network_firewall_update_token" {
+  description = "A string token used when updating a firewall"
+  value       = module.network_firewall.update_token
+}
+
+################################################################################
+# Firewall Policy
+################################################################################
+
+output "network_firewall_policy_id" {
+  description = "The Amazon Resource Name (ARN) that identifies the firewall policy"
+  value       = module.network_firewall.policy_id
+}
+
+output "network_firewall_policy_arn" {
+  description = "The Amazon Resource Name (ARN) that identifies the firewall policy"
+  value       = module.network_firewall.policy_arn
+}
+
+output "network_firewall_policy_update_token" {
+  description = "A string token used when updating a firewall policy"
+  value       = module.network_firewall.policy_update_token
+}
+
+################################################################################
+# Firewall Rule Group
+################################################################################
+
+output "network_firewall_rule_groups" {
+  description = "A map of the rule groups created and their attributes"
+  value       = module.network_firewall.rule_groups
 }
