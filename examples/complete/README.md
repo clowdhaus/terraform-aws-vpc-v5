@@ -35,6 +35,7 @@ Note that this example may create resources which will incur monetary charges on
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_dns_firewall"></a> [dns\_firewall](#module\_dns\_firewall) | ../../modules/dns-firewall | n/a |
+| <a name="module_ipam"></a> [ipam](#module\_ipam) | ../../modules/ipam | n/a |
 | <a name="module_network_firewall"></a> [network\_firewall](#module\_network\_firewall) | ../../modules/network-firewall | n/a |
 | <a name="module_public_subnets"></a> [public\_subnets](#module\_public\_subnets) | ../../modules/subnets | n/a |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | ../../ | n/a |
@@ -106,6 +107,17 @@ No inputs.
 | <a name="output_id"></a> [id](#output\_id) | The ID of the VPC |
 | <a name="output_internet_gateway_arn"></a> [internet\_gateway\_arn](#output\_internet\_gateway\_arn) | The ARN of the Internet Gateway |
 | <a name="output_internet_gateway_id"></a> [internet\_gateway\_id](#output\_internet\_gateway\_id) | The ID of the Internet Gateway |
+| <a name="output_ipam_arn"></a> [ipam\_arn](#output\_ipam\_arn) | Amazon Resource Name (ARN) of IPAM |
+| <a name="output_ipam_id"></a> [ipam\_id](#output\_ipam\_id) | The ID of the IPAM |
+| <a name="output_ipam_organization_admin_account_arn"></a> [ipam\_organization\_admin\_account\_arn](#output\_ipam\_organization\_admin\_account\_arn) | The Organizations ARN for the delegate account |
+| <a name="output_ipam_organization_admin_account_email"></a> [ipam\_organization\_admin\_account\_email](#output\_ipam\_organization\_admin\_account\_email) | The Organizations email for the delegate account |
+| <a name="output_ipam_organization_admin_account_id"></a> [ipam\_organization\_admin\_account\_id](#output\_ipam\_organization\_admin\_account\_id) | The Organizations member account ID that you want to enable as the IPAM account |
+| <a name="output_ipam_organization_admin_account_name"></a> [ipam\_organization\_admin\_account\_name](#output\_ipam\_organization\_admin\_account\_name) | The Organizations name for the delegate account |
+| <a name="output_ipam_organization_admin_account_service_principal"></a> [ipam\_organization\_admin\_account\_service\_principal](#output\_ipam\_organization\_admin\_account\_service\_principal) | The AWS service principal |
+| <a name="output_ipam_private_default_scope_id"></a> [ipam\_private\_default\_scope\_id](#output\_ipam\_private\_default\_scope\_id) | The ID of the IPAM's private scope. A scope is a top-level container in IPAM. Each scope represents an IP-independent network. Scopes enable you to represent networks where you have overlapping IP space. The private scope is intended for private IP space |
+| <a name="output_ipam_public_default_scope_id"></a> [ipam\_public\_default\_scope\_id](#output\_ipam\_public\_default\_scope\_id) | The ID of the IPAM's private scope. A scope is a top-level container in IPAM. Each scope represents an IP-independent network. Scopes enable you to represent networks where you have overlapping IP space. The public scope is intended for all internet-routable IP space |
+| <a name="output_ipam_scope_count"></a> [ipam\_scope\_count](#output\_ipam\_scope\_count) | The number of scopes in the IPAM |
+| <a name="output_ipam_scopes"></a> [ipam\_scopes](#output\_ipam\_scopes) | A map of the scopes created and their attributes |
 | <a name="output_ipv4_cidr_block_associations"></a> [ipv4\_cidr\_block\_associations](#output\_ipv4\_cidr\_block\_associations) | Map of IPv4 CIDR block associations and their attributes |
 | <a name="output_ipv6_association_id"></a> [ipv6\_association\_id](#output\_ipv6\_association\_id) | The association ID for the IPv6 CIDR block |
 | <a name="output_ipv6_cidr_block"></a> [ipv6\_cidr\_block](#output\_ipv6\_cidr\_block) | The IPv6 CIDR block of the VPC |

@@ -16,6 +16,28 @@ locals {
 data "aws_caller_identity" "current" {}
 
 ################################################################################
+# IPAM Module
+################################################################################
+
+module "ipam" {
+  source = "../../modules/ipam"
+
+  description       = "IPAM example"
+  operating_regions = [local.region, "us-west-2"]
+
+  scopes = {
+    one = {
+      description = "Example scope number one"
+    }
+    two = {
+      description = "Example scope number two"
+    }
+  }
+
+  tags = local.tags
+}
+
+################################################################################
 # VPC Module
 ################################################################################
 
