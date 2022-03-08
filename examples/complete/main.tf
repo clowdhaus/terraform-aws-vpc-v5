@@ -132,6 +132,56 @@ module "public_subnets" {
 }
 
 ################################################################################
+# DNS Firewall Module
+################################################################################
+
+module "dns_firewall" {
+  source = "../../modules/dns-firewall"
+
+  name   = local.name
+  vpc_id = module.vpc.id
+
+  # Disable for test/example
+  mutation_protection = "DISABLED"
+
+  rules = {
+    block = {
+      name           = "blockit"
+      priority       = 110
+      action         = "BLOCK"
+      block_response = "NODATA"
+      domains        = ["google.com."]
+
+      tags = { rule = true }
+    }
+    block_override = {
+      priority                = 120
+      action                  = "BLOCK"
+      block_response          = "OVERRIDE"
+      block_override_dns_type = "CNAME"
+      block_override_domain   = "example.com"
+      block_override_ttl      = 1
+      domains                 = ["microsoft.com."]
+    }
+    # # unfortunately there is not a data source yet to pull managed domain lists
+    # # so keeping this commented out but available for reference
+    # block_managed_domain_list = {
+    #   priority       = 135
+    #   action         = "BLOCK"
+    #   block_response = "NODATA"
+    #   domain_list_id = "xxxx"
+    # }
+    allow = {
+      priority = 130
+      action   = "ALLOW"
+      domains  = ["amazon.com.", "amazonaws.com."]
+    }
+  }
+
+  tags = local.tags
+}
+
+################################################################################
 # Network Firewall Module
 ################################################################################
 

@@ -96,11 +96,11 @@ This is where most of the logic will captured; the design is centered around the
 
 ### DNS Firewall
 
-- [ ] aws_route53_resolver_firewall_config
-- [ ] aws_route53_resolver_firewall_domain_list
-- [ ] aws_route53_resolver_firewall_rule
-- [ ] aws_route53_resolver_firewall_rule_group
-- [ ] aws_route53_resolver_firewall_rule_group_association
+- ✅ aws_route53_resolver_firewall_config
+- ✅ aws_route53_resolver_firewall_domain_list
+- ✅ aws_route53_resolver_firewall_rule
+- ✅ aws_route53_resolver_firewall_rule_group
+- ✅ aws_route53_resolver_firewall_rule_group_association
 
 ### EC2 Managed Prefix
 
