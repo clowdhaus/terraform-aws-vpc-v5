@@ -121,6 +121,28 @@ variable "ipv6_cidr_block_associations" {
 }
 
 ################################################################################
+# Route53 Resolver
+################################################################################
+
+variable "enable_dnssec_config" {
+  description = "Controls if Route53 Resolver DNSSEC Config is enabled/disabled"
+  type        = bool
+  default     = true
+}
+
+variable "enable_dns_query_logging" {
+  description = "Controls if Route53 Resolver DNS Query Logging is enabled/disabled"
+  type        = bool
+  default     = false
+}
+
+variable "dns_query_log_destintion_arn" {
+  description = "The ARN of the resource that you want Route 53 Resolver to send query logs. You can send query logs to an S3 bucket, a CloudWatch Logs log group, or a Kinesis Data Firehose delivery stream"
+  type        = string
+  default     = null
+}
+
+################################################################################
 # Flow Log
 ################################################################################
 

@@ -38,6 +38,10 @@ module "vpc" {
     }
   }
 
+  # DNS Query Logging
+  enable_dns_query_logging     = true
+  dns_query_log_destintion_arn = aws_s3_bucket.dns_query_logs.arn
+
   # Flow Log
   create_flow_log                                 = true
   create_flow_log_cloudwatch_iam_role             = true
@@ -471,6 +475,60 @@ resource "aws_s3_bucket_policy" "logs" {
           Service = "delivery.logs.amazonaws.com"
         }
         Resource = aws_s3_bucket.logs.arn
+        Sid      = "AWSLogDeliveryAclCheck"
+      },
+    ]
+  })
+}
+
+# DNS Query Logging
+resource "aws_s3_bucket" "dns_query_logs" {
+  bucket        = "${local.name}-dns-query-logs-${local.account_id}"
+  force_destroy = true
+
+  tags = local.tags
+}
+
+
+# Query log configuration automatically adds this policy if not present
+resource "aws_s3_bucket_policy" "dns_query_logs" {
+  bucket = aws_s3_bucket.dns_query_logs.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "s3:PutObject"
+        Condition = {
+          ArnLike = {
+            "aws:SourceArn" = "arn:aws:logs:${local.region}:${local.account_id}:*"
+          }
+          StringEquals = {
+            "aws:SourceAccount" = local.account_id
+            "s3:x-amz-acl"      = "bucket-owner-full-control"
+          }
+        }
+        Effect = "Allow"
+        Principal = {
+          Service = "delivery.logs.amazonaws.com"
+        }
+        Resource = "${aws_s3_bucket.dns_query_logs.arn}/AWSLogs/${local.account_id}/*"
+        Sid      = "AWSLogDeliveryWrite"
+      },
+      {
+        Action = "s3:GetBucketAcl"
+        Condition = {
+          ArnLike = {
+            "aws:SourceArn" = "arn:aws:logs:${local.region}:${local.account_id}:*"
+          }
+          StringEquals = {
+            "aws:SourceAccount" = local.account_id
+          }
+        }
+        Effect = "Allow"
+        Principal = {
+          Service = "delivery.logs.amazonaws.com"
+        }
+        Resource = aws_s3_bucket.dns_query_logs.arn
         Sid      = "AWSLogDeliveryAclCheck"
       },
     ]

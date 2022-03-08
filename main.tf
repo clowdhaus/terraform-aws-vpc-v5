@@ -68,6 +68,32 @@ resource "aws_vpc_ipv6_cidr_block_association" "this" {
 }
 
 ################################################################################
+# Route53 Resolver
+################################################################################
+
+resource "aws_route53_resolver_dnssec_config" "this" {
+  count = var.create && var.enable_dnssec_config ? 1 : 0
+
+  resource_id = aws_vpc.this[0].id
+}
+
+resource "aws_route53_resolver_query_log_config" "this" {
+  count = var.create && var.enable_dns_query_logging ? 1 : 0
+
+  name            = var.name
+  destination_arn = var.dns_query_log_destintion_arn
+
+  tags = var.tags
+}
+
+resource "aws_route53_resolver_query_log_config_association" "this" {
+  count = var.create && var.enable_dns_query_logging ? 1 : 0
+
+  resolver_query_log_config_id = aws_route53_resolver_query_log_config.this[0].id
+  resource_id                  = aws_vpc.this[0].id
+}
+
+################################################################################
 # DHCP Options Set
 ################################################################################
 

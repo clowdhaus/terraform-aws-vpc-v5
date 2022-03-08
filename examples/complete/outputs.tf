@@ -52,6 +52,35 @@ output "ipv6_cidr_block_associations" {
 }
 
 ################################################################################
+# Route53 Resolver DNSSEC Config
+################################################################################
+
+output "dnssec_config_arn" {
+  description = "The ARN for a configuration for DNSSEC validation"
+  value       = module.vpc.dnssec_config_arn
+}
+
+output "dnssec_config_id" {
+  description = "The ID for a configuration for DNSSEC validation"
+  value       = module.vpc.dnssec_config_id
+}
+
+output "dns_query_log_config_arn" {
+  description = "The ARN (Amazon Resource Name) of the Route 53 Resolver query logging configuration"
+  value       = module.vpc.dns_query_log_config_arn
+}
+
+output "dns_query_log_config_id" {
+  description = "The ID of the Route 53 Resolver query logging configuration"
+  value       = module.vpc.dns_query_log_config_id
+}
+
+output "dns_query_log_config_association_id" {
+  description = "he ID of the Route 53 Resolver query logging configuration association"
+  value       = module.vpc.dns_query_log_config_association_id
+}
+
+################################################################################
 # Flow Log
 ################################################################################
 
