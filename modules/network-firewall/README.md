@@ -237,7 +237,7 @@ module "network_firewall" {
 
 ## Examples
 
-- [Complete](../../examples/complete) VPC example.
+- [Complete](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/examples/complete) VPC example.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
