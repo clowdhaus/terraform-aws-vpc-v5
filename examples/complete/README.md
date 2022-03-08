@@ -93,7 +93,9 @@ No inputs.
 | <a name="output_network_firewall_id"></a> [network\_firewall\_id](#output\_network\_firewall\_id) | The Amazon Resource Name (ARN) that identifies the firewall |
 | <a name="output_network_firewall_policy_arn"></a> [network\_firewall\_policy\_arn](#output\_network\_firewall\_policy\_arn) | The Amazon Resource Name (ARN) that identifies the firewall policy |
 | <a name="output_network_firewall_policy_id"></a> [network\_firewall\_policy\_id](#output\_network\_firewall\_policy\_id) | The Amazon Resource Name (ARN) that identifies the firewall policy |
+| <a name="output_network_firewall_policy_resource_policy_id"></a> [network\_firewall\_policy\_resource\_policy\_id](#output\_network\_firewall\_policy\_resource\_policy\_id) | The Amazon Resource Name (ARN) of the firewall policy associated with the resource policy |
 | <a name="output_network_firewall_policy_update_token"></a> [network\_firewall\_policy\_update\_token](#output\_network\_firewall\_policy\_update\_token) | A string token used when updating a firewall policy |
+| <a name="output_network_firewall_rule_group_resource_policies"></a> [network\_firewall\_rule\_group\_resource\_policies](#output\_network\_firewall\_rule\_group\_resource\_policies) | Map of Rule Group resource policies created and their attributes |
 | <a name="output_network_firewall_rule_groups"></a> [network\_firewall\_rule\_groups](#output\_network\_firewall\_rule\_groups) | A map of the rule groups created and their attributes |
 | <a name="output_network_firewall_status"></a> [network\_firewall\_status](#output\_network\_firewall\_status) | Nested list of information about the current status of the firewall |
 | <a name="output_network_firewall_update_token"></a> [network\_firewall\_update\_token](#output\_network\_firewall\_update\_token) | A string token used when updating a firewall |

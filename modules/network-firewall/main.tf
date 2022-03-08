@@ -30,7 +30,7 @@ resource "aws_networkfirewall_firewall" "this" {
 ################################################################################
 
 resource "aws_networkfirewall_firewall_policy" "this" {
-  count = var.create_firewall_policy ? 1 : 0
+  count = var.create && var.create_firewall_policy ? 1 : 0
 
   name        = var.name
   description = var.policy_description
@@ -298,4 +298,28 @@ resource "aws_networkfirewall_rule_group" "this" {
   }
 
   tags = merge(var.tags, try(each.value.tags, {}))
+}
+
+################################################################################
+# Firewall Resource Policy
+################################################################################
+
+resource "aws_networkfirewall_resource_policy" "firewall_policy" {
+  count = var.create && var.create_firewall_policy && var.create_firewall_policy_resource_policy ? 1 : 0
+
+  resource_arn = aws_networkfirewall_firewall_policy.this[0].arn
+  # Hacky work-around to be able to use ARN at time of creation
+  policy = jsonencode(templatefile(var.firewall_policy_resource_policy_template_path, {
+    firewall_policy_arn = aws_networkfirewall_firewall_policy.this[0].arn
+  }))
+}
+
+resource "aws_networkfirewall_resource_policy" "rule_group" {
+  for_each = { for k, v in var.rule_group_resource_policies : k => v if var.create }
+
+  resource_arn = aws_networkfirewall_rule_group.this[each.value.rule_group_key].arn
+  # Hacky work-around to be able to use ARN at time of creation
+  policy = jsonencode(templatefile(each.value.rule_group_policy_template_path, {
+    rule_group_arn = aws_networkfirewall_rule_group.this[each.value.rule_group_key].arn
+  }))
 }

@@ -49,3 +49,17 @@ output "rule_groups" {
   description = "A map of the rule groups created and their attributes"
   value       = aws_networkfirewall_rule_group.this
 }
+
+################################################################################
+# Firewall Resource Policy
+################################################################################
+
+output "firewall_policy_resource_policy_id" {
+  description = "The Amazon Resource Name (ARN) of the firewall policy associated with the resource policy"
+  value       = try(aws_networkfirewall_resource_policy.firewall_policy[0].id, null)
+}
+
+output "rule_group_resource_policies" {
+  description = "Map of Rule Group resource policies created and their attributes"
+  value       = aws_networkfirewall_resource_policy.rule_group
+}

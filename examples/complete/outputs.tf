@@ -401,3 +401,17 @@ output "network_firewall_rule_groups" {
   description = "A map of the rule groups created and their attributes"
   value       = module.network_firewall.rule_groups
 }
+
+################################################################################
+# Firewall Resource Policy
+################################################################################
+
+output "network_firewall_policy_resource_policy_id" {
+  description = "The Amazon Resource Name (ARN) of the firewall policy associated with the resource policy"
+  value       = module.network_firewall.firewall_policy_resource_policy_id
+}
+
+output "network_firewall_rule_group_resource_policies" {
+  description = "Map of Rule Group resource policies created and their attributes"
+  value       = module.network_firewall.rule_group_resource_policies
+}

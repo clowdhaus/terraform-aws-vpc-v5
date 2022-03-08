@@ -311,5 +311,16 @@ module "network_firewall" {
     }
   }
 
+  # # Resource Policy
+  # resource_policies = {
+  #   firewall_policy = {
+  #     policy =
+  #   }
+  #   stateful_ex1_rule_group = {
+  #     rule_group_key = "stateful_ex1"
+  #     policy =
+  #   }
+  # }
+
   tags = local.tags
 }

@@ -129,3 +129,25 @@ variable "rule_groups" {
   type        = any
   default     = {}
 }
+
+################################################################################
+# Firewall Resource Policy
+################################################################################
+
+variable "create_firewall_policy_resource_policy" {
+  description = "Controls if a Firewall Policy resource policy should be created"
+  type        = bool
+  default     = false
+}
+
+variable "firewall_policy_resource_policy_template_path" {
+  description = "The path to the Firewall Policy IAM resource policy template"
+  type        = string
+  default     = ""
+}
+
+variable "rule_group_resource_policies" {
+  description = "A map of Firewall Rule Group resource policies to be created"
+  type        = any
+  default     = {}
+}
