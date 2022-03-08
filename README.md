@@ -164,15 +164,7 @@ See https://github.com/terraform-aws-modules/terraform-aws-security-group
 
 ### Route53 Resolver
 
-TODO - separate, external module
-
-- [?] aws_route53_resolver_endpoint
-- ❌ aws_route53_resolver_firewall_domain_list
-- ❌ aws_route53_resolver_firewall_rule
-- ❌ aws_route53_resolver_firewall_rule_group
-- ❌ aws_route53_resolver_firewall_rule_group_associatio
-- ❌ aws_route53_resolver_query_log_config
-- ❌ aws_route53_resolver_query_log_config_association
+- ❌ aws_route53_resolver_endpoint
 - ❌ aws_route53_resolver_rule
 
 ### Transit Gateway
@@ -196,7 +188,7 @@ See https://github.com/terraform-aws-modules/terraform-aws-transit-gateway
 
 ## Usage
 
-See [`examples`](./examples) directory for working examples to reference:
+See [`examples`](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/examples) directory for working examples to reference:
 
 ```hcl
 module "vpc" {
@@ -211,9 +203,9 @@ module "vpc" {
 
 ## Examples
 
-Examples codified under the [`examples`](./examples) are intended to give users references for how to use the module(s) as well as testing/validating changes to the source code of the module. If contributing to the project, please be sure to make any appropriate updates to the relevant examples to allow maintainers to test your changes and to keep the examples up to date for users. Thank you!
+Examples codified under the [`examples`](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/examples) are intended to give users references for how to use the module(s) as well as testing/validating changes to the source code of the module. If contributing to the project, please be sure to make any appropriate updates to the relevant examples to allow maintainers to test your changes and to keep the examples up to date for users. Thank you!
 
-- [Complete](./examples/complete)
+- [Complete](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/examples/complete)
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
