@@ -163,7 +163,7 @@ module "dns_firewall" {
       action                  = "BLOCK"
       block_response          = "OVERRIDE"
       block_override_dns_type = "CNAME"
-      block_override_domain   = "example.com"
+      block_override_domain   = "example.com."
       block_override_ttl      = 1
       domains                 = ["microsoft.com."]
     }
@@ -406,7 +406,7 @@ module "network_firewall" {
     },
     {
       log_destination = {
-        bucketName = aws_s3_bucket.logs.id
+        bucketName = aws_s3_bucket.network_firewall_logs.id
         prefix     = local.name
       }
       log_destination_type = "S3"
@@ -429,16 +429,16 @@ resource "aws_cloudwatch_log_group" "logs" {
   tags = local.tags
 }
 
-resource "aws_s3_bucket" "logs" {
-  bucket        = "${local.name}-logs-${local.account_id}"
+resource "aws_s3_bucket" "network_firewall_logs" {
+  bucket        = "${local.name}-network-firewall-logs-${local.account_id}"
   force_destroy = true
 
   tags = local.tags
 }
 
 # Logging configuration automatically adds this policy if not present
-resource "aws_s3_bucket_policy" "logs" {
-  bucket = aws_s3_bucket.logs.id
+resource "aws_s3_bucket_policy" "network_firewall_logs" {
+  bucket = aws_s3_bucket.network_firewall_logs.id
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -457,7 +457,7 @@ resource "aws_s3_bucket_policy" "logs" {
         Principal = {
           Service = "delivery.logs.amazonaws.com"
         }
-        Resource = "${aws_s3_bucket.logs.arn}/${local.name}/AWSLogs/${local.account_id}/*"
+        Resource = "${aws_s3_bucket.network_firewall_logs.arn}/${local.name}/AWSLogs/${local.account_id}/*"
         Sid      = "AWSLogDeliveryWrite"
       },
       {
@@ -474,7 +474,7 @@ resource "aws_s3_bucket_policy" "logs" {
         Principal = {
           Service = "delivery.logs.amazonaws.com"
         }
-        Resource = aws_s3_bucket.logs.arn
+        Resource = aws_s3_bucket.network_firewall_logs.arn
         Sid      = "AWSLogDeliveryAclCheck"
       },
     ]
