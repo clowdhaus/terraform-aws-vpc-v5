@@ -112,7 +112,7 @@ module "public_subnets" {
     }
   }
 
-  ingress_network_acl_rules = {
+  network_acl_ingress_rules = {
     100 = {
       protocol    = "-1"
       rule_action = "Allow"
@@ -122,7 +122,7 @@ module "public_subnets" {
     }
   }
 
-  egress_network_acl_rules = {
+  network_acl_egress_rules = {
     100 = {
       protocol    = "-1"
       rule_action = "Allow"

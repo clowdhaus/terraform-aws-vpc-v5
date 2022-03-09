@@ -8,7 +8,7 @@ resource "aws_default_security_group" "this" {
   vpc_id = local.vpc_id
 
   dynamic "ingress" {
-    for_each = var.default_security_group_ingress
+    for_each = var.default_security_group_ingress_rules
     content {
       self             = try(ingress.value.self, null)
       cidr_blocks      = try(ingress.value.cidr_blocks, null)
@@ -23,7 +23,7 @@ resource "aws_default_security_group" "this" {
   }
 
   dynamic "egress" {
-    for_each = var.default_security_group_egress
+    for_each = var.default_security_group_egress_rules
     content {
       self             = try(egress.value.self, null)
       cidr_blocks      = try(egress.value.cidr_blocks, null)
@@ -53,21 +53,13 @@ resource "aws_default_network_acl" "this" {
 
   default_network_acl_id = try(aws_vpc.this[0].default_network_acl_id, null)
 
-  # # The value of subnet_ids should be any subnet IDs that are not set as subnet_ids
-  # #   for any of the non-default network ACLs
-  # # !!! TODO - this will need to be updated
-  # subnet_ids = setsubtract(
-  #   aws_subnet.this.*.id,
-  #   aws_network_acl.this.*.subnet_ids,
-  # )
-
   dynamic "ingress" {
-    for_each = var.default_network_acl_ingress
+    for_each = var.default_network_acl_ingress_rules
     content {
-      action          = ingress.value.action
+      action          = ingress.value.rule_action # to match regular ACL rule
       from_port       = ingress.value.from_port
       protocol        = ingress.value.protocol
-      rule_no         = ingress.value.rule_no
+      rule_no         = ingress.value.rule_number # to match regular ACL rule
       to_port         = ingress.value.to_port
       cidr_block      = try(ingress.value.cidr_block, null)
       icmp_code       = try(ingress.value.icmp_code, null)
@@ -76,12 +68,12 @@ resource "aws_default_network_acl" "this" {
     }
   }
   dynamic "egress" {
-    for_each = var.default_network_acl_egress
+    for_each = var.default_network_acl_egress_rules
     content {
-      action          = egress.value.action
+      action          = egress.value.rule_action # to match regular ACL rule
       from_port       = egress.value.from_port
       protocol        = egress.value.protocol
-      rule_no         = egress.value.rule_no
+      rule_no         = egress.value.rule_number # to match regular ACL rule
       to_port         = egress.value.to_port
       cidr_block      = try(egress.value.cidr_block, null)
       icmp_code       = try(egress.value.icmp_code, null)

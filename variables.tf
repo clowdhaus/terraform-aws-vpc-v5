@@ -373,25 +373,25 @@ variable "vpn_gateway_tags" {
 ################################################################################
 
 variable "manage_default_security_group" {
-  description = "Determines whether the default security group is adopted and managed by the module"
+  description = "Determines whether the Default Security Group is adopted and managed by the module"
   type        = bool
   default     = true
 }
 
-variable "default_security_group_ingress" {
-  description = "List of maps of ingress rules to set on the default security group"
+variable "default_security_group_ingress_rules" {
+  description = "Ingress rules to be added to the Default Security Group"
   type        = list(map(string))
   default     = []
 }
 
-variable "default_security_group_egress" {
-  description = "List of maps of egress rules to set on the default security group"
+variable "default_security_group_egress_rules" {
+  description = "Egress rules to be added to the Default Security Group"
   type        = list(map(string))
   default     = []
 }
 
 variable "default_security_group_tags" {
-  description = "Additional tags for the default security group"
+  description = "Additional tags for the Default Security Group"
   type        = map(string)
   default     = {}
 }
@@ -406,14 +406,14 @@ variable "manage_default_network_acl" {
   default     = true
 }
 
-variable "default_network_acl_ingress" {
-  description = "List of maps for ingress rules to set on the default network ACL"
+variable "default_network_acl_ingress_rules" {
+  description = "Ingress rules to be added to the Default Network ACL"
   type        = list(map(string))
   default     = []
 }
 
-variable "default_network_acl_egress" {
-  description = "List of maps for egress rules to set on the default network ACL"
+variable "default_network_acl_egress_rules" {
+  description = "Egress rules to be added to the Default Network ACL"
   type        = list(map(string))
   default     = []
 }

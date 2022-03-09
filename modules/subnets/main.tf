@@ -147,7 +147,7 @@ resource "aws_network_acl" "this" {
 }
 
 resource "aws_network_acl_rule" "ingress" {
-  for_each = { for k, v in var.ingress_network_acl_rules : k => v if var.create && var.create_network_acl }
+  for_each = { for k, v in var.network_acl_ingress_rules : k => v if var.create && var.create_network_acl }
 
   network_acl_id = aws_network_acl.this[0].id
 
@@ -164,7 +164,7 @@ resource "aws_network_acl_rule" "ingress" {
 }
 
 resource "aws_network_acl_rule" "egress" {
-  for_each = { for k, v in var.egress_network_acl_rules : k => v if var.create && var.create_network_acl }
+  for_each = { for k, v in var.network_acl_egress_rules : k => v if var.create && var.create_network_acl }
 
   network_acl_id = aws_network_acl.this[0].id
 

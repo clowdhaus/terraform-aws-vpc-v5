@@ -130,9 +130,9 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_create"></a> [create](#input\_create) | Controls if network ACL resources should be created | `bool` | `true` | no |
 | <a name="input_create_network_acl"></a> [create\_network\_acl](#input\_create\_network\_acl) | Controls creation of Network ACL resources | `bool` | `true` | no |
-| <a name="input_egress_network_acl_rules"></a> [egress\_network\_acl\_rules](#input\_egress\_network\_acl\_rules) | Egress Network ACL rules to be added to the Network ACL | `map(any)` | `{}` | no |
-| <a name="input_ingress_network_acl_rules"></a> [ingress\_network\_acl\_rules](#input\_ingress\_network\_acl\_rules) | Ingress Network ACL rules to be added to the Network ACL | `map(any)` | `{}` | no |
 | <a name="input_name"></a> [name](#input\_name) | Default name to be used as a prefix for the resources created (if a custom name is not provided) | `string` | `""` | no |
+| <a name="input_network_acl_egress_rules"></a> [network\_acl\_egress\_rules](#input\_network\_acl\_egress\_rules) | Network ACL egresss rules to be added to the Network ACL | `map(any)` | `{}` | no |
+| <a name="input_network_acl_ingress_rules"></a> [network\_acl\_ingress\_rules](#input\_network\_acl\_ingress\_rules) | Network ACL ingress rules to be added to the Network ACL | `map(any)` | `{}` | no |
 | <a name="input_network_acl_tags"></a> [network\_acl\_tags](#input\_network\_acl\_tags) | Additional tags for the Network ACL | `map(string)` | `{}` | no |
 | <a name="input_route_table_timeouts"></a> [route\_table\_timeouts](#input\_route\_table\_timeouts) | Create, update, and delete timeout configurations for route table | `map(string)` | `{}` | no |
 | <a name="input_route_tables"></a> [route\_tables](#input\_route\_tables) | Map of route table definitions | `map(any)` | `{}` | no |
