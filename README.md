@@ -105,10 +105,10 @@ This is where most of the logic will captured; the design is centered around the
 
 - ✅ aws_vpc_ipam
 - ❌ aws_vpc_ipam_organization_admin_account -> provision in root account for multi-account setup
-- [ ] aws_vpc_ipam_pool
-- [ ] aws_vpc_ipam_pool_cidr
-- [ ] aws_vpc_ipam_pool_cidr_allocation
-- [ ] aws_vpc_ipam_preview_next_cidr
+- ✅ aws_vpc_ipam_pool
+- ✅ aws_vpc_ipam_pool_cidr
+- ✅ aws_vpc_ipam_pool_cidr_allocation
+- ✅ aws_vpc_ipam_preview_next_cidr
 - ✅ aws_vpc_ipam_scope
 
 ## Resources Not Supported

@@ -16,28 +16,6 @@ locals {
 data "aws_caller_identity" "current" {}
 
 ################################################################################
-# IPAM Module
-################################################################################
-
-module "ipam" {
-  source = "../../modules/ipam"
-
-  description       = "IPAM example"
-  operating_regions = [local.region, "us-west-2"]
-
-  scopes = {
-    one = {
-      description = "Example scope number one"
-    }
-    two = {
-      description = "Example scope number two"
-    }
-  }
-
-  tags = local.tags
-}
-
-################################################################################
 # VPC Module
 ################################################################################
 
@@ -517,6 +495,7 @@ resource "aws_s3_bucket_policy" "dns_query_logs" {
   bucket = aws_s3_bucket.dns_query_logs.id
   policy = jsonencode({
     Version = "2012-10-17"
+    Id      = "AWSLogDeliveryWrite20150319"
     Statement = [
       {
         Action = "s3:PutObject"

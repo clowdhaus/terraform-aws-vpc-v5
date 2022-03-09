@@ -32,22 +32,39 @@ resource "aws_vpc_ipam_scope" "this" {
 # IPAM Pool
 ################################################################################
 
-resource "aws_vpc_ipam_pool" "this" {
-  for_each = { for k, v in var.pools : k => v if var.create }
+locals {
+  # We can create more private scopes, but cannot create more public scopes
+  private_scope_id = var.create ? try(aws_vpc_ipam_scope.this[var.pool_scope_key].id, aws_vpc_ipam.this[0].private_default_scope_id, null) : null
+  public_scope_id  = var.create ? try(aws_vpc_ipam.this[0].public_default_scope_id, null) : null
+}
 
-  description = try(each.value.description, null)
+module "vpc_ipam_pool" {
+  source = "../ipam-pool"
 
-  address_family                    = try(each.value.address_family, null)
-  publicly_advertisable             = try(each.value.publicly_advertisable, null)
-  allocation_default_netmask_length = try(each.value.allocation_default_netmask_length, null)
-  allocation_max_netmask_length     = try(each.value.allocation_max_netmask_length, null)
-  allocation_min_netmask_length     = try(each.value.allocation_min_netmask_length, null)
-  allocation_resource_tags          = try(each.value.allocation_resource_tags, null)
-  auto_import                       = try(each.value.auto_import, null)
-  aws_service                       = try(each.value.aws_service, null)
-  ipam_scope_id                     = try(each.value.use_private_scope, true) ? try(aws_vpc_ipam.this[each.value.scope_key].private_default_scope_id, each.value.ipam_scope_id, null) : try(aws_vpc_ipam.this[each.value.scope_key].public_default_scope_id, each.value.ipam_scope_id, null)
-  locale                            = try(each.value.locale, null)
-  source_ipam_pool_id               = try(each.value.source_ipam_pool_id, null)
+  create = var.create && var.create_ipam_pool
 
-  tags = merge(var.tags, try(each.value.tags, {}))
+  description                       = var.pool_description
+  address_family                    = var.pool_address_family
+  publicly_advertisable             = var.pool_publicly_advertisable
+  allocation_default_netmask_length = var.pool_allocation_default_netmask_length
+  allocation_max_netmask_length     = var.pool_allocation_max_netmask_length
+  allocation_min_netmask_length     = var.pool_allocation_min_netmask_length
+  allocation_resource_tags          = var.pool_allocation_resource_tags
+  auto_import                       = var.pool_auto_import
+  aws_service                       = var.pool_aws_service
+  ipam_scope_id                     = var.pool_use_private_scope ? local.private_scope_id : local.public_scope_id
+  locale                            = var.pool_locale
+
+  # This is the top-most pool
+  # source_ipam_pool_id = var.pool_source_ipam_pool_id
+
+  cidr                       = var.pool_cidr
+  cidr_authorization_context = var.pool_cidr_authorization_context
+  cidr_allocations           = var.pool_cidr_allocations
+
+  preview_next_cidr      = var.pool_preview_next_cidr
+  disallowed_cidrs       = var.pool_disallowed_cidrs
+  preview_netmask_length = var.pool_preview_netmask_length
+
+  tags = merge(var.tags, var.pool_tags)
 }
