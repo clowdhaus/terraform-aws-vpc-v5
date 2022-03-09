@@ -54,10 +54,6 @@ module "dns_firewall" {
 }
 ```
 
-## Examples
-
-- [Complete](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/examples/complete) VPC example.
-
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
@@ -112,3 +108,7 @@ No modules.
 | <a name="output_rule_group_share_status"></a> [rule\_group\_share\_status](#output\_rule\_group\_share\_status) | Whether the rule group is shared with other AWS accounts, or was shared with the current account by another AWS account. Sharing is configured through AWS Resource Access Manager (AWS RAM). Valid values: `NOT_SHARED`, `SHARED_BY_ME`, `SHARED_WITH_ME` |
 | <a name="output_rules"></a> [rules](#output\_rules) | Map of all rules created and their attributes |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
+## License
+
+Apache-2.0 Licensed. See [LICENSE](https://github.com/clowdhaus/terraform-aws-vpc-v4/blob/main/LICENSE).

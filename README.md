@@ -1,28 +1,28 @@
-# AWS VPC Terraform module
+# AWS VPC Terraform Module
 
-:warning: Please do not rely on this being stable. The goal of this project is to explore changes to the upstream `terraform-aws-vpc` module and hopefully/eventually land those changes there as v4.0. For now, this is just for exploring and open collaboration on what that next version might look like, and how users can migrate from v3.x to v4.x. Feel free to watch along if you are curious.
+:warning: Please do not rely on this being stable. The goal of this project is to explore changes to the upstream `terraform-aws-vpc` module and eventually land those changes there as v4.0. For now, this is just for exploring and open collaboration on what that next version might look like, and how users can migrate from v3.x to v4.x. Feel free to watch along if you are curious.
 
 ## Design Goals
 
-1. Use of maps/`for_each` over `count` for stable/isolated changes
+1. Use of `for_each` instead of `count` for stable, isolated changes
 2. n-number of subnet groups with custom naming scheme
-  - Currently in `v3.x` only `private`, `public`, `internal`, `database`, and `redshift` are permitted and using those specific names. This has served well for quite some time but with each new feature release by AWS, this current structure is proving to be too rigid and not scalable. In `v4.x` we aim to provide a more flexible approach that will cover a broad suite of use cases - both current and future. We currently receive a large number of change requests centered around subnets as the core construct; it makes the most sense to split this out into its own module and build around this common construct. Roughly speaking, this sub-module will:
-    - Provide support for gateway creation and attachment - internet, egress only, NAT, etc. - allowing users to opt in to creating or not (public subnet => provision internet gateway, private subnet => provision NAT gateway or egress only gateway, etc.).
-    - Contain route table(s) and NACL(s)
-    - A module instantiation will create a "subnet group" - that is, a collection of subnets for some purpose
-
-3. Tags, tags, tags, tags
+  - Currently in `v3.x` only `private`, `public`, `internal`, `database`, and `redshift` are permitted and using those specific names. This has served well for quite some time but with each new feature release by AWS, this current structure is proving to be too rigid and not scalable. In `v4.x` we aim to provide a more flexible approach that will cover a broad suite of use cases - both current and future. We currently receive a large number of change requests centered around subnets as the core construct; it makes the most sense to split this out into its own module and build around this common construct. A module instantiation will create a "subnet group" - that is, a collection of subnets for some purpose
+3. Flexible, customizable tagging scheme
   - https://github.com/terraform-aws-modules/terraform-aws-vpc/issues/259
-
-- Ability to stack CIDR ranges - AWS allows up to 5 CIDR ranges to be stacked on a VPC
-- Changing between 1 NAT gateway vs 1 NAT Gateway per availability zone should not cause traffic disruptions
-- Flexible route table association - users can select how they want to associate route tables
-- Support for AWS Network Firewall
-- Examples not only validate different configurations, but demonstrate different design patterns used for networking
+4. Miscellaneous
+  - Ability to stack CIDR ranges - AWS allows up to 5 CIDR ranges to be stacked on a VPC
+  - Changing between 1 NAT gateway vs 1 NAT Gateway per availability zone should not cause traffic disruptions
+  - Flexible route table association - users can select how they want to associate route tables
+  - Support for AWS Network Firewall
+  - Support for ingress/egress only subnets
 
 ## Notes
 
-- VPC endpoints are one per AZ; subnets may wrap around and double/triple/etc. within an AZ -> VPC endpoints have to be separate
+ - VPC Endpoints
+  - One per AZ; subnets may wrap around and double/triple/etc. within an AZ, but VPC endpoints have to be separate
+- IPAM
+  - One public scope - default public scope created by IPAM
+  - IPAM pools can be nested up to a depth of 10 max
 
 ## Supported Resources
 
@@ -56,7 +56,7 @@
 
 ### Subnet
 
-This is where most of the logic will captured; the design is centered around the subnet and its usage patterns
+This is where most of the network logic is captured; the design is centered around the subnet and its usage patterns
 
 - ✅ aws_subnet
 - ✅ aws_network_acl
@@ -194,6 +194,34 @@ See [`examples`](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/exa
 module "vpc" {
   source = "clowdhaus/vpc-v4/aws"
 
+  name                 = "example"
+  cidr_block           = "10.99.0.0/16"
+  enable_dns_hostnames = true
+
+  ipv4_cidr_block_associations = {
+    # This matches the provider API to avoid re-creating any existing associations
+    "10.98.0.0/16" = {
+      cidr_block = "10.98.0.0/16"
+    }
+  }
+
+  # DNS Query Logging
+  enable_dns_query_logging     = true
+  dns_query_log_destintion_arn = "arn:aws:s3:::my-dns-query-log-bucket"
+
+  # Flow Log
+  create_flow_log                                 = true
+  create_flow_log_cloudwatch_iam_role             = true
+  create_flow_log_cloudwatch_log_group            = true
+  flow_log_cloudwatch_log_group_retention_in_days = 90
+
+  # DHCP
+  create_dhcp_options              = true
+  dhcp_options_domain_name         = "us-east-1.compute.internal"
+  dhcp_options_domain_name_servers = ["AmazonProvidedDNS"]
+  dhcp_options_ntp_servers         = ["169.254.169.123"]
+  dhcp_options_netbios_node_type   = 2
+
   tags = {
     Terraform   = "true"
     Environment = "dev"
@@ -203,9 +231,11 @@ module "vpc" {
 
 ## Examples
 
-Examples codified under the [`examples`](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/examples) are intended to give users references for how to use the module(s) as well as testing/validating changes to the source code of the module. If contributing to the project, please be sure to make any appropriate updates to the relevant examples to allow maintainers to test your changes and to keep the examples up to date for users. Thank you!
+Examples provided in [`examples`](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/examples) are intended to give users references for how to use the module(s) as well as testing/validating changes to the source code of the module. If contributing to the project, please be sure to make any appropriate updates to the relevant examples to allow maintainers to test your changes and to keep the examples up to date for users. Thank you!
 
 - [Complete](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/examples/complete)
+- [Default](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/examples/default)
+- [IPAM](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/examples/ipam)
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
@@ -391,4 +421,4 @@ No modules.
 
 ## License
 
-Apache-2.0 Licensed. See [LICENSE](LICENSE).
+Apache-2.0 Licensed. See [LICENSE](https://github.com/clowdhaus/terraform-aws-vpc-v4/blob/main/LICENSE).

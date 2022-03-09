@@ -1,30 +1,85 @@
 # AWS Subnets Terraform Module
 
-Terraform module which creates AWS VPC Subnets and their associated resources.
+Terraform module which creates AWS VPC Subnet resources.
 
 This module is designed to create a set of one or more subnets that serve a desired purpose. For example, one module definition would be used for public subnets, another for private subnets, another for database subnets, etc. This design affords users the ability to create any desired design configuration for a set of subnets, where multiple sets of subnets are composed under the respective VPC to create the desired network topology.
 
 ## Usage
 
-See [`examples`](../../examples) directory for working examples to reference:
+See [`examples`](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/examples) directory for working examples to reference:
+
+### Public Subnets
 
 ```hcl
 module "public_subnets" {
   source = "terraform-aws-modules/vpc/aws//modules/subnets"
 
+  name   = "example-public"
   vpc_id = "vpc-12345678"
 
-  # TODO
+  subnets = {
+    "us-east-1a" = {
+      cidr_block         = "10.98.1.0/24"
+      availability_zone  = "us-east-1a"
+      create_nat_gateway = true
+    }
+    "us-east-1b" = {
+      cidr_block         = "10.98.2.0/24"
+      availability_zone  = "us-east-1b"
+      create_nat_gateway = true
+    }
+    "us-east-1c" = {
+      cidr_block         = "10.98.3.0/24"
+      availability_zone  = "us-east-1a"
+      create_nat_gateway = true
+    }
+  }
+
+  route_tables = {
+    shared = {
+      associated_subnet_keys = ["us-east-1a", "us-east-1a", "us-east-1c"]
+      routes = {
+        igw = {
+          destination_cidr_block = "0.0.0.0/0"
+          gateway_id             = "igw-1ff7a07b"
+        }
+      }
+    }
+  }
+
+  ingress_network_acl_rules = {
+    100 = {
+      protocol    = "-1"
+      rule_action = "Allow"
+      cidr_block  = "0.0.0.0/0"
+      from_port   = 0
+      to_port     = 0
+    }
+  }
+
+  egress_network_acl_rules = {
+    100 = {
+      protocol    = "-1"
+      rule_action = "Allow"
+      cidr_block  = "0.0.0.0/0"
+      from_port   = 0
+      to_port     = 0
+    }
+  }
 
   tags = {
     Owner       = "user"
     Environment = "dev"
   }
 }
+```
+### Private Subnets
 
+```hcl
 module "private_subnets" {
   source = "terraform-aws-modules/vpc/aws//modules/subnets"
 
+  name   = "example-private"
   vpc_id = "vpc-12345678"
 
   # TODO
@@ -35,10 +90,6 @@ module "private_subnets" {
   }
 }
 ```
-
-## Examples
-
-- [Complete](../../examples/complete) VPC example.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
@@ -109,3 +160,7 @@ No modules.
 | <a name="output_route_tables"></a> [route\_tables](#output\_route\_tables) | Map of route tables created and their attributes |
 | <a name="output_subnets"></a> [subnets](#output\_subnets) | Map of subnets created and their attributes |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
+## License
+
+Apache-2.0 Licensed. See [LICENSE](https://github.com/clowdhaus/terraform-aws-vpc-v4/blob/main/LICENSE).

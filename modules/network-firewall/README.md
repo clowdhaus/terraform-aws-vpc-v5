@@ -235,10 +235,6 @@ module "network_firewall" {
 }
 ```
 
-## Examples
-
-- [Complete](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/examples/complete) VPC example.
-
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
@@ -318,3 +314,7 @@ No modules.
 | <a name="output_status"></a> [status](#output\_status) | Nested list of information about the current status of the firewall |
 | <a name="output_update_token"></a> [update\_token](#output\_update\_token) | A string token used when updating a firewall |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
+## License
+
+Apache-2.0 Licensed. See [LICENSE](https://github.com/clowdhaus/terraform-aws-vpc-v4/blob/main/LICENSE).

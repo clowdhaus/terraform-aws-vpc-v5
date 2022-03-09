@@ -4,7 +4,7 @@ Terraform module which creates AWS VPC IPAM Pool resources.
 
 ## Usage
 
-See [`examples`](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/examples) directory for working examples to reference:
+See [`examples/`](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/examples) directory for working examples to reference:
 
 ```hcl
 module "ipam_pool" {
@@ -19,10 +19,6 @@ module "ipam_pool" {
   }
 }
 ```
-
-## Examples
-
-- [Complete](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/examples/complete) VPC example.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
@@ -89,3 +85,7 @@ No modules.
 | <a name="output_preview_next_cidr_id"></a> [preview\_next\_cidr\_id](#output\_preview\_next\_cidr\_id) | The ID of the preview |
 | <a name="output_state"></a> [state](#output\_state) | State of the IPAM Pool |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
+## License
+
+Apache-2.0 Licensed. See [LICENSE](https://github.com/clowdhaus/terraform-aws-vpc-v4/blob/main/LICENSE).

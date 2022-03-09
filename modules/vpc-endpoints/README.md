@@ -1,10 +1,10 @@
 # AWS VPC Endpoints Terraform Module
 
-Terraform module which creates VPC endpoint resources on AWS.
+Terraform module which creates AWS VPC Endpoint resources.
 
 ## Usage
 
-See [`examples`](../../examples) directory for working examples to reference:
+See [`examples`](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/examples) directory for working examples to reference:
 
 ```hcl
 module "endpoints" {
@@ -15,12 +15,12 @@ module "endpoints" {
 
   endpoints = {
     s3 = {
-      # interface endpoint
+      # Interface endpoint - S3 and DynamoDB can be either Interface or Gateway, all others are Interface only
       service             = "s3"
       tags                = { Name = "s3-vpc-endpoint" }
     },
     dynamodb = {
-      # gateway endpoint
+      # Gateway endpoint - S3 and DynamoDB can be either Interface or Gateway, all others are Interface only
       service         = "dynamodb"
       route_table_ids = ["rt-12322456", "rt-43433343", "rt-11223344"]
       tags            = { Name = "dynamodb-vpc-endpoint" }
@@ -93,3 +93,7 @@ No modules.
 |------|-------------|
 | <a name="output_vpc_endpoints"></a> [vpc\_endpoints](#output\_vpc\_endpoints) | Map of VPC Endpoints and their attributes |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
+## License
+
+Apache-2.0 Licensed. See [LICENSE](https://github.com/clowdhaus/terraform-aws-vpc-v4/blob/main/LICENSE).

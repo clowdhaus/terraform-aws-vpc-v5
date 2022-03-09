@@ -4,14 +4,30 @@ Terraform module which creates AWS VPC IPAM resources.
 
 ## Usage
 
-See [`examples`](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/examples) directory for working examples to reference:
+See [`examples/ipam`](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/examples/ipam) for working example to reference:
 
 ```hcl
 module "ipam" {
   source = "terraform-aws-modules/vpc/aws//modules/ipam"
 
-  name   = "Example"
-  vpc_id = "vpc-12345678"
+  description       = "IPAM example"
+  operating_regions = ["eu-west-1", "us-west-2"]
+
+  # Top level pool
+  pool_cidr                              = "10.0.0.0/8"
+  pool_allocation_min_netmask_length     = 10
+  pool_allocation_default_netmask_length = 10
+  pool_allocation_max_netmask_length     = 16
+
+  # Additional private scopes
+  scopes = {
+    one = {
+      description = "Example scope one"
+    }
+    two = {
+      description = "Example scope two"
+    }
+  }
 
   tags = {
     Owner       = "user"
@@ -19,10 +35,6 @@ module "ipam" {
   }
 }
 ```
-
-## Examples
-
-- [Complete](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/examples/complete) VPC example.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
@@ -99,3 +111,7 @@ module "ipam" {
 | <a name="output_scope_count"></a> [scope\_count](#output\_scope\_count) | The number of scopes in the IPAM |
 | <a name="output_scopes"></a> [scopes](#output\_scopes) | A map of the scopes created and their attributes |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
+## License
+
+Apache-2.0 Licensed. See [LICENSE](https://github.com/clowdhaus/terraform-aws-vpc-v4/blob/main/LICENSE).
