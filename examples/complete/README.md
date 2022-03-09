@@ -109,11 +109,6 @@ No inputs.
 | <a name="output_internet_gateway_id"></a> [internet\_gateway\_id](#output\_internet\_gateway\_id) | The ID of the Internet Gateway |
 | <a name="output_ipam_arn"></a> [ipam\_arn](#output\_ipam\_arn) | Amazon Resource Name (ARN) of IPAM |
 | <a name="output_ipam_id"></a> [ipam\_id](#output\_ipam\_id) | The ID of the IPAM |
-| <a name="output_ipam_organization_admin_account_arn"></a> [ipam\_organization\_admin\_account\_arn](#output\_ipam\_organization\_admin\_account\_arn) | The Organizations ARN for the delegate account |
-| <a name="output_ipam_organization_admin_account_email"></a> [ipam\_organization\_admin\_account\_email](#output\_ipam\_organization\_admin\_account\_email) | The Organizations email for the delegate account |
-| <a name="output_ipam_organization_admin_account_id"></a> [ipam\_organization\_admin\_account\_id](#output\_ipam\_organization\_admin\_account\_id) | The Organizations member account ID that you want to enable as the IPAM account |
-| <a name="output_ipam_organization_admin_account_name"></a> [ipam\_organization\_admin\_account\_name](#output\_ipam\_organization\_admin\_account\_name) | The Organizations name for the delegate account |
-| <a name="output_ipam_organization_admin_account_service_principal"></a> [ipam\_organization\_admin\_account\_service\_principal](#output\_ipam\_organization\_admin\_account\_service\_principal) | The AWS service principal |
 | <a name="output_ipam_private_default_scope_id"></a> [ipam\_private\_default\_scope\_id](#output\_ipam\_private\_default\_scope\_id) | The ID of the IPAM's private scope. A scope is a top-level container in IPAM. Each scope represents an IP-independent network. Scopes enable you to represent networks where you have overlapping IP space. The private scope is intended for private IP space |
 | <a name="output_ipam_public_default_scope_id"></a> [ipam\_public\_default\_scope\_id](#output\_ipam\_public\_default\_scope\_id) | The ID of the IPAM's private scope. A scope is a top-level container in IPAM. Each scope represents an IP-independent network. Scopes enable you to represent networks where you have overlapping IP space. The public scope is intended for all internet-routable IP space |
 | <a name="output_ipam_scope_count"></a> [ipam\_scope\_count](#output\_ipam\_scope\_count) | The number of scopes in the IPAM |

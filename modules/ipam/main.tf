@@ -1,14 +1,4 @@
 ################################################################################
-# IPAM Organization Admin Account
-################################################################################
-
-resource "aws_vpc_ipam_organization_admin_account" "this" {
-  count = var.create && var.delegate_admin_account ? 1 : 0
-
-  delegated_admin_account_id = var.delegated_admin_account_id
-}
-
-################################################################################
 # IPAM
 ################################################################################
 

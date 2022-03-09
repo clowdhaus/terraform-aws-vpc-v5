@@ -17,22 +17,6 @@ variable "tags" {
 }
 
 ################################################################################
-# IPAM Organization Admin Account
-################################################################################
-
-variable "delegate_admin_account" {
-  description = "Controls whether the admin account is delegated to the `delegated_admin_account_id`"
-  type        = bool
-  default     = false
-}
-
-variable "delegated_admin_account_id" {
-  description = "The account ID of the delegated admin account"
-  type        = string
-  default     = ""
-}
-
-################################################################################
 # IPAM
 ################################################################################
 

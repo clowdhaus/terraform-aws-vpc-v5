@@ -515,35 +515,6 @@ output "dns_firewall_rule_group_association_id" {
 }
 
 ################################################################################
-# IPAM Organization Admin Account
-################################################################################
-
-output "ipam_organization_admin_account_arn" {
-  description = "The Organizations ARN for the delegate account"
-  value       = module.ipam.organization_admin_account_arn
-}
-
-output "ipam_organization_admin_account_id" {
-  description = "The Organizations member account ID that you want to enable as the IPAM account"
-  value       = module.ipam.organization_admin_account_id
-}
-
-output "ipam_organization_admin_account_email" {
-  description = "The Organizations email for the delegate account"
-  value       = module.ipam.organization_admin_account_email
-}
-
-output "ipam_organization_admin_account_name" {
-  description = "The Organizations name for the delegate account"
-  value       = module.ipam.organization_admin_account_name
-}
-
-output "ipam_organization_admin_account_service_principal" {
-  description = "The AWS service principal"
-  value       = module.ipam.organization_admin_account_service_principal
-}
-
-################################################################################
 # IPAM
 ################################################################################
 
