@@ -81,27 +81,6 @@ resource "aws_route_table" "this" {
 
   vpc_id = var.vpc_id
 
-  dynamic "route" {
-    for_each = try(each.value.routes, {})
-    content {
-      # One of the following destination arguments must be supplied:
-      cidr_block                 = try(route.value.destination_cidr_block, null)
-      ipv6_cidr_block            = try(route.value.destination_ipv6_cidr_block, null)
-      destination_prefix_list_id = try(route.value.destination_prefix_list_id, null)
-
-      # One of the following target arguments must be supplied:
-      carrier_gateway_id        = try(route.value.carrier_gateway_id, null)
-      egress_only_gateway_id    = try(route.value.egress_only_gateway_id, null)
-      gateway_id                = try(route.value.gateway_id, null)
-      nat_gateway_id            = try(aws_nat_gateway.this[route.value.nat_gateway_key].id, route.value.nat_gateway_id, null)
-      local_gateway_id          = try(route.value.local_gateway_id, null)
-      network_interface_id      = try(route.value.network_interface_id, null)
-      transit_gateway_id        = try(route.value.transit_gateway_id, null)
-      vpc_endpoint_id           = try(route.value.vpc_endpoint_id, null)
-      vpc_peering_connection_id = try(route.value.vpc_peering_connection_id, null)
-    }
-  }
-
   timeouts {
     create = try(var.route_table_timeouts.create, null)
     update = try(var.route_table_timeouts.update, null)
@@ -115,26 +94,30 @@ resource "aws_route_table" "this" {
   )
 }
 
-# resource "aws_route" "this" {
+resource "aws_route" "this" {
+  for_each = element(values({
+    for k, v in var.route_tables : k => {
+      for k2, v2 in v.routes : k2 => merge({ route_table_key = k }, v2)
+    } # if var.create && can(v.routes) # TODO - this will cause an issue if create == false
+  }), 0)
 
+  route_table_id = aws_route_table.this[each.value.route_table_key].id
 
-#   route_table_id = "xxx"
+  destination_cidr_block      = try(each.value.destination_cidr_block, null)
+  destination_ipv6_cidr_block = try(each.value.destination_ipv6_cidr_block, null)
+  destination_prefix_list_id  = try(each.value.destination_prefix_list_id, null)
 
-#   destination_cidr_block      = try(route.value.destination_cidr_block, null)
-#   destination_ipv6_cidr_block = try(route.value.destination_ipv6_cidr_block, null)
-#   destination_prefix_list_id  = try(route.value.destination_prefix_list_id, null)
-
-#   # One of the following target arguments must be supplied:
-#   carrier_gateway_id        = try(route.value.carrier_gateway_id, null)
-#   egress_only_gateway_id    = try(route.value.egress_only_gateway_id, null)
-#   gateway_id                = try(route.value.gateway_id, null)
-#   nat_gateway_id            = try(aws_nat_gateway.this[route.value.nat_gateway_key].id, route.value.nat_gateway_id, null)
-#   local_gateway_id          = try(route.value.local_gateway_id, null)
-#   network_interface_id      = try(route.value.network_interface_id, null)
-#   transit_gateway_id        = try(route.value.transit_gateway_id, null)
-#   vpc_endpoint_id           = try(route.value.vpc_endpoint_id, null)
-#   vpc_peering_connection_id = try(route.value.vpc_peering_connection_id, null)
-# }
+  # One of the following target arguments must be supplied:
+  carrier_gateway_id        = try(each.value.carrier_gateway_id, null)
+  egress_only_gateway_id    = try(each.value.egress_only_gateway_id, null)
+  gateway_id                = try(each.value.gateway_id, null)
+  nat_gateway_id            = try(aws_nat_gateway.this[each.value.nat_gateway_key].id, each.value.nat_gateway_id, null)
+  local_gateway_id          = try(each.value.local_gateway_id, null)
+  network_interface_id      = try(each.value.network_interface_id, null)
+  transit_gateway_id        = try(each.value.transit_gateway_id, null)
+  vpc_endpoint_id           = try(each.value.vpc_endpoint_id, null)
+  vpc_peering_connection_id = try(each.value.vpc_peering_connection_id, null)
+}
 
 resource "aws_route_table_association" "subnet" {
   for_each = { for k, v in element(local.subnet_route_table_associations, 0) : k => v if var.create }

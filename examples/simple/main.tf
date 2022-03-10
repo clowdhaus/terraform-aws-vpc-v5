@@ -22,6 +22,9 @@ module "vpc" {
   name       = local.name
   cidr_block = "10.0.0.0/16"
 
+  # Faster
+  enable_dnssec_config = false
+
   assign_generated_ipv6_cidr_block    = true
   create_egress_only_internet_gateway = true
 
@@ -102,13 +105,13 @@ module "private_subnets" {
     shared = {
       associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
       routes = {
-        # igw_ipv4 = {
-        #   cidr_block = "0.0.0.0/0"
-        #   gateway_id = module.public_subnets.internet_gateway_id
-        # }
+        igw_ipv4 = {
+          destination_cidr_block = "0.0.0.0/0"
+          nat_gateway_id         = module.public_subnets.nat_gateways["${local.region}a"].id
+        }
         igw_ipv6 = {
           destination_ipv6_cidr_block = "::/0"
-          gateway_id                  = module.vpc.egress_only_internet_gateway_id
+          egress_only_gateway_id      = module.vpc.egress_only_internet_gateway_id
         }
       }
     }

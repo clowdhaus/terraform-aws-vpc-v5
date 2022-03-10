@@ -62,16 +62,25 @@ module "public_subnets" {
       cidr_block              = "10.0.101.0/24"
       availability_zone       = "${local.region}a"
       map_public_ip_on_launch = true
+      tags = {
+        Name = "overridden-name-public"
+      }
     }
     "${local.region}b" = {
       cidr_block              = "10.0.102.0/24"
       availability_zone       = "${local.region}b"
       map_public_ip_on_launch = true
+      tags = {
+        Name = "overridden-name-public"
+      }
     }
     "${local.region}c" = {
       cidr_block              = "10.0.103.0/24"
       availability_zone       = "${local.region}c"
       map_public_ip_on_launch = true
+      tags = {
+        Name = "overridden-name-public"
+      }
     }
   }
 
@@ -80,18 +89,24 @@ module "public_subnets" {
       associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
       routes = {
         igw_ipv4 = {
-          cidr_block = "0.0.0.0/0"
-          gateway_id = module.vpc.internet_gateway_id
+          destination_cidr_block = "0.0.0.0/0"
+          gateway_id             = module.vpc.internet_gateway_id
         }
         igw_ipv6 = {
-          ipv6_cidr_block = "::/0"
-          gateway_id      = module.vpc.internet_gateway_id
+          destination_ipv6_cidr_block = "::/0"
+          gateway_id                  = module.vpc.internet_gateway_id
         }
+      }
+
+      tags = {
+        Name = "simple-example-public"
       }
     }
   }
 
-  tags = local.tags
+  tags = merge(local.tags, {
+    Name = "overridden-name-public"
+  })
 }
 
 
@@ -124,9 +139,13 @@ module "private_subnets" {
       associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
       routes = {
         igw_ipv6 = {
-          ipv6_cidr_block = "::/0"
-          gateway_id      = module.vpc.egress_only_internet_gateway_id
+          destination_ipv6_cidr_block = "::/0"
+          egress_only_gateway_id      = module.vpc.egress_only_internet_gateway_id
         }
+      }
+
+      tags = {
+        Name = "simple-example-private"
       }
     }
   }
