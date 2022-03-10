@@ -44,12 +44,12 @@ resource "aws_subnet" "this" {
 
 resource "aws_ec2_subnet_cidr_reservation" "this" {
   # Ugly, but it works as intended - TODO: make it less ugly
-  for_each = element(values({
+  for_each = try(element(values({
     for k, v in var.subnets : k => {
       # Add subnet map key into CIDR reservation map so we can flatten nested maps with `values()`
       for k2, v2 in v.ec2_subnet_cidr_reservations : k2 => merge({ subnet_key = k }, v2)
     } if var.create && can(v.ec2_subnet_cidr_reservations)
-  }), 0)
+  }), 0), {})
 
   description      = try(each.value.description, null)
   cidr_block       = each.value.cidr_block
@@ -93,7 +93,7 @@ resource "aws_route_table" "this" {
       carrier_gateway_id        = try(route.value.carrier_gateway_id, null)
       egress_only_gateway_id    = try(route.value.egress_only_gateway_id, null)
       gateway_id                = try(route.value.gateway_id, null)
-      nat_gateway_id            = try(route.value.nat_gateway_id, null)
+      nat_gateway_id            = try(aws_nat_gateway.this[route.value.nat_gateway_key].id, route.value.nat_gateway_id, null)
       local_gateway_id          = try(route.value.local_gateway_id, null)
       network_interface_id      = try(route.value.network_interface_id, null)
       transit_gateway_id        = try(route.value.transit_gateway_id, null)

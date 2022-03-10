@@ -2,6 +2,11 @@
 
 :warning: Please do not rely on this being stable. The goal of this project is to explore changes to the upstream `terraform-aws-vpc` module and eventually land those changes there as v4.0. For now, this is just for exploring and open collaboration on what that next version might look like, and how users can migrate from v3.x to v4.x. Feel free to watch along if you are curious.
 
+## TODO
+
+- Better defaults on subnets
+  - `associated_subnet_keys` should default to all unless users opt out to 1:1 subnet:route_table
+
 ## Design Goals
 
 1. Use of `for_each` instead of `count` for stable, isolated changes
