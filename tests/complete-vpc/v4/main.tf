@@ -178,12 +178,6 @@ module "vpc_endpoints" {
   })
 }
 
-module "vpc_endpoints_nocreate" {
-  source = "../../modules/vpc-endpoints"
-
-  create = false
-}
-
 ################################################################################
 # Supporting Resources
 ################################################################################

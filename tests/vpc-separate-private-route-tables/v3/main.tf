@@ -4,6 +4,12 @@ provider "aws" {
 
 locals {
   region = "eu-west-1"
+  name   = "vpc-ex-${replace(basename(path.cwd), "_", "-")}"
+
+  tags = {
+    Owner       = "user"
+    Environment = "staging"
+  }
 }
 
 ################################################################################
@@ -14,10 +20,7 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "3.12.0"
 
-  # source = "../../"
-
-  name = "vpc-separate-private-route-tables"
-
+  name = local.name
   cidr = "10.10.0.0/16"
 
   azs                 = ["${local.region}a", "${local.region}b", "${local.region}c"]
@@ -34,9 +37,5 @@ module "vpc" {
   single_nat_gateway = true
   enable_nat_gateway = true
 
-  tags = {
-    Owner       = "user"
-    Environment = "staging"
-    Name        = "separate-private-route-tables"
-  }
+  tags = local.tags
 }

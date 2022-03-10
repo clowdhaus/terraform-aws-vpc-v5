@@ -2,19 +2,9 @@ provider "aws" {
   region = local.region
 }
 
-# Used to aid in diffing across v3/v4 in separate folders
-terraform {
-  backend "s3" {
-    bucket = "terraform-aws-vpc-v4"
-    key    = "simple-vpc/terraform.tfstate"
-    region = "eu-west-1"
-  }
-}
-
 locals {
-  name   = "simple-example"
-  cidr   = "10.0.0.0/16"
   region = "eu-west-1"
+  name   = "vpc-ex-${replace(basename(path.cwd), "_", "-")}"
 
   tags = {
     Owner       = "user"
@@ -30,7 +20,7 @@ module "vpc" {
   source = "../../../"
 
   name       = local.name
-  cidr_block = local.cidr
+  cidr_block = "10.0.0.0/16"
 
   assign_generated_ipv6_cidr_block    = true
   create_egress_only_internet_gateway = true

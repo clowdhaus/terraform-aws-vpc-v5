@@ -37,7 +37,7 @@ tf state mv 'module.vpc.aws_route.public_internet_gateway_ipv6[0]' 'module.publi
 
 tf state mv 'module.vpc.aws_route.private_ipv6_egress[0]' 'module.private_subnets.aws_route.this["igw_ipv6"]'
 
-# This a bug in v3 - there are 3 routes that are all the same in the state file
+# This is a bug in v3 - there are 3 routes that are all the same in the state file
 # We migrate the first one to the new name, the rest need to be removed from the state
 # DO NOT destroy these or you will remove the egress only route and will need to re-provision on next apply
 # which could disrupt traffic
