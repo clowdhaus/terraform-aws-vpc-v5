@@ -93,6 +93,16 @@ output "nat_gateways" {
   value       = aws_nat_gateway.this
 }
 
+output "nat_gateway_ids" {
+  description = "List of NAT gateway IDs"
+  value       = [for nat in aws_nat_gateway.this : nat.id]
+}
+
+output "nat_gateway_public_ips" {
+  description = "List of NAT gateway public IPs"
+  value       = [for nat in aws_nat_gateway.this : nat.public_ip]
+}
+
 output "elastic_ips" {
   description = "Map of EIP(s) created and their attributes"
   value       = aws_eip.this

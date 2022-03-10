@@ -378,6 +378,8 @@ No modules.
 |------|-------------|
 | <a name="output_arn"></a> [arn](#output\_arn) | Amazon Resource Name (ARN) of VPC |
 | <a name="output_cidr_block"></a> [cidr\_block](#output\_cidr\_block) | The IPv4 CIDR block of the VPC |
+| <a name="output_customer_gateway_arns"></a> [customer\_gateway\_arns](#output\_customer\_gateway\_arns) | List of Customer Gateways ARNs |
+| <a name="output_customer_gateway_ids"></a> [customer\_gateway\_ids](#output\_customer\_gateway\_ids) | List of Customer Gateway IDs |
 | <a name="output_customer_gateways"></a> [customer\_gateways](#output\_customer\_gateways) | Map of Customer Gateways and their attributes |
 | <a name="output_default_dhcp_options_arn"></a> [default\_dhcp\_options\_arn](#output\_default\_dhcp\_options\_arn) | The ARN of the default DHCP options set |
 | <a name="output_default_dhcp_options_id"></a> [default\_dhcp\_options\_id](#output\_default\_dhcp\_options\_id) | The ID of the default DHCP options set |
@@ -423,6 +425,8 @@ No modules.
 | <a name="output_ipv6_cidr_block_network_border_group"></a> [ipv6\_cidr\_block\_network\_border\_group](#output\_ipv6\_cidr\_block\_network\_border\_group) | The Network Border Group Zone name |
 | <a name="output_main_route_table_id"></a> [main\_route\_table\_id](#output\_main\_route\_table\_id) | The ID of the main route table associated with this VPC. Note that you can change a VPC's main route table by using an `aws_main_route_table_association` |
 | <a name="output_owner_id"></a> [owner\_id](#output\_owner\_id) | The ID of the AWS account that owns the VPC |
+| <a name="output_vpn_gateway_arns"></a> [vpn\_gateway\_arns](#output\_vpn\_gateway\_arns) | List of VPN Gateways ARNs |
+| <a name="output_vpn_gateway_ids"></a> [vpn\_gateway\_ids](#output\_vpn\_gateway\_ids) | List of VPN Gateway IDs |
 | <a name="output_vpn_gateways"></a> [vpn\_gateways](#output\_vpn\_gateways) | Map of VPN Gateways and their attributes |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 

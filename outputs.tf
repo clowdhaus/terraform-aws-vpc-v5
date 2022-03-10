@@ -179,15 +179,34 @@ output "customer_gateways" {
   value       = aws_customer_gateway.this
 }
 
+output "customer_gateway_ids" {
+  description = "List of Customer Gateway IDs"
+  value       = [for cgw in aws_customer_gateway.this : cgw.id]
+}
+
+output "customer_gateway_arns" {
+  description = "List of Customer Gateways ARNs"
+  value       = [for cgw in aws_customer_gateway.this : cgw.arn]
+}
+
 ################################################################################
 # VPN Gateway(s)
 ################################################################################
 
 output "vpn_gateways" {
   description = "Map of VPN Gateways and their attributes"
-  value       = aws_customer_gateway.this
+  value       = aws_vpn_gateway.this
 }
 
+output "vpn_gateway_ids" {
+  description = "List of VPN Gateway IDs"
+  value       = [for vgw in aws_vpn_gateway.this : vgw.id]
+}
+
+output "vpn_gateway_arns" {
+  description = "List of VPN Gateways ARNs"
+  value       = [for vgw in aws_vpn_gateway.this : vgw.arn]
+}
 ################################################################################
 # VPC Default Security Group
 ################################################################################

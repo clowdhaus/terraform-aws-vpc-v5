@@ -152,6 +152,8 @@ No modules.
 | <a name="output_ids"></a> [ids](#output\_ids) | List of subnet IDs |
 | <a name="output_ipv4_cidr_blocks"></a> [ipv4\_cidr\_blocks](#output\_ipv4\_cidr\_blocks) | List of subnet IPv4 CIDR blocks |
 | <a name="output_ipv6_cidr_blocks"></a> [ipv6\_cidr\_blocks](#output\_ipv6\_cidr\_blocks) | List of subnet IPv6 CIDR blocks |
+| <a name="output_nat_gateway_ids"></a> [nat\_gateway\_ids](#output\_nat\_gateway\_ids) | List of NAT gateway IDs |
+| <a name="output_nat_gateway_public_ips"></a> [nat\_gateway\_public\_ips](#output\_nat\_gateway\_public\_ips) | List of NAT gateway public IPs |
 | <a name="output_nat_gateways"></a> [nat\_gateways](#output\_nat\_gateways) | Map of NAT gateway(s) created and their attributes |
 | <a name="output_network_acl_arn"></a> [network\_acl\_arn](#output\_network\_acl\_arn) | The ID of the network ACL |
 | <a name="output_network_acl_id"></a> [network\_acl\_id](#output\_network\_acl\_id) | The ARN of the network ACL |
