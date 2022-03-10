@@ -37,6 +37,11 @@ output "ipv6_cidr_block" {
   value       = try(aws_vpc.this[0].ipv6_cidr_block, null)
 }
 
+output "owner_id" {
+  description = "The ID of the AWS account that owns the VPC"
+  value       = try(aws_vpc.this[0].owner_id, null)
+}
+
 ################################################################################
 # VPC CIDR Block Association(s)
 ################################################################################

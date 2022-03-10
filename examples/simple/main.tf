@@ -2,23 +2,13 @@ provider "aws" {
   region = local.region
 }
 
-# Used to aid in diffing across v3/v4 in separate folders
-terraform {
-  backend "s3" {
-    bucket = "terraform-aws-vpc-v4"
-    key    = "simple-vpc/terraform.tfstate"
-    region = "eu-west-1"
-  }
-}
-
 locals {
-  name   = "simple-example"
-  cidr   = "10.0.0.0/16"
+  name   = "vpc-ex-${replace(basename(path.cwd), "_", "-")}"
   region = "eu-west-1"
 
   tags = {
-    Owner       = "user"
-    Environment = "dev"
+    Example    = local.name
+    GithubRepo = "terraform-aws-vpc-v4"
   }
 }
 
@@ -27,41 +17,33 @@ locals {
 ################################################################################
 
 module "vpc" {
-  source = "../../../"
+  source = "../../"
 
   name       = local.name
-  cidr_block = local.cidr
+  cidr_block = "10.0.0.0/16"
 
   assign_generated_ipv6_cidr_block    = true
   create_egress_only_internet_gateway = true
 
-  # Not in v3.x
-  enable_dnssec_config          = false
-  manage_default_security_group = false
-  manage_default_network_acl    = false
-  manage_default_route_table    = false
-
   vpc_tags = {
-    Name = "vpc-name"
+    vpc_tag = true
   }
 
   tags = local.tags
 }
 
 module "public_subnets" {
-  source = "../../../modules/subnets"
+  source = "../../modules/subnets"
 
   name   = "${local.name}-public"
   vpc_id = module.vpc.id
-
-  # Backwards compat
-  create_network_acl = false
 
   subnets = {
     "${local.region}a" = {
       cidr_block              = "10.0.101.0/24"
       availability_zone       = "${local.region}a"
       map_public_ip_on_launch = true
+      create_nat_gateway      = true
     }
     "${local.region}b" = {
       cidr_block              = "10.0.102.0/24"
@@ -80,12 +62,12 @@ module "public_subnets" {
       associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
       routes = {
         igw_ipv4 = {
-          cidr_block = "0.0.0.0/0"
-          gateway_id = module.vpc.internet_gateway_id
+          destination_cidr_block = "0.0.0.0/0"
+          gateway_id             = module.vpc.internet_gateway_id
         }
         igw_ipv6 = {
-          ipv6_cidr_block = "::/0"
-          gateway_id      = module.vpc.internet_gateway_id
+          destination_ipv6_cidr_block = "::/0"
+          gateway_id                  = module.vpc.internet_gateway_id
         }
       }
     }
@@ -96,13 +78,10 @@ module "public_subnets" {
 
 
 module "private_subnets" {
-  source = "../../../modules/subnets"
+  source = "../../modules/subnets"
 
   name   = "${local.name}-private"
   vpc_id = module.vpc.id
-
-  # Backwards compat
-  create_network_acl = false
 
   subnets = {
     "${local.region}a" = {
@@ -123,9 +102,13 @@ module "private_subnets" {
     shared = {
       associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
       routes = {
+        # igw_ipv4 = {
+        #   cidr_block = "0.0.0.0/0"
+        #   gateway_id = module.public_subnets.internet_gateway_id
+        # }
         igw_ipv6 = {
-          ipv6_cidr_block = "::/0"
-          gateway_id      = module.vpc.egress_only_internet_gateway_id
+          destination_ipv6_cidr_block = "::/0"
+          gateway_id                  = module.vpc.egress_only_internet_gateway_id
         }
       }
     }

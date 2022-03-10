@@ -83,3 +83,17 @@ output "network_acl_rules_egress" {
   description = "Map of egress network ACL rules created and their attributes"
   value       = aws_network_acl_rule.egress
 }
+
+################################################################################
+# NAT Gateway
+################################################################################
+
+output "nat_gateways" {
+  description = "Map of NAT gateway(s) created and their attributes"
+  value       = aws_nat_gateway.this
+}
+
+output "elastic_ips" {
+  description = "Map of EIP(s) created and their attributes"
+  value       = aws_eip.this
+}

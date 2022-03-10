@@ -147,9 +147,11 @@ No modules.
 |------|-------------|
 | <a name="output_arns"></a> [arns](#output\_arns) | List of subnet ARNs |
 | <a name="output_ec2_subnet_cidr_reservations"></a> [ec2\_subnet\_cidr\_reservations](#output\_ec2\_subnet\_cidr\_reservations) | Map of EC2 subnet CIDR reservations created and their attributes |
+| <a name="output_elastic_ips"></a> [elastic\_ips](#output\_elastic\_ips) | Map of EIP(s) created and their attributes |
 | <a name="output_ids"></a> [ids](#output\_ids) | List of subnet IDs |
 | <a name="output_ipv4_cidr_blocks"></a> [ipv4\_cidr\_blocks](#output\_ipv4\_cidr\_blocks) | List of subnet IPv4 CIDR blocks |
 | <a name="output_ipv6_cidr_blocks"></a> [ipv6\_cidr\_blocks](#output\_ipv6\_cidr\_blocks) | List of subnet IPv6 CIDR blocks |
+| <a name="output_nat_gateways"></a> [nat\_gateways](#output\_nat\_gateways) | Map of NAT gateway(s) created and their attributes |
 | <a name="output_network_acl_arn"></a> [network\_acl\_arn](#output\_network\_acl\_arn) | The ID of the network ACL |
 | <a name="output_network_acl_id"></a> [network\_acl\_id](#output\_network\_acl\_id) | The ARN of the network ACL |
 | <a name="output_network_acl_rules_egress"></a> [network\_acl\_rules\_egress](#output\_network\_acl\_rules\_egress) | Map of egress network ACL rules created and their attributes |
