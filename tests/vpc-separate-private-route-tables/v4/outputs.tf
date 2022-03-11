@@ -48,6 +48,7 @@ output "vpc_owner_id" {
   value       = module.vpc.owner_id
 }
 
+# Private Subnets
 output "private_subnets" {
   description = "List of IDs of private subnets"
   value       = module.private_subnets.ids
@@ -68,6 +69,7 @@ output "private_subnets_ipv6_cidr_blocks" {
   value       = module.private_subnets.ipv6_cidr_blocks
 }
 
+# Public Subnets
 output "public_subnets" {
   description = "List of IDs of public subnets"
   value       = module.public_subnets.ids
@@ -88,9 +90,104 @@ output "public_subnets_ipv6_cidr_blocks" {
   value       = module.public_subnets.ipv6_cidr_blocks
 }
 
+# Database Subnets
+output "database_subnets" {
+  description = "List of IDs of database subnets"
+  value       = module.database_subnets.ids
+}
+
+output "database_subnet_arns" {
+  description = "List of ARNs of database subnets"
+  value       = module.database_subnets.arns
+}
+
+output "database_subnets_cidr_blocks" {
+  description = "List of cidr_blocks of database subnets"
+  value       = module.database_subnets.ipv4_cidr_blocks
+}
+
+output "database_subnets_ipv6_cidr_blocks" {
+  description = "List of IPv6 cidr_blocks of database subnets in an IPv6 enabled VPC"
+  value       = module.database_subnets.ipv6_cidr_blocks
+}
+
+output "database_subnet_group" {
+  description = "ID of database subnet group"
+  value       = [for group in module.database_subnets.rds_subnet_groups : group.id][0]
+}
+
+output "database_subnet_group_name" {
+  description = "Name of database subnet group"
+  value       = [for group in module.database_subnets.rds_subnet_groups : group.name][0]
+}
+
+
+# Redshift Subnets
+output "redshift_subnets" {
+  description = "List of IDs of redshift subnets"
+  value       = module.redshift_subnets.ids
+}
+
+output "redshift_subnet_arns" {
+  description = "List of ARNs of redshift subnets"
+  value       = module.redshift_subnets.arns
+}
+
+output "redshift_subnets_cidr_blocks" {
+  description = "List of cidr_blocks of redshift subnets"
+  value       = module.redshift_subnets.ipv4_cidr_blocks
+}
+
+output "redshift_subnets_ipv6_cidr_blocks" {
+  description = "List of IPv6 cidr_blocks of redshift subnets in an IPv6 enabled VPC"
+  value       = module.redshift_subnets.ipv6_cidr_blocks
+}
+
+output "redshift_subnet_group" {
+  description = "ID of redshift subnet group"
+  value       = [for group in module.redshift_subnets.redshift_subnet_groups : group.id][0]
+}
+
+# Elasticache Subnets
+output "elasticache_subnets" {
+  description = "List of IDs of elasticache subnets"
+  value       = module.elasticache_subnets.ids
+}
+
+output "elasticache_subnet_arns" {
+  description = "List of ARNs of elasticache subnets"
+  value       = module.elasticache_subnets.arns
+}
+
+output "elasticache_subnets_cidr_blocks" {
+  description = "List of cidr_blocks of elasticache subnets"
+  value       = module.elasticache_subnets.ipv4_cidr_blocks
+}
+
+output "elasticache_subnets_ipv6_cidr_blocks" {
+  description = "List of IPv6 cidr_blocks of elasticache subnets in an IPv6 enabled VPC"
+  value       = module.elasticache_subnets.ipv6_cidr_blocks
+}
+
+output "elasticache_subnet_group" {
+  description = "ID of elasticache subnet group"
+  value       = [for group in module.elasticache_subnets.elasticache_subnet_groups : group.id][0]
+}
+
+output "elasticache_subnet_group_name" {
+  description = "Name of elasticache subnet group"
+  value       = [for group in module.elasticache_subnets.elasticache_subnet_groups : group.name][0]
+}
+
+# Route Tables
 output "public_route_table_ids" {
   description = "List of IDs of public route tables"
   value       = module.public_subnets.route_table_ids
+}
+
+output "public_route_table_association_ids" {
+  description = "List of IDs of the public route table association"
+  value       = module.public_subnets.route_table_subnet_association_ids
 }
 
 output "private_route_table_ids" {
@@ -103,9 +200,39 @@ output "private_route_table_association_ids" {
   value       = module.private_subnets.route_table_subnet_association_ids
 }
 
-output "public_route_table_association_ids" {
-  description = "List of IDs of the public route table association"
-  value       = module.public_subnets.route_table_subnet_association_ids
+output "database_route_table_ids" {
+  description = "List of IDs of database route tables"
+  value       = module.database_subnets.route_table_ids
+}
+
+output "database_route_table_association_ids" {
+  description = "List of IDs of the database route table association"
+  value       = module.database_subnets.route_table_subnet_association_ids
+}
+
+output "redshift_route_table_ids" {
+  description = "List of IDs of redshift route tables"
+  value       = module.redshift_subnets.route_table_ids
+}
+
+output "redshift_route_table_association_ids" {
+  description = "List of IDs of the redshift route table association"
+  value       = module.redshift_subnets.route_table_subnet_association_ids
+}
+
+# output "redshift_public_route_table_association_ids" {
+#   description = "List of IDs of the public redshidt route table association"
+#   value       = module.vpc.redshift_public_route_table_association_ids
+# }
+
+output "elasticache_route_table_ids" {
+  description = "List of IDs of elasticache route tables"
+  value       = module.elasticache_subnets.route_table_ids
+}
+
+output "elasticache_route_table_association_ids" {
+  description = "List of IDs of the elasticache route table association"
+  value       = module.elasticache_subnets.route_table_subnet_association_ids
 }
 
 output "dhcp_options_id" {
@@ -133,36 +260,7 @@ output "igw_arn" {
   value       = module.vpc.internet_gateway_arn
 }
 
-output "egress_only_internet_gateway_id" {
-  description = "The ID of the egress only Internet Gateway"
-  value       = module.vpc.egress_only_internet_gateway_id
-}
-
-output "cgw_ids" {
-  description = "List of IDs of Customer Gateway"
-  value       = module.vpc.customer_gateway_ids
-}
-
-output "cgw_arns" {
-  description = "List of ARNs of Customer Gateway"
-  value       = module.vpc.customer_gateway_arns
-}
-
-output "this_customer_gateway" {
-  description = "Map of Customer Gateway attributes"
-  value       = module.vpc.customer_gateways
-}
-
-output "vgw_ids" {
-  description = "The ID of the VPN Gateway"
-  value       = module.vpc.vpn_gateway_ids
-}
-
-output "vgw_arns" {
-  description = "The ARN of the VPN Gateway"
-  value       = module.vpc.vpn_gateway_arns
-}
-
+# Network ACLs
 output "public_network_acl_id" {
   description = "ID of the public network ACL"
   value       = module.public_subnets.network_acl_arn

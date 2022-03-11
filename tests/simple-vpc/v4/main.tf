@@ -4,7 +4,7 @@ provider "aws" {
 
 locals {
   region = "eu-west-1"
-  name   = "vpc-ex-${replace(basename(path.cwd), "_", "-")}"
+  name   = "vpc-ex-simple"
 
   tags = {
     Owner       = "user"
@@ -47,30 +47,25 @@ module "public_subnets" {
   # Backwards compat
   create_network_acl = false
 
+  subnets_default = {
+    map_public_ip_on_launch = true
+    tags = {
+      Name = "overridden-name-public"
+    }
+  }
+
   subnets = {
     "${local.region}a" = {
-      cidr_block              = "10.0.101.0/24"
-      availability_zone       = "${local.region}a"
-      map_public_ip_on_launch = true
-      tags = {
-        Name = "overridden-name-public"
-      }
+      cidr_block        = "10.0.101.0/24"
+      availability_zone = "${local.region}a"
     }
     "${local.region}b" = {
-      cidr_block              = "10.0.102.0/24"
-      availability_zone       = "${local.region}b"
-      map_public_ip_on_launch = true
-      tags = {
-        Name = "overridden-name-public"
-      }
+      cidr_block        = "10.0.102.0/24"
+      availability_zone = "${local.region}b"
     }
     "${local.region}c" = {
-      cidr_block              = "10.0.103.0/24"
-      availability_zone       = "${local.region}c"
-      map_public_ip_on_launch = true
-      tags = {
-        Name = "overridden-name-public"
-      }
+      cidr_block        = "10.0.103.0/24"
+      availability_zone = "${local.region}c"
     }
   }
 
@@ -86,10 +81,6 @@ module "public_subnets" {
           destination_ipv6_cidr_block = "::/0"
           gateway_id                  = module.vpc.internet_gateway_id
         }
-      }
-
-      tags = {
-        Name = "simple-example-public"
       }
     }
   }
@@ -132,10 +123,6 @@ module "private_subnets" {
           destination_ipv6_cidr_block = "::/0"
           egress_only_gateway_id      = module.vpc.egress_only_internet_gateway_id
         }
-      }
-
-      tags = {
-        Name = "simple-example-private"
       }
     }
   }

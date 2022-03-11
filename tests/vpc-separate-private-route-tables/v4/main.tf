@@ -4,7 +4,7 @@ provider "aws" {
 
 locals {
   region = "eu-west-1"
-  name   = "vpc-ex-${replace(basename(path.cwd), "_", "-")}"
+  name   = "vpc-ex-separate"
 
   tags = {
     Owner       = "user"
@@ -80,6 +80,9 @@ module "private_subnets" {
   name   = "${local.name}-private"
   vpc_id = module.vpc.id
 
+  # Backwards compat
+  create_network_acl = false
+
   subnets = {
     "${local.region}a" = {
       cidr_block        = "10.10.1.0/24"
@@ -99,7 +102,7 @@ module "private_subnets" {
     shared = {
       associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
       routes = {
-        igw_ipv4 = {
+        nat_gw_ipv4 = {
           destination_cidr_block = "0.0.0.0/0"
           nat_gateway_id         = module.public_subnets.nat_gateways["${local.region}a"].id
         }
@@ -115,6 +118,9 @@ module "database_subnets" {
 
   name   = "${local.name}-database"
   vpc_id = module.vpc.id
+
+  # Backwards compat
+  create_network_acl = false
 
   subnets = {
     "${local.region}a" = {
@@ -134,6 +140,19 @@ module "database_subnets" {
   route_tables = {
     shared = {
       associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
+      routes                 = {}
+    }
+  }
+
+  rds_subnet_groups = {
+    database = {
+      name                   = local.name
+      description            = "Database subnet group for ${local.name}"
+      associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
+
+      tags = {
+        Name = local.name
+      }
     }
   }
 
@@ -145,6 +164,9 @@ module "elasticache_subnets" {
 
   name   = "${local.name}-elasticache"
   vpc_id = module.vpc.id
+
+  # Backwards compat
+  create_network_acl = false
 
   subnets = {
     "${local.region}a" = {
@@ -164,6 +186,19 @@ module "elasticache_subnets" {
   route_tables = {
     shared = {
       associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
+      routes                 = {}
+    }
+  }
+
+  elasticache_subnet_groups = {
+    elasticache = {
+      name                   = local.name
+      description            = "ElastiCache subnet group for ${local.name}"
+      associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
+
+      tags = {
+        Name = local.name
+      }
     }
   }
 
@@ -175,6 +210,9 @@ module "redshift_subnets" {
 
   name   = "${local.name}-redshift"
   vpc_id = module.vpc.id
+
+  # Backwards compat
+  create_network_acl = false
 
   subnets = {
     "${local.region}a" = {
@@ -194,6 +232,19 @@ module "redshift_subnets" {
   route_tables = {
     shared = {
       associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
+      routes                 = {}
+    }
+  }
+
+  redshift_subnet_groups = {
+    redshift = {
+      name                   = local.name
+      description            = "Redshift subnet group for ${local.name}"
+      associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
+
+      tags = {
+        Name = local.name
+      }
     }
   }
 

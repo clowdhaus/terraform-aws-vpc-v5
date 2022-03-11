@@ -45,6 +45,58 @@ variable "subnet_timeouts" {
 }
 
 ################################################################################
+# Subnet Groups
+################################################################################
+
+variable "dms_replication_subnet_groups" {
+  description = "Map of DMS replication subnet group [definitions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dms_replication_subnet_group)"
+  type        = any
+  default     = {}
+}
+
+variable "docdb_subnet_groups" {
+  description = "Map of DocumentDB subnet group [definitions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/docdb_subnet_group)"
+  type        = any
+  default     = {}
+}
+
+variable "dax_subnet_groups" {
+  description = "Map of DAX subnet group [definitions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dax_subnet_group)"
+  type        = any
+  default     = {}
+}
+
+variable "elasticache_subnet_groups" {
+  description = "Map of Elasticache subnet group [definitions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/elasticache_subnet_group)"
+  type        = any
+  default     = {}
+}
+
+variable "memorydb_subnet_groups" {
+  description = "Map of MemoryDB subnet group [definitions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/memorydb_subnet_group)"
+  type        = any
+  default     = {}
+}
+
+variable "neptune_subnet_groups" {
+  description = "Map of Neptune subnet group [definitions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/neptune_subnet_group)"
+  type        = any
+  default     = {}
+}
+
+variable "rds_subnet_groups" {
+  description = "Map of RDS Database subnet group [definitions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_subnet_group)"
+  type        = any
+  default     = {}
+}
+
+variable "redshift_subnet_groups" {
+  description = "Map of Redshift subnet group [definitions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/redshift_subnet_group)"
+  type        = any
+  default     = {}
+}
+
+################################################################################
 # Route Table
 ################################################################################
 

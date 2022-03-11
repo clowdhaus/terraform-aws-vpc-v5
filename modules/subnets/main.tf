@@ -102,7 +102,7 @@ resource "aws_route" "this" {
     } # if var.create && can(v.routes) # TODO - this will cause an issue if create == false
   }), 0)
 
-  route_table_id = aws_route_table.this[each.value.route_table_key].id
+  route_table_id = try(aws_route_table.this[each.value.route_table_key].id, each.value.route_table_id)
 
   destination_cidr_block      = try(each.value.destination_cidr_block, null)
   destination_ipv6_cidr_block = try(each.value.destination_ipv6_cidr_block, null)

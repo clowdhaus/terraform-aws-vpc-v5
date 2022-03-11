@@ -10,6 +10,7 @@
   - ~CIDR is unique and 1:1 to subnet - consider making this the map key~
     - Nothing gained by doing this and complexity becomes very ugly to support
   - Internal helper function to allow users to opt into using netmask for subnets
+- A `routes` object must be added until [this](https://github.com/clowdhaus/terraform-aws-vpc-v4/blob/cd1dd432dc81e0dbb493e46a0cb644a9d4e2ff07/modules/subnets/main.tf#L102) is fixed
 
 ## Design Goals
 

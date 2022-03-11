@@ -22,4 +22,19 @@ locals {
       for k2, v2 in try(v.routes, {}) : k2 => merge({ route_table_key = k }, v2)
     }
   }), 0)
+
+  # buckets       = ["blue", "green", "red"]
+  # bucket_filter = ["blue", "green"]
 }
+
+# resource "aws_s3_bucket" "this" {
+#   for_each = toset(local.buckets)
+#   bucket   = "my-temp-bux-${each.value}"
+
+#   force_destroy = true
+# }
+
+# output "buckets" {
+#   value = [for bucket in [for filt in local.bucket_filter : aws_s3_bucket.this[filt]] : bucket.id]
+#   # value = aws_s3_bucket.this
+# }

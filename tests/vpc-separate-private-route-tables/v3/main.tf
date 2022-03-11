@@ -4,11 +4,11 @@ provider "aws" {
 
 locals {
   region = "eu-west-1"
-  name   = "vpc-ex-${replace(basename(path.cwd), "_", "-")}"
+  name   = "vpc-ex-separate"
 
   tags = {
     Owner       = "user"
-    Environment = "staging"
+    Environment = "dev"
   }
 }
 

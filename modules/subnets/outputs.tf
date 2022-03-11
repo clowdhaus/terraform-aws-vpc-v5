@@ -28,6 +28,50 @@ output "ipv6_cidr_blocks" {
 }
 
 ################################################################################
+# Subnet Groups
+################################################################################
+
+output "dms_replication_subnet_groups" {
+  description = "Map of DMS Replication subnet groups created and their attributes"
+  value       = aws_dms_replication_subnet_group.this
+}
+
+output "docdb_subnet_groups" {
+  description = "Map of DocumentDB subnet groups created and their attributes"
+  value       = aws_docdb_subnet_group.this
+}
+
+output "dax_subnet_groups" {
+  description = "Map of DAX subnet groups created and their attributes"
+  value       = aws_dax_subnet_group.this
+}
+
+output "elasticache_subnet_groups" {
+  description = "Map of Elasitcache subnet groups created and their attributes"
+  value       = aws_elasticache_subnet_group.this
+}
+
+output "memorydb_subnet_groups" {
+  description = "Map of MemoryDB subnet groups created and their attributes"
+  value       = aws_memorydb_subnet_group.this
+}
+
+output "neptune_subnet_groups" {
+  description = "Map of Neptune subnet groups created and their attributes"
+  value       = aws_neptune_subnet_group.this
+}
+
+output "rds_subnet_groups" {
+  description = "Map of RDS Database subnet groups created and their attributes"
+  value       = aws_db_subnet_group.this
+}
+
+output "redshift_subnet_groups" {
+  description = "Map of DMS Replication subnet groups created and their attributes"
+  value       = aws_redshift_subnet_group.this
+}
+
+################################################################################
 # EC2 Subnet CIDR Reservation
 ################################################################################
 
