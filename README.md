@@ -7,7 +7,8 @@
 - Add DB subnet group support to `subnet` module
 - Better defaults on subnets
   - `associated_subnet_keys` should default to all unless users opt out to 1:1 subnet:route_table
-  - CIDR is unique and 1:1 to subnet - consider making this the map key
+  - ~CIDR is unique and 1:1 to subnet - consider making this the map key~
+    - Nothing gained by doing this and complexity becomes very ugly to support
   - Internal helper function to allow users to opt into using netmask for subnets
 
 ## Design Goals

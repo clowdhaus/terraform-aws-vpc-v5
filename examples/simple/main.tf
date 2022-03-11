@@ -41,28 +41,29 @@ module "public_subnets" {
   name   = "${local.name}-public"
   vpc_id = module.vpc.id
 
+  subnets_default = {
+    map_public_ip_on_launch = true
+  }
+
   subnets = {
-    "${local.region}a" = {
-      cidr_block              = "10.0.101.0/24"
-      availability_zone       = "${local.region}a"
-      map_public_ip_on_launch = true
-      create_nat_gateway      = true
+    "one" = {
+      cidr_block         = "10.0.100.0/24"
+      availability_zone  = "${local.region}a"
+      create_nat_gateway = true
     }
-    "${local.region}b" = {
-      cidr_block              = "10.0.102.0/24"
-      availability_zone       = "${local.region}b"
-      map_public_ip_on_launch = true
+    "two" = {
+      cidr_block        = "10.0.101.0/24"
+      availability_zone = "${local.region}b"
     }
-    "${local.region}c" = {
-      cidr_block              = "10.0.103.0/24"
-      availability_zone       = "${local.region}c"
-      map_public_ip_on_launch = true
+    "three" = {
+      cidr_block        = "10.0.102.0/24"
+      availability_zone = "${local.region}c"
     }
   }
 
   route_tables = {
     shared = {
-      associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
+      associated_subnet_keys = ["one", "two", "three"]
       routes = {
         igw_ipv4 = {
           destination_cidr_block = "0.0.0.0/0"
@@ -88,15 +89,15 @@ module "private_subnets" {
 
   subnets = {
     "${local.region}a" = {
-      cidr_block        = "10.0.1.0/24"
+      cidr_block        = "10.0.10.0/24"
       availability_zone = "${local.region}a"
     }
     "${local.region}b" = {
-      cidr_block        = "10.0.2.0/24"
+      cidr_block        = "10.0.11.0/24"
       availability_zone = "${local.region}b"
     }
     "${local.region}c" = {
-      cidr_block        = "10.0.3.0/24"
+      cidr_block        = "10.0.12.0/24"
       availability_zone = "${local.region}c"
     }
   }
@@ -107,7 +108,7 @@ module "private_subnets" {
       routes = {
         igw_ipv4 = {
           destination_cidr_block = "0.0.0.0/0"
-          nat_gateway_id         = module.public_subnets.nat_gateways["${local.region}a"].id
+          nat_gateway_id         = module.public_subnets.nat_gateways["one"].id
         }
         igw_ipv6 = {
           destination_ipv6_cidr_block = "::/0"

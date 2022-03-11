@@ -7,24 +7,24 @@ resource "aws_subnet" "this" {
 
   vpc_id = var.vpc_id
 
-  availability_zone                   = try(each.value.availability_zone, null)
-  availability_zone_id                = try(each.value.availability_zone_id, null)
-  map_customer_owned_ip_on_launch     = try(each.value.map_customer_owned_ip_on_launch, null)
-  map_public_ip_on_launch             = try(each.value.map_public_ip_on_launch, null)
-  private_dns_hostname_type_on_launch = try(each.value.private_dns_hostname_type_on_launch, null)
+  availability_zone                   = try(var.subnets_default.availability_zone, each.value.availability_zone, null)
+  availability_zone_id                = try(var.subnets_default.availability_zone_id, each.value.availability_zone_id, null)
+  map_customer_owned_ip_on_launch     = try(var.subnets_default.map_customer_owned_ip_on_launch, each.value.map_customer_owned_ip_on_launch, null)
+  map_public_ip_on_launch             = try(var.subnets_default.map_public_ip_on_launch, each.value.map_public_ip_on_launch, null)
+  private_dns_hostname_type_on_launch = try(var.subnets_default.private_dns_hostname_type_on_launch, each.value.private_dns_hostname_type_on_launch, null)
 
-  cidr_block               = try(each.value.cidr_block, each.key, null)
-  customer_owned_ipv4_pool = try(each.value.customer_owned_ipv4_pool, null)
+  cidr_block               = try(each.value.cidr_block, null)
+  customer_owned_ipv4_pool = try(var.subnets_default.customer_owned_ipv4_pool, each.value.customer_owned_ipv4_pool, null)
 
-  ipv6_cidr_block                 = try(each.value.ipv6_cidr_block, each.key, null)
-  ipv6_native                     = try(each.value.ipv6_native, null)
-  assign_ipv6_address_on_creation = try(each.value.assign_ipv6_address_on_creation, null)
+  ipv6_cidr_block                 = try(each.value.ipv6_cidr_block, null)
+  ipv6_native                     = try(var.subnets_default.ipv6_native, each.value.ipv6_native, null)
+  assign_ipv6_address_on_creation = try(var.subnets_default.assign_ipv6_address_on_creation, each.value.assign_ipv6_address_on_creation, null)
 
-  enable_dns64                                   = try(each.value.enable_dns64, null)
-  enable_resource_name_dns_a_record_on_launch    = try(each.value.enable_resource_name_dns_a_record_on_launch, null)
-  enable_resource_name_dns_aaaa_record_on_launch = try(each.value.enable_resource_name_dns_aaaa_record_on_launch, null)
+  enable_dns64                                   = try(var.subnets_default.enable_dns64, each.value.enable_dns64, null)
+  enable_resource_name_dns_a_record_on_launch    = try(var.subnets_default.enable_resource_name_dns_a_record_on_launch, each.value.enable_resource_name_dns_a_record_on_launch, null)
+  enable_resource_name_dns_aaaa_record_on_launch = try(var.subnets_default.enable_resource_name_dns_aaaa_record_on_launch, each.value.enable_resource_name_dns_aaaa_record_on_launch, null)
 
-  outpost_arn = try(each.value.outpost_arn, null)
+  outpost_arn = try(var.subnets_default.outpost_arn, each.value.outpost_arn, null)
 
   timeouts {
     create = try(var.subnet_timeouts.create, null)
@@ -33,6 +33,7 @@ resource "aws_subnet" "this" {
 
   tags = merge(
     var.tags,
+    try(var.subnets_default.tags, {}),
     { Name = "${var.name}-${each.key}" },
     try(each.value.tags, {})
   )

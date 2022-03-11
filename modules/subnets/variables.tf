@@ -32,6 +32,12 @@ variable "subnets" {
   default     = {}
 }
 
+variable "subnets_default" {
+  description = "Map of subnet default configurations used across all subnets created"
+  type        = any
+  default     = {}
+}
+
 variable "subnet_timeouts" {
   description = "Create and delete timeout configurations for subnets"
   type        = map(string)
