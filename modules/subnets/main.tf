@@ -13,10 +13,10 @@ resource "aws_subnet" "this" {
   map_public_ip_on_launch             = try(each.value.map_public_ip_on_launch, null)
   private_dns_hostname_type_on_launch = try(each.value.private_dns_hostname_type_on_launch, null)
 
-  cidr_block               = try(each.value.cidr_block, null)
+  cidr_block               = try(each.value.cidr_block, each.key, null)
   customer_owned_ipv4_pool = try(each.value.customer_owned_ipv4_pool, null)
 
-  ipv6_cidr_block                 = try(each.value.ipv6_cidr_block, null)
+  ipv6_cidr_block                 = try(each.value.ipv6_cidr_block, each.key, null)
   ipv6_native                     = try(each.value.ipv6_native, null)
   assign_ipv6_address_on_creation = try(each.value.assign_ipv6_address_on_creation, null)
 
@@ -52,7 +52,7 @@ resource "aws_ec2_subnet_cidr_reservation" "this" {
   }), 0), {})
 
   description      = try(each.value.description, null)
-  cidr_block       = each.value.cidr_block
+  cidr_block       = try(each.key, each.value.cidr_block)
   reservation_type = each.value.reservation_type
   subnet_id        = aws_subnet.this[each.value.subnet_key].id
 }
