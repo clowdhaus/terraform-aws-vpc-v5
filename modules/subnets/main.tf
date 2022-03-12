@@ -13,7 +13,7 @@ resource "aws_subnet" "this" {
   map_public_ip_on_launch             = try(var.subnets_default.map_public_ip_on_launch, each.value.map_public_ip_on_launch, null)
   private_dns_hostname_type_on_launch = try(var.subnets_default.private_dns_hostname_type_on_launch, each.value.private_dns_hostname_type_on_launch, null)
 
-  cidr_block               = try(each.value.cidr_block, null)
+  cidr_block               = try(each.value.ipv4_cidr_block, null)
   customer_owned_ipv4_pool = try(var.subnets_default.customer_owned_ipv4_pool, each.value.customer_owned_ipv4_pool, null)
 
   ipv6_cidr_block                 = try(each.value.ipv6_cidr_block, null)
@@ -52,7 +52,8 @@ resource "aws_ec2_subnet_cidr_reservation" "this" {
     } if var.create && can(v.ec2_subnet_cidr_reservations)
   }), 0), {})
 
-  description      = try(each.value.description, null)
+  description = try(each.value.description, null)
+  # TODO - is this IPv4 only or does IPv6 work as well?
   cidr_block       = try(each.key, each.value.cidr_block)
   reservation_type = each.value.reservation_type
   subnet_id        = aws_subnet.this[each.value.subnet_key].id
@@ -104,7 +105,7 @@ resource "aws_route" "this" {
 
   route_table_id = try(aws_route_table.this[each.value.route_table_key].id, each.value.route_table_id)
 
-  destination_cidr_block      = try(each.value.destination_cidr_block, null)
+  destination_cidr_block      = try(each.value.destination_ipv4_cidr_block, null)
   destination_ipv6_cidr_block = try(each.value.destination_ipv6_cidr_block, null)
   destination_prefix_list_id  = try(each.value.destination_prefix_list_id, null)
 
@@ -160,7 +161,7 @@ resource "aws_network_acl_rule" "ingress" {
   egress          = false
   protocol        = each.value.protocol
   rule_action     = each.value.rule_action
-  cidr_block      = try(each.value.cidr_block, null)
+  cidr_block      = try(each.value.ipv4_cidr_block, null)
   ipv6_cidr_block = try(each.value.ipv6_cidr_block, null)
   from_port       = try(each.value.from_port, null)
   to_port         = try(each.value.to_port, null)
@@ -177,7 +178,7 @@ resource "aws_network_acl_rule" "egress" {
   egress          = true
   protocol        = each.value.protocol
   rule_action     = each.value.rule_action
-  cidr_block      = try(each.value.cidr_block, null)
+  cidr_block      = try(each.value.ipv4_cidr_block, null)
   ipv6_cidr_block = try(each.value.ipv6_cidr_block, null)
   from_port       = try(each.value.from_port, null)
   to_port         = try(each.value.to_port, null)

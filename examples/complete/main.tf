@@ -23,14 +23,14 @@ module "vpc" {
   source = "../../"
 
   name                 = local.name
-  cidr_block           = "10.99.0.0/16"
+  ipv4_cidr_block      = "10.99.0.0/16"
   enable_dns_hostnames = true
   vpc_tags             = { vpc_tags = true }
 
   ipv4_cidr_block_associations = {
     # This matches the provider API to avoid re-creating the association
     "10.98.0.0/16" = {
-      cidr_block = "10.98.0.0/16"
+      ipv4_cidr_block = "10.98.0.0/16"
       timeouts = {
         create = "12m"
         delete = "12m"
@@ -74,30 +74,30 @@ module "public_subnets" {
 
   subnets = {
     "${local.region}a" = {
-      cidr_block         = "10.98.1.0/24"
+      ipv4_cidr_block    = "10.98.1.0/24"
       availability_zone  = "${local.region}a"
       create_nat_gateway = true
       ec2_subnet_cidr_reservations = {
         one = {
           description      = "Example EC2 subnet CIDR reservation"
-          cidr_block       = "10.98.1.0/28"
+          ipv4_cidr_block  = "10.98.1.0/28"
           reservation_type = "prefix"
         }
         two = {
           description      = "Example EC2 subnet CIDR reservation"
-          cidr_block       = "10.98.1.16/28"
+          ipv4_cidr_block  = "10.98.1.16/28"
           reservation_type = "prefix"
         }
       }
     }
     "${local.region}b" = {
-      cidr_block        = "10.98.2.0/24"
+      ipv4_cidr_block   = "10.98.2.0/24"
       availability_zone = "${local.region}b"
     }
-    # public_3 = {
-    #   cidr_block = "10.98.3.0/24"
-    #   availability_zone = "${local.region}c"
-    # }
+    "${local.region}c" = {
+      ipv4_cidr_block   = "10.98.3.0/24"
+      availability_zone = "${local.region}c"
+    }
   }
 
   route_tables = {
@@ -105,8 +105,8 @@ module "public_subnets" {
       associated_subnet_keys = ["${local.region}a", "${local.region}b"]
       routes = {
         igw = {
-          destination_cidr_block = "0.0.0.0/0"
-          gateway_id             = module.vpc.internet_gateway_id
+          destination_ipv4_cidr_block = "0.0.0.0/0"
+          gateway_id                  = module.vpc.internet_gateway_id
         }
       }
     }
@@ -114,21 +114,21 @@ module "public_subnets" {
 
   network_acl_ingress_rules = {
     100 = {
-      protocol    = "-1"
-      rule_action = "Allow"
-      cidr_block  = module.vpc.cidr_block
-      from_port   = 0
-      to_port     = 0
+      protocol        = "-1"
+      rule_action     = "Allow"
+      ipv4_cidr_block = module.vpc.ipv4_cidr_block
+      from_port       = 0
+      to_port         = 0
     }
   }
 
   network_acl_egress_rules = {
     100 = {
-      protocol    = "-1"
-      rule_action = "Allow"
-      cidr_block  = "0.0.0.0/0"
-      from_port   = 0
-      to_port     = 0
+      protocol        = "-1"
+      rule_action     = "Allow"
+      ipv4_cidr_block = "0.0.0.0/0"
+      from_port       = 0
+      to_port         = 0
     }
   }
 

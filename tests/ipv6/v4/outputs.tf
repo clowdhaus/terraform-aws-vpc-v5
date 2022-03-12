@@ -59,7 +59,7 @@ output "private_subnet_arns" {
   value       = module.private_subnets.arns
 }
 
-output "private_subnets_cidr_blocks" {
+output "private_subnets_ipv4_cidr_blocks" {
   description = "List of cidr_blocks of private subnets"
   value       = module.private_subnets.ipv4_cidr_blocks
 }
@@ -80,7 +80,7 @@ output "public_subnet_arns" {
   value       = module.public_subnets.arns
 }
 
-output "public_subnets_cidr_blocks" {
+output "public_subnets_ipv4_cidr_blocks" {
   description = "List of cidr_blocks of public subnets"
   value       = module.public_subnets.ipv4_cidr_blocks
 }
@@ -101,7 +101,7 @@ output "database_subnet_arns" {
   value       = module.database_subnets.arns
 }
 
-output "database_subnets_cidr_blocks" {
+output "database_subnets_ipv4_cidr_blocks" {
   description = "List of cidr_blocks of database subnets"
   value       = module.database_subnets.ipv4_cidr_blocks
 }

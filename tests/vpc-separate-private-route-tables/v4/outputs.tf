@@ -8,9 +8,9 @@ output "vpc_arn" {
   value       = module.vpc.arn
 }
 
-output "vpc_cidr_block" {
+output "vpc_ipv4_cidr_block" {
   description = "The CIDR block of the VPC"
-  value       = module.vpc.cidr_block
+  value       = module.vpc.ipv4_cidr_block
 }
 
 output "default_security_group_id" {
@@ -59,7 +59,7 @@ output "private_subnet_arns" {
   value       = module.private_subnets.arns
 }
 
-output "private_subnets_cidr_blocks" {
+output "private_subnets_ipv4_cidr_blocks" {
   description = "List of cidr_blocks of private subnets"
   value       = module.private_subnets.ipv4_cidr_blocks
 }
@@ -80,7 +80,7 @@ output "public_subnet_arns" {
   value       = module.public_subnets.arns
 }
 
-output "public_subnets_cidr_blocks" {
+output "public_subnets_ipv4_cidr_blocks" {
   description = "List of cidr_blocks of public subnets"
   value       = module.public_subnets.ipv4_cidr_blocks
 }
@@ -101,7 +101,7 @@ output "database_subnet_arns" {
   value       = module.database_subnets.arns
 }
 
-output "database_subnets_cidr_blocks" {
+output "database_subnets_ipv4_cidr_blocks" {
   description = "List of cidr_blocks of database subnets"
   value       = module.database_subnets.ipv4_cidr_blocks
 }
@@ -133,7 +133,7 @@ output "redshift_subnet_arns" {
   value       = module.redshift_subnets.arns
 }
 
-output "redshift_subnets_cidr_blocks" {
+output "redshift_subnets_ipv4_cidr_blocks" {
   description = "List of cidr_blocks of redshift subnets"
   value       = module.redshift_subnets.ipv4_cidr_blocks
 }
@@ -159,7 +159,7 @@ output "elasticache_subnet_arns" {
   value       = module.elasticache_subnets.arns
 }
 
-output "elasticache_subnets_cidr_blocks" {
+output "elasticache_subnets_ipv4_cidr_blocks" {
   description = "List of cidr_blocks of elasticache subnets"
   value       = module.elasticache_subnets.ipv4_cidr_blocks
 }

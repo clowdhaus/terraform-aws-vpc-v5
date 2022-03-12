@@ -11,7 +11,7 @@ resource "aws_default_security_group" "this" {
     for_each = var.default_security_group_ingress_rules
     content {
       self             = try(ingress.value.self, null)
-      cidr_blocks      = try(ingress.value.cidr_blocks, null)
+      cidr_blocks      = try(ingress.value.ipv4_cidr_blocks, null)
       ipv6_cidr_blocks = try(ingress.value.ipv6_cidr_blocks, null)
       prefix_list_ids  = try(ingress.value.prefix_list_ids, null)
       security_groups  = try(ingress.value.security_groups, null)
@@ -26,7 +26,7 @@ resource "aws_default_security_group" "this" {
     for_each = var.default_security_group_egress_rules
     content {
       self             = try(egress.value.self, null)
-      cidr_blocks      = try(egress.value.cidr_blocks, null)
+      cidr_blocks      = try(egress.value.ipv4_cidr_blocks, null)
       ipv6_cidr_blocks = try(egress.value.ipv6_cidr_blocks, null)
       prefix_list_ids  = try(egress.value.prefix_list_ids, null)
       security_groups  = try(egress.value.security_groups, null)
@@ -61,10 +61,10 @@ resource "aws_default_network_acl" "this" {
       protocol        = ingress.value.protocol
       rule_no         = ingress.value.rule_number # to match regular ACL rule
       to_port         = ingress.value.to_port
-      cidr_block      = try(ingress.value.cidr_block, null)
+      cidr_block      = try(ingress.value.ipv4_cidr_block, null)
+      ipv6_cidr_block = try(ingress.value.ipv6_cidr_block, null)
       icmp_code       = try(ingress.value.icmp_code, null)
       icmp_type       = try(ingress.value.icmp_type, null)
-      ipv6_cidr_block = try(ingress.value.ipv6_cidr_block, null)
     }
   }
   dynamic "egress" {
@@ -75,10 +75,10 @@ resource "aws_default_network_acl" "this" {
       protocol        = egress.value.protocol
       rule_no         = egress.value.rule_number # to match regular ACL rule
       to_port         = egress.value.to_port
-      cidr_block      = try(egress.value.cidr_block, null)
+      cidr_block      = try(egress.value.ipv4_cidr_block, null)
+      ipv6_cidr_block = try(egress.value.ipv6_cidr_block, null)
       icmp_code       = try(egress.value.icmp_code, null)
       icmp_type       = try(egress.value.icmp_type, null)
-      ipv6_cidr_block = try(egress.value.ipv6_cidr_block, null)
     }
   }
 
@@ -103,7 +103,7 @@ resource "aws_default_route_table" "this" {
     for_each = var.default_route_table_routes
     content {
       # One of the following destinations must be provided
-      cidr_block                 = route.value.cidr_block
+      cidr_block                 = route.value.ipv4_cidr_block
       ipv6_cidr_block            = try(route.value.ipv6_cidr_block, null)
       destination_prefix_list_id = try(route.value.destination_prefix_list_id, null)
 

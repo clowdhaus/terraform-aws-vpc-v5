@@ -4,12 +4,6 @@ variable "create" {
   default     = true
 }
 
-# variable "name" {
-#   description = "Name of used across the resources created"
-#   type        = string
-#   default     = ""
-# }
-
 variable "tags" {
   description = "A map of tags to add to all resources"
   type        = map(string)
@@ -41,11 +35,6 @@ variable "scopes" {
   type        = any
   default     = {}
 }
-
-################################################################################
-# IPAM Pool
-################################################################################
-
 
 ################################################################################
 # IPAM Pool

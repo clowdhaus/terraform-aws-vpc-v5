@@ -19,8 +19,8 @@ locals {
 module "vpc" {
   source = "../../../"
 
-  name       = local.name
-  cidr_block = "10.10.0.0/16"
+  name            = local.name
+  ipv4_cidr_block = "10.10.0.0/16"
 
   # Not in v3.x
   enable_dnssec_config          = false
@@ -46,16 +46,16 @@ module "public_subnets" {
 
   subnets = {
     "${local.region}a" = {
-      cidr_block         = "10.10.11.0/24"
+      ipv4_cidr_block    = "10.10.11.0/24"
       availability_zone  = "${local.region}a"
       create_nat_gateway = true
     }
     "${local.region}b" = {
-      cidr_block        = "10.10.12.0/24"
+      ipv4_cidr_block   = "10.10.12.0/24"
       availability_zone = "${local.region}b"
     }
     "${local.region}c" = {
-      cidr_block        = "10.10.13.0/24"
+      ipv4_cidr_block   = "10.10.13.0/24"
       availability_zone = "${local.region}c"
     }
   }
@@ -65,8 +65,8 @@ module "public_subnets" {
       associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
       routes = {
         igw_ipv4 = {
-          destination_cidr_block = "0.0.0.0/0"
-          gateway_id             = module.vpc.internet_gateway_id
+          destination_ipv4_cidr_block = "0.0.0.0/0"
+          gateway_id                  = module.vpc.internet_gateway_id
         }
       }
     }
@@ -86,15 +86,15 @@ module "private_subnets" {
 
   subnets = {
     "${local.region}a" = {
-      cidr_block        = "10.10.1.0/24"
+      ipv4_cidr_block   = "10.10.1.0/24"
       availability_zone = "${local.region}a"
     }
     "${local.region}b" = {
-      cidr_block        = "10.10.2.0/24"
+      ipv4_cidr_block   = "10.10.2.0/24"
       availability_zone = "${local.region}b"
     }
     "${local.region}c" = {
-      cidr_block        = "10.10.3.0/24"
+      ipv4_cidr_block   = "10.10.3.0/24"
       availability_zone = "${local.region}c"
     }
   }
@@ -104,8 +104,8 @@ module "private_subnets" {
       associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
       routes = {
         nat_gw_ipv4 = {
-          destination_cidr_block = "0.0.0.0/0"
-          nat_gateway_id         = module.public_subnets.nat_gateways["${local.region}a"].id
+          destination_ipv4_cidr_block = "0.0.0.0/0"
+          nat_gateway_id              = module.public_subnets.nat_gateways["${local.region}a"].id
         }
       }
     }
@@ -125,15 +125,15 @@ module "database_subnets" {
 
   subnets = {
     "${local.region}a" = {
-      cidr_block        = "10.10.21.0/24"
+      ipv4_cidr_block   = "10.10.21.0/24"
       availability_zone = "${local.region}a"
     }
     "${local.region}b" = {
-      cidr_block        = "10.10.22.0/24"
+      ipv4_cidr_block   = "10.10.22.0/24"
       availability_zone = "${local.region}b"
     }
     "${local.region}c" = {
-      cidr_block        = "10.10.23.0/24"
+      ipv4_cidr_block   = "10.10.23.0/24"
       availability_zone = "${local.region}c"
     }
   }
@@ -171,15 +171,15 @@ module "elasticache_subnets" {
 
   subnets = {
     "${local.region}a" = {
-      cidr_block        = "10.10.31.0/24"
+      ipv4_cidr_block   = "10.10.31.0/24"
       availability_zone = "${local.region}a"
     }
     "${local.region}b" = {
-      cidr_block        = "10.10.32.0/24"
+      ipv4_cidr_block   = "10.10.32.0/24"
       availability_zone = "${local.region}b"
     }
     "${local.region}c" = {
-      cidr_block        = "10.10.33.0/24"
+      ipv4_cidr_block   = "10.10.33.0/24"
       availability_zone = "${local.region}c"
     }
   }
@@ -217,15 +217,15 @@ module "redshift_subnets" {
 
   subnets = {
     "${local.region}a" = {
-      cidr_block        = "10.10.41.0/24"
+      ipv4_cidr_block   = "10.10.41.0/24"
       availability_zone = "${local.region}a"
     }
     "${local.region}b" = {
-      cidr_block        = "10.10.42.0/24"
+      ipv4_cidr_block   = "10.10.42.0/24"
       availability_zone = "${local.region}b"
     }
     "${local.region}c" = {
-      cidr_block        = "10.10.43.0/24"
+      ipv4_cidr_block   = "10.10.43.0/24"
       availability_zone = "${local.region}c"
     }
   }

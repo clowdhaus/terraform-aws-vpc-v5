@@ -43,7 +43,7 @@ resource "aws_vpc_ipv4_cidr_block_association" "this" {
   for_each = { for k, v in var.ipv4_cidr_block_associations : k => v if var.create }
 
   vpc_id              = aws_vpc.this[0].id
-  cidr_block          = try(each.value.cidr_block, null)
+  cidr_block          = try(each.value.ipv4_cidr_block, null)
   ipv4_ipam_pool_id   = try(each.value.ipv4_ipam_pool_id, null)
   ipv4_netmask_length = try(each.value.ipv4_netmask_length, null)
 
@@ -157,7 +157,7 @@ resource "aws_customer_gateway" "this" {
 
   bgp_asn    = each.value.bgp_asn
   ip_address = each.value.ip_address
-  type       = try(each.value.type, "ipsec.1") # required but only one value accepted
+  type       = try(each.value.type, "ipsec.1") # required but only one value accepted currently
 
   certificate_arn = try(each.value.certificate_arn, null)
   device_name     = try(each.value.device_name, null)

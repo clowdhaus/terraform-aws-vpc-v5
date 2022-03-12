@@ -277,7 +277,7 @@ output "default_vpc_arn" {
   value       = try(aws_default_vpc.this[0].arn, null)
 }
 
-output "default_vpc_cidr_block" {
+output "default_vpc_ipv4_cidr_block" {
   description = "The CIDR block of the Default VPC"
   value       = try(aws_default_vpc.this[0].cidr_block, null)
 }

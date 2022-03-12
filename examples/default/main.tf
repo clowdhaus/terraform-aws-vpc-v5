@@ -20,8 +20,8 @@ locals {
 module "vpc" {
   source = "../../"
 
-  name       = local.name
-  cidr_block = "${local.cidr_prefix}.0.0/16"
+  name            = local.name
+  ipv4_cidr_block = "${local.cidr_prefix}.0.0/16"
 
   tags = local.tags
 }

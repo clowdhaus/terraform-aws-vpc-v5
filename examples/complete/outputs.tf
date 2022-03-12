@@ -27,9 +27,9 @@ output "ipv6_cidr_block_network_border_group" {
   value       = module.vpc.ipv6_cidr_block_network_border_group
 }
 
-output "cidr_block" {
+output "ipv4_cidr_block" {
   description = "The IPv4 CIDR block of the VPC"
-  value       = module.vpc.cidr_block
+  value       = module.vpc.ipv4_cidr_block
 }
 
 output "ipv6_cidr_block" {
@@ -253,9 +253,9 @@ output "default_vpc_arn" {
   value       = module.vpc.default_vpc_arn
 }
 
-output "default_vpc_cidr_block" {
+output "default_vpc_ipv4_cidr_block" {
   description = "The CIDR block of the Default VPC"
-  value       = module.vpc.default_vpc_cidr_block
+  value       = module.vpc.default_vpc_ipv4_cidr_block
 }
 
 output "default_vpc_default_security_group_id" {

@@ -19,8 +19,8 @@ locals {
 module "vpc" {
   source = "../../../"
 
-  name       = local.name
-  cidr_block = "10.0.0.0/16"
+  name            = local.name
+  ipv4_cidr_block = "10.0.0.0/16"
 
   assign_generated_ipv6_cidr_block    = true
   create_egress_only_internet_gateway = true
@@ -56,15 +56,15 @@ module "public_subnets" {
 
   subnets = {
     "${local.region}a" = {
-      cidr_block        = "10.0.101.0/24"
+      ipv4_cidr_block   = "10.0.101.0/24"
       availability_zone = "${local.region}a"
     }
     "${local.region}b" = {
-      cidr_block        = "10.0.102.0/24"
+      ipv4_cidr_block   = "10.0.102.0/24"
       availability_zone = "${local.region}b"
     }
     "${local.region}c" = {
-      cidr_block        = "10.0.103.0/24"
+      ipv4_cidr_block   = "10.0.103.0/24"
       availability_zone = "${local.region}c"
     }
   }
@@ -74,8 +74,8 @@ module "public_subnets" {
       associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
       routes = {
         igw_ipv4 = {
-          destination_cidr_block = "0.0.0.0/0"
-          gateway_id             = module.vpc.internet_gateway_id
+          destination_ipv4_cidr_block = "0.0.0.0/0"
+          gateway_id                  = module.vpc.internet_gateway_id
         }
         igw_ipv6 = {
           destination_ipv6_cidr_block = "::/0"
@@ -102,15 +102,15 @@ module "private_subnets" {
 
   subnets = {
     "${local.region}a" = {
-      cidr_block        = "10.0.1.0/24"
+      ipv4_cidr_block   = "10.0.1.0/24"
       availability_zone = "${local.region}a"
     }
     "${local.region}b" = {
-      cidr_block        = "10.0.2.0/24"
+      ipv4_cidr_block   = "10.0.2.0/24"
       availability_zone = "${local.region}b"
     }
     "${local.region}c" = {
-      cidr_block        = "10.0.3.0/24"
+      ipv4_cidr_block   = "10.0.3.0/24"
       availability_zone = "${local.region}c"
     }
   }
