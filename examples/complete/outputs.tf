@@ -80,52 +80,52 @@ output "dns_query_log_config_association_id" {
   value       = module.vpc.dns_query_log_config_association_id
 }
 
-################################################################################
-# Flow Log
-################################################################################
+# ################################################################################
+# # Flow Log
+# ################################################################################
 
-output "flow_log_arn" {
-  description = "The VPC flow log ARN"
-  value       = module.vpc.flow_log_arn
-}
+# output "flow_log_arn" {
+#   description = "The VPC flow log ARN"
+#   value       = module.vpc.flow_log_arn
+# }
 
-output "flow_log_id" {
-  description = "The VPC flow log ID"
-  value       = module.vpc.flow_log_id
-}
+# output "flow_log_id" {
+#   description = "The VPC flow log ID"
+#   value       = module.vpc.flow_log_id
+# }
 
-################################################################################
-# Flow Log CloudWatch Log Group
-################################################################################
+# ################################################################################
+# # Flow Log CloudWatch Log Group
+# ################################################################################
 
-output "flow_log_cloudwatch_log_group_name" {
-  description = "Name of cloudwatch log group created"
-  value       = module.vpc.flow_log_cloudwatch_log_group_name
-}
+# output "flow_log_cloudwatch_log_group_name" {
+#   description = "Name of cloudwatch log group created"
+#   value       = module.vpc.flow_log_cloudwatch_log_group_name
+# }
 
-output "flow_log_cloudwatch_log_group_arn" {
-  description = "ARN of cloudwatch log group created"
-  value       = module.vpc.flow_log_cloudwatch_log_group_arn
-}
+# output "flow_log_cloudwatch_log_group_arn" {
+#   description = "ARN of cloudwatch log group created"
+#   value       = module.vpc.flow_log_cloudwatch_log_group_arn
+# }
 
-################################################################################
-# Flow Log CloudWatch Log Group IAM Role
-################################################################################
+# ################################################################################
+# # Flow Log CloudWatch Log Group IAM Role
+# ################################################################################
 
-output "flow_log_iam_role_name" {
-  description = "Name of the flow log CloudWatch IAM role"
-  value       = module.vpc.flow_log_iam_role_name
-}
+# output "flow_log_iam_role_name" {
+#   description = "Name of the flow log CloudWatch IAM role"
+#   value       = module.vpc.flow_log_iam_role_name
+# }
 
-output "flow_log_iam_role_arn" {
-  description = "ARN of the flow log CloudWatch IAM role"
-  value       = module.vpc.flow_log_iam_role_arn
-}
+# output "flow_log_iam_role_arn" {
+#   description = "ARN of the flow log CloudWatch IAM role"
+#   value       = module.vpc.flow_log_iam_role_arn
+# }
 
-output "flow_log_iam_role_unique_id" {
-  description = "Stable and unique string identifying the flow log CloudWatch IAM role"
-  value       = module.vpc.flow_log_iam_role_unique_id
-}
+# output "flow_log_iam_role_unique_id" {
+#   description = "Stable and unique string identifying the flow log CloudWatch IAM role"
+#   value       = module.vpc.flow_log_iam_role_unique_id
+# }
 
 ################################################################################
 # DHCP Options Set

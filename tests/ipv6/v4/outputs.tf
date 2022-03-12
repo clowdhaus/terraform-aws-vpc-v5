@@ -198,18 +198,18 @@ output "private_network_acl_arn" {
   value       = module.private_subnets.network_acl_arn
 }
 
-# VPC flow log
-output "vpc_flow_log_id" {
-  description = "The ID of the Flow Log resource"
-  value       = module.vpc.flow_log_id
-}
+# # VPC flow log
+# output "vpc_flow_log_id" {
+#   description = "The ID of the Flow Log resource"
+#   value       = module.vpc.flow_log_id
+# }
 
-output "vpc_flow_log_cloudwatch_log_group_arn" {
-  description = "The ARN of the CloudWatch log group for VPC Flow Logs"
-  value       = module.vpc.flow_log_cloudwatch_log_group_arn
-}
+# output "vpc_flow_log_cloudwatch_log_group_arn" {
+#   description = "The ARN of the CloudWatch log group for VPC Flow Logs"
+#   value       = module.vpc.flow_log_cloudwatch_log_group_arn
+# }
 
-output "vpc_flow_log_cloudwatch_iam_role_arn" {
-  description = "The ARN of the IAM role used when pushing logs to Cloudwatch log group"
-  value       = module.vpc.flow_log_iam_role_arn
-}
+# output "vpc_flow_log_cloudwatch_iam_role_arn" {
+#   description = "The ARN of the IAM role used when pushing logs to Cloudwatch log group"
+#   value       = module.vpc.flow_log_iam_role_arn
+# }
