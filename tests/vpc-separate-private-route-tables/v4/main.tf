@@ -40,17 +40,19 @@ module "public_subnets" {
   # Backwards compat
   create_network_acl = false
 
+  subnets_default = {
+    map_public_ip_on_launch = true
+  }
+
   subnets = {
     "${local.region}a" = {
-      cidr_block              = "10.10.11.0/24"
-      availability_zone       = "${local.region}a"
-      map_public_ip_on_launch = true
-      create_nat_gateway      = true
+      cidr_block         = "10.10.11.0/24"
+      availability_zone  = "${local.region}a"
+      create_nat_gateway = true
     }
     "${local.region}b" = {
-      cidr_block              = "10.10.12.0/24"
-      availability_zone       = "${local.region}b"
-      map_public_ip_on_launch = true
+      cidr_block        = "10.10.12.0/24"
+      availability_zone = "${local.region}b"
     }
     "${local.region}c" = {
       cidr_block              = "10.10.13.0/24"
@@ -140,7 +142,7 @@ module "database_subnets" {
   route_tables = {
     shared = {
       associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
-      routes                 = {}
+      routes                 = {} # TODO - FixMe!
     }
   }
 
@@ -186,7 +188,7 @@ module "elasticache_subnets" {
   route_tables = {
     shared = {
       associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
-      routes                 = {}
+      routes                 = {} # TODO - FixMe!
     }
   }
 
@@ -232,7 +234,7 @@ module "redshift_subnets" {
   route_tables = {
     shared = {
       associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
-      routes                 = {}
+      routes                 = {} # TODO - FixMe!
     }
   }
 
