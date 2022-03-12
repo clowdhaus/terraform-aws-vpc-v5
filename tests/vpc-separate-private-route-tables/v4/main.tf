@@ -55,9 +55,8 @@ module "public_subnets" {
       availability_zone = "${local.region}b"
     }
     "${local.region}c" = {
-      cidr_block              = "10.10.13.0/24"
-      availability_zone       = "${local.region}c"
-      map_public_ip_on_launch = true
+      cidr_block        = "10.10.13.0/24"
+      availability_zone = "${local.region}c"
     }
   }
 

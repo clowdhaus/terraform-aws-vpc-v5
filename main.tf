@@ -12,7 +12,7 @@ data "aws_partition" "current" {}
 resource "aws_vpc" "this" {
   count = var.create ? 1 : 0
 
-  cidr_block          = var.cidr_block
+  cidr_block          = var.ipv4_cidr_block
   ipv4_ipam_pool_id   = var.ipv4_ipam_pool_id
   ipv4_netmask_length = var.ipv4_netmask_length
 

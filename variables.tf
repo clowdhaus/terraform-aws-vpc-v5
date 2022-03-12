@@ -20,7 +20,7 @@ variable "tags" {
 # VPC
 ################################################################################
 
-variable "cidr_block" {
+variable "ipv4_cidr_block" {
   description = "The IPv4 CIDR block for the VPC. CIDR can be explicitly set or it can be derived from IPAM using `ipv4_netmask_length`"
   type        = string
   default     = null

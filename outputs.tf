@@ -27,7 +27,7 @@ output "ipv6_cidr_block_network_border_group" {
   value       = try(aws_vpc.this[0].ipv6_cidr_block_network_border_group, null)
 }
 
-output "cidr_block" {
+output "ipv4_cidr_block" {
   description = "The IPv4 CIDR block of the VPC"
   value       = try(aws_vpc.this[0].cidr_block, null)
 }

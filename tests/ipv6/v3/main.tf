@@ -4,6 +4,12 @@ provider "aws" {
 
 locals {
   region = "eu-west-1"
+  name   = "ipv6"
+
+  tags = {
+    Owner       = "user"
+    Environment = "dev"
+  }
 }
 
 ################################################################################
@@ -14,9 +20,7 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "3.12.0"
 
-  # source = "../../"
-
-  name = "ipv6"
+  name = local.name
   cidr = "10.0.0.0/16"
 
   azs              = ["${local.region}a", "${local.region}b"]
@@ -38,8 +42,5 @@ module "vpc" {
   private_subnet_ipv6_prefixes  = [2, 3]
   database_subnet_ipv6_prefixes = [4, 5]
 
-  tags = {
-    Owner       = "user"
-    Environment = "dev"
-  }
+  tags = local.tags
 }
