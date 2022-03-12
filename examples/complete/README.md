@@ -22,13 +22,13 @@ Note that this example may create resources which will incur monetary charges on
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.3 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.4 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 4.3 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 4.4 |
 
 ## Modules
 
@@ -38,6 +38,7 @@ Note that this example may create resources which will incur monetary charges on
 | <a name="module_network_firewall"></a> [network\_firewall](#module\_network\_firewall) | ../../modules/network-firewall | n/a |
 | <a name="module_public_subnets"></a> [public\_subnets](#module\_public\_subnets) | ../../modules/subnets | n/a |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | ../../ | n/a |
+| <a name="module_vpc_flow_log"></a> [vpc\_flow\_log](#module\_vpc\_flow\_log) | ../../modules/flow-log | n/a |
 
 ## Resources
 
@@ -95,6 +96,13 @@ No inputs.
 | <a name="output_dnssec_config_arn"></a> [dnssec\_config\_arn](#output\_dnssec\_config\_arn) | The ARN for a configuration for DNSSEC validation |
 | <a name="output_dnssec_config_id"></a> [dnssec\_config\_id](#output\_dnssec\_config\_id) | The ID for a configuration for DNSSEC validation |
 | <a name="output_egress_only_internet_gateway_id"></a> [egress\_only\_internet\_gateway\_id](#output\_egress\_only\_internet\_gateway\_id) | The ID of the Egress-Only Internet Gateway |
+| <a name="output_flow_log_arn"></a> [flow\_log\_arn](#output\_flow\_log\_arn) | The VPC flow log ARN |
+| <a name="output_flow_log_cloudwatch_log_group_arn"></a> [flow\_log\_cloudwatch\_log\_group\_arn](#output\_flow\_log\_cloudwatch\_log\_group\_arn) | ARN of cloudwatch log group created |
+| <a name="output_flow_log_cloudwatch_log_group_name"></a> [flow\_log\_cloudwatch\_log\_group\_name](#output\_flow\_log\_cloudwatch\_log\_group\_name) | Name of cloudwatch log group created |
+| <a name="output_flow_log_iam_role_arn"></a> [flow\_log\_iam\_role\_arn](#output\_flow\_log\_iam\_role\_arn) | ARN of the flow log CloudWatch IAM role |
+| <a name="output_flow_log_iam_role_name"></a> [flow\_log\_iam\_role\_name](#output\_flow\_log\_iam\_role\_name) | Name of the flow log CloudWatch IAM role |
+| <a name="output_flow_log_iam_role_unique_id"></a> [flow\_log\_iam\_role\_unique\_id](#output\_flow\_log\_iam\_role\_unique\_id) | Stable and unique string identifying the flow log CloudWatch IAM role |
+| <a name="output_flow_log_id"></a> [flow\_log\_id](#output\_flow\_log\_id) | The VPC flow log ID |
 | <a name="output_id"></a> [id](#output\_id) | The ID of the VPC |
 | <a name="output_internet_gateway_arn"></a> [internet\_gateway\_arn](#output\_internet\_gateway\_arn) | The ARN of the Internet Gateway |
 | <a name="output_internet_gateway_id"></a> [internet\_gateway\_id](#output\_internet\_gateway\_id) | The ID of the Internet Gateway |

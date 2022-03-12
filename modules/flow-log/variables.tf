@@ -17,19 +17,19 @@ variable "tags" {
 variable "eni_id" {
   description = "The ID of the ENI to attach the flow log to"
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "subnet_id" {
   description = "The ID of the subnet to attach the flow log to"
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "vpc_id" {
   description = "The ID of the VPC to attach the flow log to"
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "destination_arn" {
@@ -39,7 +39,7 @@ variable "destination_arn" {
 }
 
 variable "destination_type" {
-  description = "Type of flow log destination. One of `s3` or `cloud-watch-logs"
+  description = "Type of flow log destination. One of `s3` or `cloud-watch-logs`"
   type        = string
   default     = null
 }
@@ -115,7 +115,7 @@ variable "cloudwatch_log_group_kms_key_id" {
 variable "create_cloudwatch_iam_role" {
   description = "Determines whether a an IAM role is created or to use an existing IAM role"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "cloudwatch_iam_role_arn" {

@@ -6,8 +6,6 @@ locals {
   destination_arn = local.create_cloudwatch_log_group ? aws_cloudwatch_log_group.this[0].arn : var.destination_arn
 }
 
-data "aws_partition" "current" {}
-
 ################################################################################
 # Flow Log
 ################################################################################
@@ -41,7 +39,7 @@ resource "aws_flow_log" "this" {
 }
 
 ################################################################################
-# Flow Log CloudWatch Log Group
+# CloudWatch Log Group
 ################################################################################
 
 resource "aws_cloudwatch_log_group" "this" {
@@ -55,7 +53,7 @@ resource "aws_cloudwatch_log_group" "this" {
 }
 
 ################################################################################
-# Flow Log CloudWatch Log Group IAM Role
+# CloudWatch Log Group IAM Role
 ################################################################################
 
 resource "aws_iam_role" "this" {
@@ -86,7 +84,7 @@ data "aws_iam_policy_document" "assume" {
 
     principals {
       type        = "Service"
-      identifiers = ["vpc-flow-logs.${data.aws_partition.current.dns_suffix}"]
+      identifiers = ["vpc-flow-logs.amazonaws.com"]
     }
   }
 }

@@ -125,13 +125,18 @@ resource "aws_vpc_dhcp_options_association" "this" {
 resource "aws_internet_gateway" "this" {
   count = var.create && var.create_internet_gateway ? 1 : 0
 
-  vpc_id = local.vpc_id
-
   tags = merge(
     var.tags,
     { Name = var.name },
     var.internet_gateway_tags,
   )
+}
+
+resource "aws_internet_gateway_attachment" "this" {
+  count = var.create && var.create_internet_gateway || var.attach_internet_gateway ? 1 : 0
+
+  vpc_id              = local.vpc_id
+  internet_gateway_id = var.create_internet_gateway ? aws_internet_gateway.this[0].id : var.internet_gateway_id
 }
 
 resource "aws_egress_only_internet_gateway" "this" {

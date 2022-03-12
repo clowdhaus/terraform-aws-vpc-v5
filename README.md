@@ -4,7 +4,6 @@
 
 ## TODO
 
-- Add DB subnet group support to `subnet` module
 - Better defaults on subnets
   - `associated_subnet_keys` should default to all unless users opt out to 1:1 subnet:route_table
   - ~CIDR is unique and 1:1 to subnet - consider making this the map key~
@@ -110,10 +109,13 @@ This is where most of the network logic is captured; the design is centered arou
 - ✅ aws_route53_resolver_firewall_rule_group
 - ✅ aws_route53_resolver_firewall_rule_group_association
 
-### EC2 Managed Prefix
+### EC2 Misc
 
 - [ ] aws_ec2_managed_prefix_list
 - [ ] aws_ec2_managed_prefix_list_entry
+- [ ] aws_ec2_network_insights_path
+- [ ] aws_ec2_transit_gateway_connect
+- [ ] aws_ec2_transit_gateway_connect_peer
 
 ### IPAM
 
@@ -257,13 +259,13 @@ Examples provided in [`examples`](https://github.com/clowdhaus/terraform-aws-vpc
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.3 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.4 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 4.3 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 4.4 |
 
 ## Modules
 
@@ -281,6 +283,7 @@ No modules.
 | [aws_default_vpc_dhcp_options.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_vpc_dhcp_options) | resource |
 | [aws_egress_only_internet_gateway.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/egress_only_internet_gateway) | resource |
 | [aws_internet_gateway.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway) | resource |
+| [aws_internet_gateway_attachment.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway_attachment) | resource |
 | [aws_route53_resolver_dnssec_config.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_resolver_dnssec_config) | resource |
 | [aws_route53_resolver_query_log_config.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_resolver_query_log_config) | resource |
 | [aws_route53_resolver_query_log_config_association.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_resolver_query_log_config_association) | resource |
@@ -296,6 +299,7 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_assign_generated_ipv6_cidr_block"></a> [assign\_generated\_ipv6\_cidr\_block](#input\_assign\_generated\_ipv6\_cidr\_block) | Requests an Amazon-provided IPv6 CIDR block with a `/56` prefix length for the VPC. You cannot specify the range of IP addresses, or the size of the CIDR block. Default is `false`. Conflicts with `ipv6_ipam_pool_id` | `bool` | `null` | no |
+| <a name="input_attach_internet_gateway"></a> [attach\_internet\_gateway](#input\_attach\_internet\_gateway) | Controls if an internet gateway is attached to the VPC | `bool` | `true` | no |
 | <a name="input_create"></a> [create](#input\_create) | Controls if VPC should be created (it affects almost all resources) | `bool` | `true` | no |
 | <a name="input_create_dhcp_options"></a> [create\_dhcp\_options](#input\_create\_dhcp\_options) | Controls if custom DHCP options set is created | `bool` | `false` | no |
 | <a name="input_create_egress_only_internet_gateway"></a> [create\_egress\_only\_internet\_gateway](#input\_create\_egress\_only\_internet\_gateway) | Controls if an egress only internet gateway is created | `bool` | `false` | no |
@@ -334,6 +338,7 @@ No modules.
 | <a name="input_enable_dns_support"></a> [enable\_dns\_support](#input\_enable\_dns\_support) | A boolean flag to enable/disable DNS support in the VPC. Defaults `true` | `bool` | `null` | no |
 | <a name="input_enable_dnssec_config"></a> [enable\_dnssec\_config](#input\_enable\_dnssec\_config) | Controls if Route53 Resolver DNSSEC Config is enabled/disabled | `bool` | `true` | no |
 | <a name="input_instance_tenancy"></a> [instance\_tenancy](#input\_instance\_tenancy) | A tenancy option for instances launched into the VPC. Default is `default`, which makes your instances shared on the host | `string` | `null` | no |
+| <a name="input_internet_gateway_id"></a> [internet\_gateway\_id](#input\_internet\_gateway\_id) | The ID of an existing internet gateway to attach to the VPC. Reqiured if `create_internet_gateway` is `false` and `attach_internet_gateway` is `true` | `string` | `null` | no |
 | <a name="input_internet_gateway_tags"></a> [internet\_gateway\_tags](#input\_internet\_gateway\_tags) | Additional tags for the internet gateway/egress only internet gateway | `map(string)` | `{}` | no |
 | <a name="input_ipv4_cidr_block"></a> [ipv4\_cidr\_block](#input\_ipv4\_cidr\_block) | The IPv4 CIDR block for the VPC. CIDR can be explicitly set or it can be derived from IPAM using `ipv4_netmask_length` | `string` | `null` | no |
 | <a name="input_ipv4_cidr_block_associations"></a> [ipv4\_cidr\_block\_associations](#input\_ipv4\_cidr\_block\_associations) | Map of additional IPv4 CIDR blocks to associate with the VPC to extend the IP address pool | `any` | `{}` | no |

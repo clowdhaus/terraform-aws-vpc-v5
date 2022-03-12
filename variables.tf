@@ -198,6 +198,18 @@ variable "create_internet_gateway" {
   default     = true
 }
 
+variable "attach_internet_gateway" {
+  description = "Controls if an internet gateway is attached to the VPC"
+  type        = bool
+  default     = true
+}
+
+variable "internet_gateway_id" {
+  description = "The ID of an existing internet gateway to attach to the VPC. Reqiured if `create_internet_gateway` is `false` and `attach_internet_gateway` is `true`"
+  type        = string
+  default     = null
+}
+
 variable "create_egress_only_internet_gateway" {
   description = "Controls if an egress only internet gateway is created"
   type        = bool

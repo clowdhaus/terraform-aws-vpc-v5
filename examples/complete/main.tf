@@ -42,13 +42,6 @@ module "vpc" {
   enable_dns_query_logging     = true
   dns_query_log_destintion_arn = aws_s3_bucket.dns_query_logs.arn
 
-  # # Flow Log
-  # create_flow_log                                 = true
-  # create_flow_log_cloudwatch_iam_role             = true
-  # create_flow_log_cloudwatch_log_group            = true
-  # flow_log_cloudwatch_log_group_retention_in_days = 7
-  # flow_log_tags                                   = { flow_log_tags = true }
-
   # DHCP
   create_dhcp_options              = true
   dhcp_options_domain_name         = "${local.region}.compute.internal"
@@ -56,6 +49,23 @@ module "vpc" {
   dhcp_options_ntp_servers         = ["169.254.169.123"]
   dhcp_options_netbios_node_type   = 2
   dhcp_options_tags                = { dhcp_options_tags = true }
+
+  tags = local.tags
+}
+
+################################################################################
+# VPC Flow Log
+################################################################################
+
+module "vpc_flow_log" {
+  source = "../../modules/flow-log"
+
+  vpc_id = module.vpc.id
+
+  create_cloudwatch_log_group            = true
+  cloudwatch_log_group_name              = "/aws/flow-log/vpc-${module.vpc.id}"
+  cloudwatch_log_group_retention_in_days = 7
+  create_cloudwatch_iam_role             = true
 
   tags = local.tags
 }
@@ -80,12 +90,12 @@ module "public_subnets" {
       ec2_subnet_cidr_reservations = {
         one = {
           description      = "Example EC2 subnet CIDR reservation"
-          ipv4_cidr_block  = "10.98.1.0/28"
+          cidr_block       = "10.98.1.0/28"
           reservation_type = "prefix"
         }
         two = {
           description      = "Example EC2 subnet CIDR reservation"
-          ipv4_cidr_block  = "10.98.1.16/28"
+          cidr_block       = "10.98.1.16/28"
           reservation_type = "prefix"
         }
       }

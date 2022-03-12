@@ -54,7 +54,7 @@ resource "aws_ec2_subnet_cidr_reservation" "this" {
 
   description = try(each.value.description, null)
   # TODO - is this IPv4 only or does IPv6 work as well?
-  cidr_block       = try(each.key, each.value.cidr_block)
+  cidr_block       = each.value.cidr_block
   reservation_type = each.value.reservation_type
   subnet_id        = aws_subnet.this[each.value.subnet_key].id
 }
