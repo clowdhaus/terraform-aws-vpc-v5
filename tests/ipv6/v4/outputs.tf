@@ -111,15 +111,15 @@ output "database_subnets_ipv6_cidr_blocks" {
   value       = module.database_subnets.ipv6_cidr_blocks
 }
 
-output "database_subnet_group" {
-  description = "ID of database subnet group"
-  value       = [for group in module.database_subnets.rds_subnet_groups : group.id][0]
-}
+# output "database_subnet_group" {
+#   description = "ID of database subnet group"
+#   value       = [for group in module.database_subnets.rds_subnet_groups : group.id][0]
+# }
 
-output "database_subnet_group_name" {
-  description = "Name of database subnet group"
-  value       = [for group in module.database_subnets.rds_subnet_groups : group.name][0]
-}
+# output "database_subnet_group_name" {
+#   description = "Name of database subnet group"
+#   value       = [for group in module.database_subnets.rds_subnet_groups : group.name][0]
+# }
 
 # Route Tables
 output "public_route_table_ids" {

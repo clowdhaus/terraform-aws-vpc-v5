@@ -11,6 +11,16 @@
   - Internal helper function to allow users to opt into using netmask for subnets
 - A `routes` object must be added until [this](https://github.com/clowdhaus/terraform-aws-vpc-v4/blob/cd1dd432dc81e0dbb493e46a0cb644a9d4e2ff07/modules/subnets/main.tf#L102) is fixed
 
+Instead of module with many subnets:
+- Create one `aws_subnet` w/ `aws_ec2_subnet_cidr_reservation`, `aws_route_table_association` (for subnet, gateway stays in root)
+- Move to root: `aws_route_table`, `aws_route`, `aws_route_table_association` (for gateway),
+- Move `aws_network_acl` and `aws_network_acl_rule` to ????
+
+Idea #2:
+- Move `aws_route_table` to root
+- Simplify `aws_route` in subnet module by accepting just map of routes; no funky unpacking logic
+- Add `aws_route` support to root ???
+
 ## Design Goals
 
 1. Use of `for_each` instead of `count` for stable, isolated changes
