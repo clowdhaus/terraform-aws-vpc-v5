@@ -55,17 +55,18 @@ module "public_subnets" {
       ipv4_cidr_block   = "10.0.101.0/24"
       ipv6_cidr_block   = element(local.ipv6_cidr_subnets, 0)
       availability_zone = "${local.region}a"
+      route_table_key   = "shared"
     }
     "${local.region}b" = {
       ipv4_cidr_block   = "10.0.102.0/24"
       ipv6_cidr_block   = element(local.ipv6_cidr_subnets, 1)
       availability_zone = "${local.region}b"
+      route_table_key   = "shared"
     }
   }
 
   route_tables = {
     shared = {
-      associated_subnet_keys = ["${local.region}a", "${local.region}b"]
       routes = {
         igw_ipv4 = {
           destination_ipv4_cidr_block = "0.0.0.0/0"
@@ -96,17 +97,18 @@ module "private_subnets" {
       ipv4_cidr_block   = "10.0.1.0/24"
       ipv6_cidr_block   = element(local.ipv6_cidr_subnets, 2)
       availability_zone = "${local.region}a"
+      route_table_key   = "${local.region}a"
     }
     "${local.region}b" = {
       ipv4_cidr_block   = "10.0.2.0/24"
       ipv6_cidr_block   = element(local.ipv6_cidr_subnets, 3)
       availability_zone = "${local.region}b"
+      route_table_key   = "${local.region}b"
     }
   }
 
   route_tables = {
     "${local.region}a" = {
-      associated_subnet_keys = ["${local.region}a"]
       routes = {
         eigw_ipv6 = {
           destination_ipv6_cidr_block = "::/0"
@@ -115,7 +117,6 @@ module "private_subnets" {
       }
     }
     "${local.region}b" = {
-      associated_subnet_keys = ["${local.region}b"]
       routes = {
         eigw_ipv6 = {
           destination_ipv6_cidr_block = "::/0"
@@ -146,17 +147,18 @@ module "database_subnets" {
       ipv4_cidr_block   = "10.0.103.0/24"
       ipv6_cidr_block   = element(local.ipv6_cidr_subnets, 4)
       availability_zone = "${local.region}a"
+      route_table_key   = "shared"
     }
     "${local.region}b" = {
       ipv4_cidr_block   = "10.0.104.0/24"
       ipv6_cidr_block   = element(local.ipv6_cidr_subnets, 5)
       availability_zone = "${local.region}b"
+      route_table_key   = "shared"
     }
   }
 
   route_tables = {
     shared = {
-      associated_subnet_keys = ["${local.region}a", "${local.region}b"]
       routes = {
         igw_ipv4 = {
           destination_ipv4_cidr_block = "0.0.0.0/0"

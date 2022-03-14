@@ -72,25 +72,6 @@ resource "aws_ec2_subnet_cidr_reservation" "this" {
 # Route Table / Routes
 ################################################################################
 
-locals {
-  # We have to change:
-  # my_shared_route_table = {
-  #    associated_subnet_keys = ["subnet_key_1", "subnet_key_2"]
-  #  }
-  # Into:
-  # {
-  #   "subnet_key_1" = "my_shared_route_table"
-  #   "subnet_key_2" = "my_shared_route_table"
-  # }
-  subnet_route_table_associations = [for k, v in var.route_tables :
-    zipmap(lookup(v, "associated_subnet_keys", []), [for i in range(length(lookup(v, "associated_subnet_keys", []))) : k]) if var.create && can(v.associated_subnet_keys)
-  ]
-  # Same approach as subnets above but for gateways
-  gateway_route_table_associations = [for k, v in var.route_tables :
-    zipmap(lookup(v, "associated_gateway_ids", []), [for i in range(length(lookup(v, "associated_gateway_ids", []))) : k]) if var.create && can(v.associated_gateway_ids)
-  ]
-}
-
 resource "aws_route_table" "this" {
   for_each = { for k, v in var.route_tables : k => v if var.create }
 
@@ -135,22 +116,14 @@ resource "aws_route" "this" {
 }
 
 resource "aws_route_table_association" "subnet" {
-  # for_each = { for k, v in local.subnet_route_table_associations : k => v if var.create }
-  for_each = { for k, v in local.subnet_route_table_associations : k => {
-    subnet_key = element(keys(v), 0), route_table_key = element(values(v), 0) }
-  }
+  for_each = { for k, v in var.subnets : k => v.route_table_key if var.create && can(v.route_table_key) }
 
-
-  subnet_id      = try(aws_subnet.this[each.value.subnet_key].id, null)
-  route_table_id = aws_route_table.this[each.value.route_table_key].id
+  subnet_id      = try(aws_subnet.this[each.key].id, null)
+  route_table_id = aws_route_table.this[each.value].id
 }
 
 resource "aws_route_table_association" "gateway" {
-  # for_each = { for k, v in local.gateway_route_table_associations : k => v if var.create }
-  for_each = { for k, v in local.gateway_route_table_associations : k => {
-    gateway_key = element(keys(v), 0), route_table_key = element(values(v), 0) }
-  }
-
+  for_each = { for k, v in var.subnets : k => v.gateway_id if var.create && can(v.gateway_id) }
 
   gateway_id     = each.value.gateway_key
   route_table_id = aws_route_table.this[each.value.route_table_key].id
