@@ -137,6 +137,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_cidr_reservations"></a> [cidr\_reservations](#input\_cidr\_reservations) | Map of CIDR reservations to create | `any` | `{}` | no |
 | <a name="input_create"></a> [create](#input\_create) | Controls if network ACL resources should be created | `bool` | `true` | no |
 | <a name="input_create_network_acl"></a> [create\_network\_acl](#input\_create\_network\_acl) | Controls creation of Network ACL resources | `bool` | `true` | no |
 | <a name="input_dax_subnet_groups"></a> [dax\_subnet\_groups](#input\_dax\_subnet\_groups) | Map of DAX subnet group [definitions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dax_subnet_group) | `any` | `{}` | no |

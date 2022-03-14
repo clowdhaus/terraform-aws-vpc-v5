@@ -87,18 +87,6 @@ module "public_subnets" {
       ipv4_cidr_block    = "10.98.1.0/24"
       availability_zone  = "${local.region}a"
       create_nat_gateway = true
-      ec2_subnet_cidr_reservations = {
-        one = {
-          description      = "Example EC2 subnet CIDR reservation"
-          cidr_block       = "10.98.1.0/28"
-          reservation_type = "prefix"
-        }
-        two = {
-          description      = "Example EC2 subnet CIDR reservation"
-          cidr_block       = "10.98.1.16/28"
-          reservation_type = "prefix"
-        }
-      }
     }
     "${local.region}b" = {
       ipv4_cidr_block   = "10.98.2.0/24"
@@ -107,6 +95,21 @@ module "public_subnets" {
     "${local.region}c" = {
       ipv4_cidr_block   = "10.98.3.0/24"
       availability_zone = "${local.region}c"
+    }
+  }
+
+  cidr_reservations = {
+    one = {
+      subnet_key       = "${local.region}a"
+      description      = "Example EC2 subnet CIDR reservation"
+      cidr_block       = "10.98.1.0/28"
+      reservation_type = "prefix"
+    }
+    two = {
+      subnet_key       = "${local.region}b"
+      description      = "Example EC2 subnet CIDR reservation"
+      cidr_block       = "10.98.1.16/28"
+      reservation_type = "prefix"
     }
   }
 

@@ -30,10 +30,55 @@ locals {
   cidr_chunks        = chunklist(cidrsubnets("fd00:fd12:3456:7890::/56", 8, 8, 8, 8, 8, 8), 2)
   subnet_maps        = [for cidrs in local.cidr_chunks : zipmap(local.availability_zones, cidrs)]
 
-  subnets = { for k, v in element(local.subnet_maps, 0) : k => {
-    ipv6_cidr_block   = v
-    availability_zone = k
-  } }
+  # subnets = { for k, v in element(local.subnet_maps, 0) : k => {
+  #   ipv6_cidr_block   = v
+  #   availability_zone = k
+  # } }
+
+  subnets_in = {
+    "${local.region}a" = {
+      ipv4_cidr_block    = "10.98.1.0/24"
+      availability_zone  = "${local.region}a"
+      create_nat_gateway = true
+      # ec2_subnet_cidr_reservations = {
+      #   one = {
+      #     description      = "Example EC2 subnet CIDR reservation"
+      #     cidr_block       = "10.98.1.0/28"
+      #     reservation_type = "prefix"
+      #   }
+      #   two = {
+      #     description      = "Example EC2 subnet CIDR reservation"
+      #     cidr_block       = "10.98.1.16/28"
+      #     reservation_type = "prefix"
+      #   }
+      # }
+      ec2_subnet_cidr_reservations = [{
+        description      = "Example EC2 subnet CIDR reservation"
+        cidr_block       = "10.98.1.0/28"
+        reservation_type = "prefix"
+        }, {
+        description      = "Example EC2 subnet CIDR reservation"
+        cidr_block       = "10.98.1.16/28"
+        reservation_type = "prefix"
+      }]
+    }
+    "${local.region}b" = {
+      ipv4_cidr_block   = "10.98.2.0/24"
+      availability_zone = "${local.region}b"
+    }
+    "${local.region}c" = {
+      ipv4_cidr_block   = "10.98.3.0/24"
+      availability_zone = "${local.region}c"
+    }
+  }
+
+  # subnets = [for k, v in local.subnets_in : zipmap(
+  #   [for i in range(length(keys(v.ec2_subnet_cidr_reservations))) : k],
+  # v.ec2_subnet_cidr_reservations[*].cidr_block) if can(v.ec2_subnet_cidr_reservations)]
+
+  subnets = { for k, v in local.subnets_in :
+    k => v.ec2_subnet_cidr_reservations if can(v.ec2_subnet_cidr_reservations)
+  }
 }
 
 # resource "aws_s3_bucket" "this" {

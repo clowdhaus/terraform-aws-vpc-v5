@@ -11,14 +11,6 @@ locals {
     Environment = "dev"
   }
 
-  availability_zones = ["${local.region}a", "${local.region}b"]
-
-  # ipv4_cidr_groups = chunklist(cidrsubnets(module.vpc.ipv4_cidr_block, 8, 8, 8, 8, 8, 8), 2)
-  # ipv4_subnet_maps = [for cidrs in local.ipv4_cidr_groups : zipmap(local.availability_zones, cidrs)]
-
-  # ipv6_cidr_groups = chunklist(cidrsubnets(module.vpc.ipv6_cidr_block, 8, 8, 8, 8, 8, 8), 2)
-  # ipv6_subnet_maps = [for cidrs in local.ipv6_cidr_groups : zipmap(local.availability_zones, cidrs)]
-
   ipv6_cidr_subnets = cidrsubnets(module.vpc.ipv6_cidr_block, 8, 8, 8, 8, 8, 8)
 }
 
@@ -76,17 +68,6 @@ module "public_subnets" {
     }
   }
 
-  # subnets = merge(
-  #   { for k, v in element(local.ipv4_subnet_maps, 0) : "${k}-ipv4" => {
-  #     ipv4_cidr_block   = v
-  #     availability_zone = k
-  #   } },
-  #   { for k, v in element(local.ipv6_subnet_maps, 0) : "${k}-ipv6" => {
-  #     ipv6_cidr_block   = v
-  #     availability_zone = k
-  #   } }
-  # )
-
   route_tables = {
     shared = {
       associated_subnet_keys = ["${local.region}a-ipv4", "${local.region}b-ipv4", "${local.region}a-ipv6", "${local.region}b-ipv6"]
@@ -134,17 +115,6 @@ module "private_subnets" {
     }
   }
 
-  # subnets = merge(
-  #   { for k, v in element(local.ipv4_subnet_maps, 1) : "${k}-ipv4" => {
-  #     ipv4_cidr_block   = v
-  #     availability_zone = k
-  #   } },
-  #   { for k, v in element(local.ipv6_subnet_maps, 1) : "${k}-ipv6" => {
-  #     ipv6_cidr_block   = v
-  #     availability_zone = k
-  #   } }
-  # )
-
   route_tables = {
     shared = {
       associated_subnet_keys = ["${local.region}a-ipv4", "${local.region}b-ipv4", "${local.region}a-ipv6", "${local.region}b-ipv6"]
@@ -186,17 +156,6 @@ module "database_subnets" {
       availability_zone = "${local.region}b"
     }
   }
-
-  # subnets = merge(
-  #   { for k, v in element(local.ipv4_subnet_maps, 2) : "${k}-ipv4" => {
-  #     ipv4_cidr_block   = v
-  #     availability_zone = k
-  #   } },
-  #   { for k, v in element(local.ipv6_subnet_maps, 2) : "${k}-ipv6" => {
-  #     ipv6_cidr_block   = v
-  #     availability_zone = k
-  #   } }
-  # )
 
   route_tables = {
     shared = {
