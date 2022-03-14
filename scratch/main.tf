@@ -2,8 +2,21 @@ locals {
   region = "us-east-1"
 
   route_tables = {
-    shared = {
-      associated_subnet_keys = ["${local.region}a", "${local.region}b"]
+    "${local.region}a" = {
+      associated_subnet_keys = ["${local.region}a"]
+      routes = {
+        igw = {
+          destination_cidr_block = "0.0.0.0/0"
+          gateway_id             = "igw-xxxxxx"
+        }
+        nat = {
+          destination_cidr_block = "0.0.0.0/0"
+          gateway_id             = "nat-xxxxxx"
+        }
+      }
+    }
+    "${local.region}b" = {
+      associated_subnet_keys = ["${local.region}b"]
       routes = {
         igw = {
           destination_cidr_block = "0.0.0.0/0"
@@ -17,11 +30,16 @@ locals {
     }
   }
 
-  inter = element(values({
-    for k, v in local.route_tables : k => {
-      for k2, v2 in try(v.routes, {}) : k2 => merge({ route_table_key = k }, v2)
-    }
-  }), 0)
+  subnet_route_table_associations = [for k, v in local.route_tables : zipmap(lookup(v, "associated_subnet_keys", []), [for i in range(length(lookup(v, "associated_subnet_keys", []))) : k])]
+
+
+  inter = { for k, v in local.subnet_route_table_associations : k => { gateway_key = element(keys(v), 0), subnet_key = element(values(v), 0) } }
+
+  # element(values({
+  #   for k, v in local.route_tables : k => {
+  #     for k2, v2 in try(v.routes, {}) : k2 => merge({ route_table_key = k }, v2)
+  #   }
+  # }), 0)
 
   # buckets       = ["blue", "green", "red"]
   # bucket_filter = ["blue", "green"]

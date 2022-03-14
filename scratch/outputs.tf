@@ -5,12 +5,12 @@ output "out" {
   # value       = element([for k, v in local.route_tables : zipmap(lookup(v, "subnet_keys", []), [for i in range(length(lookup(v, "subnet_keys", []))) : "${k}"])], 0)
 }
 
-output "subnet_maps" {
-  description = "value"
-  value       = local.subnet_maps
-}
+# output "subnet_maps" {
+#   description = "value"
+#   value       = local.subnet_maps
+# }
 
-output "subnets" {
-  description = "value"
-  value       = local.subnets
-}
+# output "subnets" {
+#   description = "value"
+#   value       = local.subnets
+# }

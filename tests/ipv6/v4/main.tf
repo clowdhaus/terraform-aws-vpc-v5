@@ -30,7 +30,8 @@ module "vpc" {
   manage_default_network_acl    = false
   manage_default_route_table    = false
 
-  assign_generated_ipv6_cidr_block = true
+  assign_generated_ipv6_cidr_block    = true
+  create_egress_only_internet_gateway = true
 
   tags = local.tags
 }
@@ -50,19 +51,13 @@ module "public_subnets" {
   }
 
   subnets = {
-    "${local.region}a-ipv4" = {
+    "${local.region}a" = {
       ipv4_cidr_block   = "10.0.101.0/24"
-      availability_zone = "${local.region}a"
-    }
-    "${local.region}b-ipv4" = {
-      ipv4_cidr_block   = "10.0.102.0/24"
-      availability_zone = "${local.region}b"
-    }
-    "${local.region}a-ipv6" = {
       ipv6_cidr_block   = element(local.ipv6_cidr_subnets, 0)
       availability_zone = "${local.region}a"
     }
-    "${local.region}b-ipv6" = {
+    "${local.region}b" = {
+      ipv4_cidr_block   = "10.0.102.0/24"
       ipv6_cidr_block   = element(local.ipv6_cidr_subnets, 1)
       availability_zone = "${local.region}b"
     }
@@ -70,10 +65,14 @@ module "public_subnets" {
 
   route_tables = {
     shared = {
-      associated_subnet_keys = ["${local.region}a-ipv4", "${local.region}b-ipv4", "${local.region}a-ipv6", "${local.region}b-ipv6"]
+      associated_subnet_keys = ["${local.region}a", "${local.region}b"]
       routes = {
         igw_ipv4 = {
           destination_ipv4_cidr_block = "0.0.0.0/0"
+          gateway_id                  = module.vpc.internet_gateway_id
+        }
+        igw_ipv6 = {
+          destination_ipv6_cidr_block = "::/0"
           gateway_id                  = module.vpc.internet_gateway_id
         }
       }
@@ -92,33 +91,37 @@ module "private_subnets" {
   # Backwards compat
   create_network_acl = false
 
-  subnets_default = {
-    assign_ipv6_address_on_creation = true
-  }
-
   subnets = {
-    "${local.region}a-ipv4" = {
-      ipv4_cidr_block   = "10.0.10.0/24"
-      availability_zone = "${local.region}a"
-    }
-    "${local.region}b-ipv4" = {
-      ipv4_cidr_block   = "10.0.11.0/24"
-      availability_zone = "${local.region}b"
-    }
-    "${local.region}a-ipv6" = {
+    "${local.region}a" = {
+      ipv4_cidr_block   = "10.0.1.0/24"
       ipv6_cidr_block   = element(local.ipv6_cidr_subnets, 2)
       availability_zone = "${local.region}a"
     }
-    "${local.region}b-ipv6" = {
+    "${local.region}b" = {
+      ipv4_cidr_block   = "10.0.2.0/24"
       ipv6_cidr_block   = element(local.ipv6_cidr_subnets, 3)
       availability_zone = "${local.region}b"
     }
   }
 
   route_tables = {
-    shared = {
-      associated_subnet_keys = ["${local.region}a-ipv4", "${local.region}b-ipv4", "${local.region}a-ipv6", "${local.region}b-ipv6"]
-      routes                 = {}
+    "${local.region}a" = {
+      associated_subnet_keys = ["${local.region}a"]
+      routes = {
+        eigw_ipv6 = {
+          destination_ipv6_cidr_block = "::/0"
+          egress_only_gateway_id      = module.vpc.egress_only_internet_gateway_id
+        }
+      }
+    }
+    "${local.region}b" = {
+      associated_subnet_keys = ["${local.region}b"]
+      routes = {
+        eigw_ipv6 = {
+          destination_ipv6_cidr_block = "::/0"
+          egress_only_gateway_id      = module.vpc.egress_only_internet_gateway_id
+        }
+      }
     }
   }
 
@@ -139,19 +142,13 @@ module "database_subnets" {
   }
 
   subnets = {
-    "${local.region}a-ipv4" = {
+    "${local.region}a" = {
       ipv4_cidr_block   = "10.0.103.0/24"
-      availability_zone = "${local.region}a"
-    }
-    "${local.region}b-ipv4" = {
-      ipv4_cidr_block   = "10.0.104.0/24"
-      availability_zone = "${local.region}b"
-    }
-    "${local.region}a-ipv6" = {
       ipv6_cidr_block   = element(local.ipv6_cidr_subnets, 4)
       availability_zone = "${local.region}a"
     }
-    "${local.region}b-ipv6" = {
+    "${local.region}b" = {
+      ipv4_cidr_block   = "10.0.104.0/24"
       ipv6_cidr_block   = element(local.ipv6_cidr_subnets, 5)
       availability_zone = "${local.region}b"
     }
@@ -159,22 +156,31 @@ module "database_subnets" {
 
   route_tables = {
     shared = {
-      associated_subnet_keys = ["${local.region}a-ipv4", "${local.region}b-ipv4", "${local.region}a-ipv6", "${local.region}b-ipv6"]
-      routes                 = {}
+      associated_subnet_keys = ["${local.region}a", "${local.region}b"]
+      routes = {
+        igw_ipv4 = {
+          destination_ipv4_cidr_block = "0.0.0.0/0"
+          gateway_id                  = module.vpc.internet_gateway_id
+        }
+        eigw_ipv6 = {
+          destination_ipv6_cidr_block = "::/0"
+          egress_only_gateway_id      = module.vpc.egress_only_internet_gateway_id
+        }
+      }
     }
   }
 
-  # rds_subnet_groups = {
-  #   database = {
-  #     name                   = local.name
-  #     description            = "Database subnet group for ${local.name}"
-  #     associated_subnet_keys = ["${local.region}a", "${local.region}b"]
+  rds_subnet_groups = {
+    database = {
+      name                   = local.name
+      description            = "Database subnet group for ${local.name}"
+      associated_subnet_keys = ["${local.region}a", "${local.region}b"]
 
-  #     tags = {
-  #       Name = local.name
-  #     }
-  #   }
-  # }
+      tags = {
+        Name = local.name
+      }
+    }
+  }
 
   tags = local.tags
 }
