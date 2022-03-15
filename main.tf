@@ -327,24 +327,6 @@ resource "aws_default_route_table" "this" {
 }
 
 ################################################################################
-# Default DHCP Options
-################################################################################
-
-resource "aws_default_vpc_dhcp_options" "this" {
-  count = var.create && var.manage_default_dhcp_options ? 1 : 0
-
-  netbios_name_servers = var.default_dhcp_options_netbios_name_servers
-  netbios_node_type    = var.default_dhcp_options_netbios_node_type
-  owner_id             = var.default_dhcp_options_owner_id
-
-  tags = merge(
-    var.tags,
-    { Name = "${var.name}-default" },
-    var.default_dhcp_options_tags,
-  )
-}
-
-################################################################################
 # Account Default VPC
 ################################################################################
 
@@ -359,5 +341,23 @@ resource "aws_default_vpc" "this" {
     var.tags,
     { Name = "default" },
     var.default_vpc_tags,
+  )
+}
+
+################################################################################
+# Account Default DHCP Options
+################################################################################
+
+resource "aws_default_vpc_dhcp_options" "this" {
+  count = var.create && var.manage_default_dhcp_options ? 1 : 0
+
+  netbios_name_servers = var.default_dhcp_options_netbios_name_servers
+  netbios_node_type    = var.default_dhcp_options_netbios_node_type
+  owner_id             = var.default_dhcp_options_owner_id
+
+  tags = merge(
+    var.tags,
+    { Name = "${var.name}-default" },
+    var.default_dhcp_options_tags,
   )
 }

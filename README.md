@@ -2,24 +2,11 @@
 
 :warning: Please do not rely on this being stable. The goal of this project is to explore changes to the upstream `terraform-aws-vpc` module and eventually land those changes there as v4.0. For now, this is just for exploring and open collaboration on what that next version might look like, and how users can migrate from v3.x to v4.x. Feel free to watch along if you are curious.
 
-## TODO
+## High Level Diagram
 
-- Better defaults on subnets
-  - `associated_subnet_keys` should default to all unless users opt out to 1:1 subnet:route_table
-  - ~CIDR is unique and 1:1 to subnet - consider making this the map key~
-    - Nothing gained by doing this and complexity becomes very ugly to support
-  - Internal helper function to allow users to opt into using netmask for subnets
-- A `routes` object must be added until [this](https://github.com/clowdhaus/terraform-aws-vpc-v4/blob/cd1dd432dc81e0dbb493e46a0cb644a9d4e2ff07/modules/subnets/main.tf#L102) is fixed
-
-Instead of module with many subnets:
-- Create one `aws_subnet` w/ `aws_ec2_subnet_cidr_reservation`, `aws_route_table_association` (for subnet, gateway stays in root)
-- Move to root: `aws_route_table`, `aws_route`, `aws_route_table_association` (for gateway),
-- Move `aws_network_acl` and `aws_network_acl_rule` to ????
-
-Idea #2:
-- Move `aws_route_table` to root
-- Simplify `aws_route` in subnet module by accepting just map of routes; no funky unpacking logic
-- Add `aws_route` support to root ???
+<p align="center">
+  <img src="https://github.com/clowdhaus/terraform-aws-vpc-v4/blob/main/.github/images/hld.svg" alt="high level diagram">
+</p>
 
 ## Design Goals
 
