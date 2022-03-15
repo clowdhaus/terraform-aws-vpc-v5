@@ -335,24 +335,19 @@ output "public_subnets_ec2_subnet_cidr_reservations" {
 # Route Table
 ################################################################################
 
-output "public_subnets_route_tables" {
-  description = "Map of route tables created and their attributes"
-  value       = module.public_subnets.route_tables
+output "public_route_table_id" {
+  description = "Public route table ID"
+  value       = module.public_route_table.id
 }
 
-output "public_subnets_route_table_ids" {
-  description = "List of route table IDs"
-  value       = module.public_subnets.route_table_ids
-}
-
-output "public_subnets_route_table_subnet_association_ids" {
+output "public_route_table_subnet_association_ids" {
   description = "List of subnet route table association IDs"
   value       = module.public_subnets.route_table_subnet_association_ids
 }
 
-output "public_subnets_route_table_gateway_association_ids" {
+output "public_route_table_gateway_association_ids" {
   description = "List of subnet route table association IDs"
-  value       = module.public_subnets.route_table_gateway_association_ids
+  value       = module.public_route_table.gateway_association_ids
 }
 
 ################################################################################

@@ -133,7 +133,7 @@ resource "aws_internet_gateway" "this" {
 }
 
 resource "aws_internet_gateway_attachment" "this" {
-  count = var.create && var.create_internet_gateway || var.attach_internet_gateway ? 1 : 0
+  count = var.create && var.attach_internet_gateway ? 1 : 0
 
   vpc_id              = local.vpc_id
   internet_gateway_id = var.create_internet_gateway ? aws_internet_gateway.this[0].id : var.internet_gateway_id

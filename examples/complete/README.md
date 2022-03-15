@@ -36,6 +36,7 @@ Note that this example may create resources which will incur monetary charges on
 |------|--------|---------|
 | <a name="module_dns_firewall"></a> [dns\_firewall](#module\_dns\_firewall) | ../../modules/dns-firewall | n/a |
 | <a name="module_network_firewall"></a> [network\_firewall](#module\_network\_firewall) | ../../modules/network-firewall | n/a |
+| <a name="module_public_route_table"></a> [public\_route\_table](#module\_public\_route\_table) | ../../modules/route-table | n/a |
 | <a name="module_public_subnets"></a> [public\_subnets](#module\_public\_subnets) | ../../modules/subnets | n/a |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | ../../ | n/a |
 | <a name="module_vpc_flow_log"></a> [vpc\_flow\_log](#module\_vpc\_flow\_log) | ../../modules/flow-log | n/a |
@@ -124,6 +125,9 @@ No inputs.
 | <a name="output_network_firewall_rule_groups"></a> [network\_firewall\_rule\_groups](#output\_network\_firewall\_rule\_groups) | A map of the rule groups created and their attributes |
 | <a name="output_network_firewall_status"></a> [network\_firewall\_status](#output\_network\_firewall\_status) | Nested list of information about the current status of the firewall |
 | <a name="output_network_firewall_update_token"></a> [network\_firewall\_update\_token](#output\_network\_firewall\_update\_token) | A string token used when updating a firewall |
+| <a name="output_public_route_table_gateway_association_ids"></a> [public\_route\_table\_gateway\_association\_ids](#output\_public\_route\_table\_gateway\_association\_ids) | List of subnet route table association IDs |
+| <a name="output_public_route_table_id"></a> [public\_route\_table\_id](#output\_public\_route\_table\_id) | Public route table ID |
+| <a name="output_public_route_table_subnet_association_ids"></a> [public\_route\_table\_subnet\_association\_ids](#output\_public\_route\_table\_subnet\_association\_ids) | List of subnet route table association IDs |
 | <a name="output_public_subnet_arns"></a> [public\_subnet\_arns](#output\_public\_subnet\_arns) | List of subnet ARNs |
 | <a name="output_public_subnet_ids"></a> [public\_subnet\_ids](#output\_public\_subnet\_ids) | List of subnet IDs |
 | <a name="output_public_subnet_ipv4_cidr_blocks"></a> [public\_subnet\_ipv4\_cidr\_blocks](#output\_public\_subnet\_ipv4\_cidr\_blocks) | List of subnet IPv4 CIDR blocks |
@@ -134,10 +138,6 @@ No inputs.
 | <a name="output_public_subnets_network_acl_id"></a> [public\_subnets\_network\_acl\_id](#output\_public\_subnets\_network\_acl\_id) | The ARN of the network ACL |
 | <a name="output_public_subnets_network_acl_rules_egress"></a> [public\_subnets\_network\_acl\_rules\_egress](#output\_public\_subnets\_network\_acl\_rules\_egress) | Map of egress network ACL rules created and their attributes |
 | <a name="output_public_subnets_network_acl_rules_ingress"></a> [public\_subnets\_network\_acl\_rules\_ingress](#output\_public\_subnets\_network\_acl\_rules\_ingress) | Map of ingress network ACL rules created and their attributes |
-| <a name="output_public_subnets_route_table_gateway_association_ids"></a> [public\_subnets\_route\_table\_gateway\_association\_ids](#output\_public\_subnets\_route\_table\_gateway\_association\_ids) | List of subnet route table association IDs |
-| <a name="output_public_subnets_route_table_ids"></a> [public\_subnets\_route\_table\_ids](#output\_public\_subnets\_route\_table\_ids) | List of route table IDs |
-| <a name="output_public_subnets_route_table_subnet_association_ids"></a> [public\_subnets\_route\_table\_subnet\_association\_ids](#output\_public\_subnets\_route\_table\_subnet\_association\_ids) | List of subnet route table association IDs |
-| <a name="output_public_subnets_route_tables"></a> [public\_subnets\_route\_tables](#output\_public\_subnets\_route\_tables) | Map of route tables created and their attributes |
 | <a name="output_vpn_gateways"></a> [vpn\_gateways](#output\_vpn\_gateways) | Map of VPN Gateways and their attributes |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 

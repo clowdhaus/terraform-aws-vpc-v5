@@ -180,42 +180,42 @@ output "elasticache_subnet_group_name" {
 }
 
 # Route Tables
-output "public_route_table_ids" {
+output "public_route_table_id" {
   description = "List of IDs of public route tables"
-  value       = module.public_subnets.route_table_ids
+  value       = module.public_route_table.id
 }
 
-output "public_route_table_association_ids" {
+output "public_route_table_subnet_association_ids" {
   description = "List of IDs of the public route table association"
   value       = module.public_subnets.route_table_subnet_association_ids
 }
 
-output "private_route_table_ids" {
+output "private_route_table_id" {
   description = "List of IDs of private route tables"
-  value       = module.private_subnets.route_table_ids
+  value       = module.private_route_table.id
 }
 
-output "private_route_table_association_ids" {
+output "private_route_table_subnet_association_ids" {
   description = "List of IDs of the private route table association"
   value       = module.private_subnets.route_table_subnet_association_ids
 }
 
-output "database_route_table_ids" {
+output "database_route_table_id" {
   description = "List of IDs of database route tables"
-  value       = module.database_subnets.route_table_ids
+  value       = module.database_route_table.id
 }
 
-output "database_route_table_association_ids" {
+output "database_route_table_subnet_association_ids" {
   description = "List of IDs of the database route table association"
   value       = module.database_subnets.route_table_subnet_association_ids
 }
 
-output "redshift_route_table_ids" {
+output "redshift_route_table_id" {
   description = "List of IDs of redshift route tables"
-  value       = module.redshift_subnets.route_table_ids
+  value       = module.redshift_route_table.id
 }
 
-output "redshift_route_table_association_ids" {
+output "redshift_route_table_subnet_association_ids" {
   description = "List of IDs of the redshift route table association"
   value       = module.redshift_subnets.route_table_subnet_association_ids
 }
@@ -225,12 +225,12 @@ output "redshift_route_table_association_ids" {
 #   value       = module.vpc.redshift_public_route_table_association_ids
 # }
 
-output "elasticache_route_table_ids" {
+output "elasticache_route_table_id" {
   description = "List of IDs of elasticache route tables"
-  value       = module.elasticache_subnets.route_table_ids
+  value       = module.elasticache_route_table.id
 }
 
-output "elasticache_route_table_association_ids" {
+output "elasticache_route_table_subnet_association_ids" {
   description = "List of IDs of the elasticache route table association"
   value       = module.elasticache_subnets.route_table_subnet_association_ids
 }

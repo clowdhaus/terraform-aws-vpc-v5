@@ -31,7 +31,7 @@ output "routes" {
 # See `subnets` sub-module for associating to subnet
 ################################################################################
 
-output "route_table_gateway_association_ids" {
+output "gateway_association_ids" {
   description = "List of route table gateway association IDs"
   value       = [for association in aws_route_table_association.gateway : association.id]
 }

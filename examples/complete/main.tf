@@ -16,7 +16,7 @@ locals {
 data "aws_caller_identity" "current" {}
 
 ################################################################################
-# VPC Module
+# VPC
 ################################################################################
 
 module "vpc" {
@@ -71,6 +71,27 @@ module "vpc_flow_log" {
 }
 
 ################################################################################
+# Route Tables
+################################################################################
+
+
+module "public_route_table" {
+  source = "../../modules/route-table"
+
+  name   = "${local.name}-public"
+  vpc_id = module.vpc.id
+
+  routes = {
+    igw = {
+      destination_ipv4_cidr_block = "0.0.0.0/0"
+      gateway_id                  = module.vpc.internet_gateway_id
+    }
+  }
+
+  tags = local.tags
+}
+
+################################################################################
 # Subnets Module
 ################################################################################
 
@@ -81,6 +102,11 @@ module "public_subnets" {
 
   name   = "${local.name}-public"
   vpc_id = module.vpc.id
+
+  subnets_default = {
+    map_public_ip_on_launch = true
+    route_table_id          = module.public_route_table.id
+  }
 
   subnets = {
     "${local.region}a" = {
@@ -110,18 +136,6 @@ module "public_subnets" {
       description      = "Example EC2 subnet CIDR reservation"
       cidr_block       = "10.98.1.16/28"
       reservation_type = "prefix"
-    }
-  }
-
-  route_tables = {
-    shared = {
-      associated_subnet_keys = ["${local.region}a", "${local.region}b"]
-      routes = {
-        igw = {
-          destination_ipv4_cidr_block = "0.0.0.0/0"
-          gateway_id                  = module.vpc.internet_gateway_id
-        }
-      }
     }
   }
 

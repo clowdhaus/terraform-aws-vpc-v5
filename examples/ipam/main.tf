@@ -150,6 +150,7 @@ module "vpc_nonprod_euwest1" {
 
   # Not required for this example
   create_internet_gateway       = false
+  attach_internet_gateway       = false
   enable_dnssec_config          = false
   manage_default_security_group = false
   manage_default_network_acl    = false
@@ -172,6 +173,7 @@ module "vpc_prod_euwest1" {
 
   # Not required for this example
   create_internet_gateway       = false
+  attach_internet_gateway       = false
   enable_dnssec_config          = false
   manage_default_security_group = false
   manage_default_network_acl    = false
@@ -193,6 +195,7 @@ module "vpc_prod_useast1" {
 
   # Not required for this example
   create_internet_gateway       = false
+  attach_internet_gateway       = false
   enable_dnssec_config          = false
   manage_default_security_group = false
   manage_default_network_acl    = false

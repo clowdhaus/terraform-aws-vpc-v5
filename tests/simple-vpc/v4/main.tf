@@ -13,7 +13,7 @@ locals {
 }
 
 ################################################################################
-# VPC Module
+# VPC
 ################################################################################
 
 module "vpc" {
@@ -38,6 +38,53 @@ module "vpc" {
   tags = local.tags
 }
 
+################################################################################
+# Route Tables
+################################################################################
+
+module "public_route_table" {
+  source = "../../../modules/route-table"
+
+  name   = "${local.name}-public"
+  vpc_id = module.vpc.id
+
+  routes = {
+    igw_ipv4 = {
+      destination_ipv4_cidr_block = "0.0.0.0/0"
+      gateway_id                  = module.vpc.internet_gateway_id
+    }
+    igw_ipv6 = {
+      destination_ipv6_cidr_block = "::/0"
+      gateway_id                  = module.vpc.internet_gateway_id
+    }
+  }
+
+  tags = merge(local.tags, {
+    Name = "overridden-name-public"
+  })
+}
+
+
+module "private_route_table" {
+  source = "../../../modules/route-table"
+
+  name   = "${local.name}-private"
+  vpc_id = module.vpc.id
+
+  routes = {
+    igw_ipv6 = {
+      destination_ipv6_cidr_block = "::/0"
+      egress_only_gateway_id      = module.vpc.egress_only_internet_gateway_id
+    }
+  }
+
+  tags = local.tags
+}
+
+################################################################################
+# Subnets
+################################################################################
+
 module "public_subnets" {
   source = "../../../modules/subnets"
 
@@ -49,6 +96,7 @@ module "public_subnets" {
 
   subnets_default = {
     map_public_ip_on_launch = true
+    route_table_id          = module.public_route_table.id
     tags = {
       Name = "overridden-name-public"
     }
@@ -69,22 +117,6 @@ module "public_subnets" {
     }
   }
 
-  route_tables = {
-    shared = {
-      associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
-      routes = {
-        igw_ipv4 = {
-          destination_ipv4_cidr_block = "0.0.0.0/0"
-          gateway_id                  = module.vpc.internet_gateway_id
-        }
-        igw_ipv6 = {
-          destination_ipv6_cidr_block = "::/0"
-          gateway_id                  = module.vpc.internet_gateway_id
-        }
-      }
-    }
-  }
-
   tags = merge(local.tags, {
     Name = "overridden-name-public"
   })
@@ -100,6 +132,11 @@ module "private_subnets" {
   # Backwards compat
   create_network_acl = false
 
+
+  subnets_default = {
+    route_table_id = module.private_route_table.id
+  }
+
   subnets = {
     "${local.region}a" = {
       ipv4_cidr_block   = "10.0.1.0/24"
@@ -112,18 +149,6 @@ module "private_subnets" {
     "${local.region}c" = {
       ipv4_cidr_block   = "10.0.3.0/24"
       availability_zone = "${local.region}c"
-    }
-  }
-
-  route_tables = {
-    shared = {
-      associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
-      routes = {
-        igw_ipv6 = {
-          destination_ipv6_cidr_block = "::/0"
-          egress_only_gateway_id      = module.vpc.egress_only_internet_gateway_id
-        }
-      }
     }
   }
 

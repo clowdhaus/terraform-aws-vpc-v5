@@ -13,7 +13,7 @@ locals {
 }
 
 ################################################################################
-# VPC Module
+# VPC
 ################################################################################
 
 module "vpc" {
@@ -31,6 +31,73 @@ module "vpc" {
   tags = local.tags
 }
 
+################################################################################
+# Route Tables
+################################################################################
+
+module "public_route_table" {
+  source = "../../../modules/route-table"
+
+  name   = "${local.name}-public"
+  vpc_id = module.vpc.id
+
+  routes = {
+    igw_ipv4 = {
+      destination_ipv4_cidr_block = "0.0.0.0/0"
+      gateway_id                  = module.vpc.internet_gateway_id
+    }
+  }
+
+  tags = local.tags
+}
+
+module "private_route_table" {
+  source = "../../../modules/route-table"
+
+  name   = "${local.name}-private"
+  vpc_id = module.vpc.id
+
+  routes = {
+    nat_gw_ipv4 = {
+      destination_ipv4_cidr_block = "0.0.0.0/0"
+      nat_gateway_id              = module.public_subnets.nat_gateways["${local.region}a"].id
+    }
+  }
+
+  tags = local.tags
+}
+
+module "database_route_table" {
+  source = "../../../modules/route-table"
+
+  name   = "${local.name}-database"
+  vpc_id = module.vpc.id
+
+  tags = local.tags
+}
+
+module "elasticache_route_table" {
+  source = "../../../modules/route-table"
+
+  name   = "${local.name}-elasticache"
+  vpc_id = module.vpc.id
+
+  tags = local.tags
+}
+
+module "redshift_route_table" {
+  source = "../../../modules/route-table"
+
+  name   = "${local.name}-redshift"
+  vpc_id = module.vpc.id
+
+  tags = local.tags
+}
+
+################################################################################
+# Subnets
+################################################################################
+
 module "public_subnets" {
   source = "../../../modules/subnets"
 
@@ -42,6 +109,7 @@ module "public_subnets" {
 
   subnets_default = {
     map_public_ip_on_launch = true
+    route_table_id          = module.public_route_table.id
   }
 
   subnets = {
@@ -60,18 +128,6 @@ module "public_subnets" {
     }
   }
 
-  route_tables = {
-    shared = {
-      associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
-      routes = {
-        igw_ipv4 = {
-          destination_ipv4_cidr_block = "0.0.0.0/0"
-          gateway_id                  = module.vpc.internet_gateway_id
-        }
-      }
-    }
-  }
-
   tags = local.tags
 }
 
@@ -83,6 +139,10 @@ module "private_subnets" {
 
   # Backwards compat
   create_network_acl = false
+
+  subnets_default = {
+    route_table_id = module.private_route_table.id
+  }
 
   subnets = {
     "${local.region}a" = {
@@ -99,18 +159,6 @@ module "private_subnets" {
     }
   }
 
-  route_tables = {
-    shared = {
-      associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
-      routes = {
-        nat_gw_ipv4 = {
-          destination_ipv4_cidr_block = "0.0.0.0/0"
-          nat_gateway_id              = module.public_subnets.nat_gateways["${local.region}a"].id
-        }
-      }
-    }
-  }
-
   tags = local.tags
 }
 
@@ -122,6 +170,10 @@ module "database_subnets" {
 
   # Backwards compat
   create_network_acl = false
+
+  subnets_default = {
+    route_table_id = module.database_route_table.id
+  }
 
   subnets = {
     "${local.region}a" = {
@@ -135,13 +187,6 @@ module "database_subnets" {
     "${local.region}c" = {
       ipv4_cidr_block   = "10.10.23.0/24"
       availability_zone = "${local.region}c"
-    }
-  }
-
-  route_tables = {
-    shared = {
-      associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
-      routes                 = {} # TODO - FixMe!
     }
   }
 
@@ -169,6 +214,10 @@ module "elasticache_subnets" {
   # Backwards compat
   create_network_acl = false
 
+  subnets_default = {
+    route_table_id = module.elasticache_route_table.id
+  }
+
   subnets = {
     "${local.region}a" = {
       ipv4_cidr_block   = "10.10.31.0/24"
@@ -181,13 +230,6 @@ module "elasticache_subnets" {
     "${local.region}c" = {
       ipv4_cidr_block   = "10.10.33.0/24"
       availability_zone = "${local.region}c"
-    }
-  }
-
-  route_tables = {
-    shared = {
-      associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
-      routes                 = {} # TODO - FixMe!
     }
   }
 
@@ -215,6 +257,10 @@ module "redshift_subnets" {
   # Backwards compat
   create_network_acl = false
 
+  subnets_default = {
+    route_table_id = module.redshift_route_table.id
+  }
+
   subnets = {
     "${local.region}a" = {
       ipv4_cidr_block   = "10.10.41.0/24"
@@ -227,13 +273,6 @@ module "redshift_subnets" {
     "${local.region}c" = {
       ipv4_cidr_block   = "10.10.43.0/24"
       availability_zone = "${local.region}c"
-    }
-  }
-
-  route_tables = {
-    shared = {
-      associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
-      routes                 = {} # TODO - FixMe!
     }
   }
 

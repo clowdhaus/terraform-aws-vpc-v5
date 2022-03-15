@@ -36,7 +36,9 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_private_route_table"></a> [private\_route\_table](#module\_private\_route\_table) | ../../modules/route-table | n/a |
 | <a name="module_private_subnets"></a> [private\_subnets](#module\_private\_subnets) | ../../modules/subnets | n/a |
+| <a name="module_public_route_table"></a> [public\_route\_table](#module\_public\_route\_table) | ../../modules/route-table | n/a |
 | <a name="module_public_subnets"></a> [public\_subnets](#module\_public\_subnets) | ../../modules/subnets | n/a |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | ../../ | n/a |
 
@@ -93,6 +95,8 @@ No inputs.
 | <a name="output_main_route_table_id"></a> [main\_route\_table\_id](#output\_main\_route\_table\_id) | The ID of the main route table associated with this VPC. Note that you can change a VPC's main route table by using an `aws_main_route_table_association` |
 | <a name="output_nat_gateways"></a> [nat\_gateways](#output\_nat\_gateways) | Map of NAT gateway(s) created and their attributes |
 | <a name="output_nat_gateways_elastic_ips"></a> [nat\_gateways\_elastic\_ips](#output\_nat\_gateways\_elastic\_ips) | Map of EIP(s) created and their attributes |
+| <a name="output_private_route_table_gateway_association_ids"></a> [private\_route\_table\_gateway\_association\_ids](#output\_private\_route\_table\_gateway\_association\_ids) | List of subnet route table association IDs |
+| <a name="output_private_route_table_subnet_association_ids"></a> [private\_route\_table\_subnet\_association\_ids](#output\_private\_route\_table\_subnet\_association\_ids) | List of subnet route table association IDs |
 | <a name="output_private_subnet_arns"></a> [private\_subnet\_arns](#output\_private\_subnet\_arns) | List of subnet ARNs |
 | <a name="output_private_subnet_ids"></a> [private\_subnet\_ids](#output\_private\_subnet\_ids) | List of subnet IDs |
 | <a name="output_private_subnet_ipv4_cidr_blocks"></a> [private\_subnet\_ipv4\_cidr\_blocks](#output\_private\_subnet\_ipv4\_cidr\_blocks) | List of subnet IPv4 CIDR blocks |
@@ -103,10 +107,9 @@ No inputs.
 | <a name="output_private_subnets_network_acl_id"></a> [private\_subnets\_network\_acl\_id](#output\_private\_subnets\_network\_acl\_id) | The ARN of the network ACL |
 | <a name="output_private_subnets_network_acl_rules_egress"></a> [private\_subnets\_network\_acl\_rules\_egress](#output\_private\_subnets\_network\_acl\_rules\_egress) | Map of egress network ACL rules created and their attributes |
 | <a name="output_private_subnets_network_acl_rules_ingress"></a> [private\_subnets\_network\_acl\_rules\_ingress](#output\_private\_subnets\_network\_acl\_rules\_ingress) | Map of ingress network ACL rules created and their attributes |
-| <a name="output_private_subnets_route_table_gateway_association_ids"></a> [private\_subnets\_route\_table\_gateway\_association\_ids](#output\_private\_subnets\_route\_table\_gateway\_association\_ids) | List of subnet route table association IDs |
-| <a name="output_private_subnets_route_table_ids"></a> [private\_subnets\_route\_table\_ids](#output\_private\_subnets\_route\_table\_ids) | List of route table IDs |
-| <a name="output_private_subnets_route_table_subnet_association_ids"></a> [private\_subnets\_route\_table\_subnet\_association\_ids](#output\_private\_subnets\_route\_table\_subnet\_association\_ids) | List of subnet route table association IDs |
-| <a name="output_private_subnets_route_tables"></a> [private\_subnets\_route\_tables](#output\_private\_subnets\_route\_tables) | Map of route tables created and their attributes |
+| <a name="output_private_subnets_route_table_id"></a> [private\_subnets\_route\_table\_id](#output\_private\_subnets\_route\_table\_id) | List of route table IDs |
+| <a name="output_public_route_table_gateway_association_ids"></a> [public\_route\_table\_gateway\_association\_ids](#output\_public\_route\_table\_gateway\_association\_ids) | List of subnet route table association IDs |
+| <a name="output_public_route_table_subnet_association_ids"></a> [public\_route\_table\_subnet\_association\_ids](#output\_public\_route\_table\_subnet\_association\_ids) | List of subnet route table association IDs |
 | <a name="output_public_subnet_arns"></a> [public\_subnet\_arns](#output\_public\_subnet\_arns) | List of subnet ARNs |
 | <a name="output_public_subnet_ids"></a> [public\_subnet\_ids](#output\_public\_subnet\_ids) | List of subnet IDs |
 | <a name="output_public_subnet_ipv4_cidr_blocks"></a> [public\_subnet\_ipv4\_cidr\_blocks](#output\_public\_subnet\_ipv4\_cidr\_blocks) | List of subnet IPv4 CIDR blocks |
@@ -117,9 +120,6 @@ No inputs.
 | <a name="output_public_subnets_network_acl_id"></a> [public\_subnets\_network\_acl\_id](#output\_public\_subnets\_network\_acl\_id) | The ARN of the network ACL |
 | <a name="output_public_subnets_network_acl_rules_egress"></a> [public\_subnets\_network\_acl\_rules\_egress](#output\_public\_subnets\_network\_acl\_rules\_egress) | Map of egress network ACL rules created and their attributes |
 | <a name="output_public_subnets_network_acl_rules_ingress"></a> [public\_subnets\_network\_acl\_rules\_ingress](#output\_public\_subnets\_network\_acl\_rules\_ingress) | Map of ingress network ACL rules created and their attributes |
-| <a name="output_public_subnets_route_table_gateway_association_ids"></a> [public\_subnets\_route\_table\_gateway\_association\_ids](#output\_public\_subnets\_route\_table\_gateway\_association\_ids) | List of subnet route table association IDs |
-| <a name="output_public_subnets_route_table_ids"></a> [public\_subnets\_route\_table\_ids](#output\_public\_subnets\_route\_table\_ids) | List of route table IDs |
-| <a name="output_public_subnets_route_table_subnet_association_ids"></a> [public\_subnets\_route\_table\_subnet\_association\_ids](#output\_public\_subnets\_route\_table\_subnet\_association\_ids) | List of subnet route table association IDs |
-| <a name="output_public_subnets_route_tables"></a> [public\_subnets\_route\_tables](#output\_public\_subnets\_route\_tables) | Map of route tables created and their attributes |
+| <a name="output_public_subnets_route_table_id"></a> [public\_subnets\_route\_table\_id](#output\_public\_subnets\_route\_table\_id) | List of route table IDs |
 | <a name="output_vpn_gateways"></a> [vpn\_gateways](#output\_vpn\_gateways) | Map of VPN Gateways and their attributes |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
