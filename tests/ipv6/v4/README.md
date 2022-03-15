@@ -30,8 +30,11 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_database_route_table"></a> [database\_route\_table](#module\_database\_route\_table) | ../../../modules/route-table | n/a |
 | <a name="module_database_subnets"></a> [database\_subnets](#module\_database\_subnets) | ../../../modules/subnets | n/a |
+| <a name="module_private_route_tables"></a> [private\_route\_tables](#module\_private\_route\_tables) | ../../../modules/route-table | n/a |
 | <a name="module_private_subnets"></a> [private\_subnets](#module\_private\_subnets) | ../../../modules/subnets | n/a |
+| <a name="module_public_route_table"></a> [public\_route\_table](#module\_public\_route\_table) | ../../../modules/route-table | n/a |
 | <a name="module_public_subnets"></a> [public\_subnets](#module\_public\_subnets) | ../../../modules/subnets | n/a |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | ../../../ | n/a |
 
@@ -48,8 +51,10 @@ No inputs.
 | Name | Description |
 |------|-------------|
 | <a name="output_database_route_table_association_ids"></a> [database\_route\_table\_association\_ids](#output\_database\_route\_table\_association\_ids) | List of IDs of the database route table association |
-| <a name="output_database_route_table_ids"></a> [database\_route\_table\_ids](#output\_database\_route\_table\_ids) | List of IDs of database route tables |
+| <a name="output_database_route_table_id"></a> [database\_route\_table\_id](#output\_database\_route\_table\_id) | Database route table ID |
 | <a name="output_database_subnet_arns"></a> [database\_subnet\_arns](#output\_database\_subnet\_arns) | List of ARNs of database subnets |
+| <a name="output_database_subnet_group"></a> [database\_subnet\_group](#output\_database\_subnet\_group) | ID of database subnet group |
+| <a name="output_database_subnet_group_name"></a> [database\_subnet\_group\_name](#output\_database\_subnet\_group\_name) | Name of database subnet group |
 | <a name="output_database_subnets"></a> [database\_subnets](#output\_database\_subnets) | List of IDs of database subnets |
 | <a name="output_database_subnets_ipv4_cidr_blocks"></a> [database\_subnets\_ipv4\_cidr\_blocks](#output\_database\_subnets\_ipv4\_cidr\_blocks) | List of cidr\_blocks of database subnets |
 | <a name="output_database_subnets_ipv6_cidr_blocks"></a> [database\_subnets\_ipv6\_cidr\_blocks](#output\_database\_subnets\_ipv6\_cidr\_blocks) | List of IPv6 cidr\_blocks of database subnets in an IPv6 enabled VPC |
@@ -72,7 +77,7 @@ No inputs.
 | <a name="output_public_network_acl_arn"></a> [public\_network\_acl\_arn](#output\_public\_network\_acl\_arn) | ARN of the public network ACL |
 | <a name="output_public_network_acl_id"></a> [public\_network\_acl\_id](#output\_public\_network\_acl\_id) | ID of the public network ACL |
 | <a name="output_public_route_table_association_ids"></a> [public\_route\_table\_association\_ids](#output\_public\_route\_table\_association\_ids) | List of IDs of the public route table association |
-| <a name="output_public_route_table_ids"></a> [public\_route\_table\_ids](#output\_public\_route\_table\_ids) | List of IDs of public route tables |
+| <a name="output_public_route_table_id"></a> [public\_route\_table\_id](#output\_public\_route\_table\_id) | Public route table ID |
 | <a name="output_public_subnet_arns"></a> [public\_subnet\_arns](#output\_public\_subnet\_arns) | List of ARNs of public subnets |
 | <a name="output_public_subnets"></a> [public\_subnets](#output\_public\_subnets) | List of IDs of public subnets |
 | <a name="output_public_subnets_ipv4_cidr_blocks"></a> [public\_subnets\_ipv4\_cidr\_blocks](#output\_public\_subnets\_ipv4\_cidr\_blocks) | List of cidr\_blocks of public subnets |

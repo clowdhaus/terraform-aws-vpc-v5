@@ -30,11 +30,80 @@ module "vpc" {
   manage_default_network_acl    = false
   manage_default_route_table    = false
 
+  # IPv6
   assign_generated_ipv6_cidr_block    = true
   create_egress_only_internet_gateway = true
 
   tags = local.tags
 }
+
+################################################################################
+# Route Tables
+################################################################################
+
+module "public_route_table" {
+  source = "../../../modules/route-table"
+
+  name   = "${local.name}-public"
+  vpc_id = module.vpc.id
+
+  routes = {
+    igw_ipv4 = {
+      destination_ipv4_cidr_block = "0.0.0.0/0"
+      gateway_id                  = module.vpc.internet_gateway_id
+    }
+    igw_ipv6 = {
+      destination_ipv6_cidr_block = "::/0"
+      gateway_id                  = module.vpc.internet_gateway_id
+    }
+  }
+
+  tags = local.tags
+}
+
+
+module "private_route_tables" {
+  source = "../../../modules/route-table"
+
+  for_each = toset(["${local.region}a", "${local.region}b"])
+
+  name   = "${local.name}-private-${each.value}"
+  vpc_id = module.vpc.id
+
+  routes = {
+    eigw_ipv6 = {
+      destination_ipv6_cidr_block = "::/0"
+      egress_only_gateway_id      = module.vpc.egress_only_internet_gateway_id
+    }
+  }
+
+  tags = local.tags
+}
+
+
+module "database_route_table" {
+  source = "../../../modules/route-table"
+
+  name   = "${local.name}-database"
+  vpc_id = module.vpc.id
+
+  routes = {
+    igw_ipv4 = {
+      destination_ipv4_cidr_block = "0.0.0.0/0"
+      gateway_id                  = module.vpc.internet_gateway_id
+    }
+    eigw_ipv6 = {
+      destination_ipv6_cidr_block = "::/0"
+      egress_only_gateway_id      = module.vpc.egress_only_internet_gateway_id
+    }
+  }
+
+  tags = local.tags
+}
+
+################################################################################
+# Subnets
+################################################################################
 
 module "public_subnets" {
   source = "../../../modules/subnets"
@@ -48,6 +117,7 @@ module "public_subnets" {
   subnets_default = {
     assign_ipv6_address_on_creation = true
     map_public_ip_on_launch         = true
+    route_table_id                  = module.public_route_table.id
   }
 
   subnets = {
@@ -55,28 +125,11 @@ module "public_subnets" {
       ipv4_cidr_block   = "10.0.101.0/24"
       ipv6_cidr_block   = element(local.ipv6_cidr_subnets, 0)
       availability_zone = "${local.region}a"
-      route_table_key   = "shared"
     }
     "${local.region}b" = {
       ipv4_cidr_block   = "10.0.102.0/24"
       ipv6_cidr_block   = element(local.ipv6_cidr_subnets, 1)
       availability_zone = "${local.region}b"
-      route_table_key   = "shared"
-    }
-  }
-
-  route_tables = {
-    shared = {
-      routes = {
-        igw_ipv4 = {
-          destination_ipv4_cidr_block = "0.0.0.0/0"
-          gateway_id                  = module.vpc.internet_gateway_id
-        }
-        igw_ipv6 = {
-          destination_ipv6_cidr_block = "::/0"
-          gateway_id                  = module.vpc.internet_gateway_id
-        }
-      }
     }
   }
 
@@ -97,32 +150,13 @@ module "private_subnets" {
       ipv4_cidr_block   = "10.0.1.0/24"
       ipv6_cidr_block   = element(local.ipv6_cidr_subnets, 2)
       availability_zone = "${local.region}a"
-      route_table_key   = "${local.region}a"
+      route_table_id    = module.private_route_tables["${local.region}a"].id
     }
     "${local.region}b" = {
       ipv4_cidr_block   = "10.0.2.0/24"
       ipv6_cidr_block   = element(local.ipv6_cidr_subnets, 3)
       availability_zone = "${local.region}b"
-      route_table_key   = "${local.region}b"
-    }
-  }
-
-  route_tables = {
-    "${local.region}a" = {
-      routes = {
-        eigw_ipv6 = {
-          destination_ipv6_cidr_block = "::/0"
-          egress_only_gateway_id      = module.vpc.egress_only_internet_gateway_id
-        }
-      }
-    }
-    "${local.region}b" = {
-      routes = {
-        eigw_ipv6 = {
-          destination_ipv6_cidr_block = "::/0"
-          egress_only_gateway_id      = module.vpc.egress_only_internet_gateway_id
-        }
-      }
+      route_table_id    = module.private_route_tables["${local.region}a"].id
     }
   }
 
@@ -140,6 +174,7 @@ module "database_subnets" {
 
   subnets_default = {
     assign_ipv6_address_on_creation = true
+    route_table_id                  = module.database_route_table.id
   }
 
   subnets = {
@@ -147,28 +182,11 @@ module "database_subnets" {
       ipv4_cidr_block   = "10.0.103.0/24"
       ipv6_cidr_block   = element(local.ipv6_cidr_subnets, 4)
       availability_zone = "${local.region}a"
-      route_table_key   = "shared"
     }
     "${local.region}b" = {
       ipv4_cidr_block   = "10.0.104.0/24"
       ipv6_cidr_block   = element(local.ipv6_cidr_subnets, 5)
       availability_zone = "${local.region}b"
-      route_table_key   = "shared"
-    }
-  }
-
-  route_tables = {
-    shared = {
-      routes = {
-        igw_ipv4 = {
-          destination_ipv4_cidr_block = "0.0.0.0/0"
-          gateway_id                  = module.vpc.internet_gateway_id
-        }
-        eigw_ipv6 = {
-          destination_ipv6_cidr_block = "::/0"
-          egress_only_gateway_id      = module.vpc.egress_only_internet_gateway_id
-        }
-      }
     }
   }
 

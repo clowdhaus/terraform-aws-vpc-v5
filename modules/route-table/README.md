@@ -1,88 +1,28 @@
-# AWS Subnets Terraform Module
+# AWS Route Table Terraform Module
 
-Terraform module which creates AWS VPC Subnet resources.
-
-This module is designed to create a set of one or more subnets that serve a desired purpose. For example, one module definition would be used for public subnets, another for private subnets, another for database subnets, etc. This design affords users the ability to create any desired design configuration for a set of subnets, where multiple sets of subnets are composed under the respective VPC to create the desired network topology.
+Terraform module which creates AWS Route Table resources.
 
 ## Usage
 
 See [`examples`](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/examples) directory for working examples to reference:
 
-### Public Subnets
-
 ```hcl
-module "public_subnets" {
-  source = "terraform-aws-modules/vpc/aws//modules/subnets"
+module "route_table" {
+  source = "terraform-aws-modules/vpc/aws//modules/route_table"
 
   name   = "example-public"
   vpc_id = "vpc-12345678"
 
-  subnets = {
-    "us-east-1a" = {
-      cidr_block         = "10.98.1.0/24"
-      availability_zone  = "us-east-1a"
-      create_nat_gateway = true
+  routes = {
+    ipv4_igw = {
+      destination_cidr_block = "0.0.0.0/0"
+      gateway_id             = "igw-1ff7a07b"
     }
-    "us-east-1b" = {
-      cidr_block         = "10.98.2.0/24"
-      availability_zone  = "us-east-1b"
-      create_nat_gateway = true
-    }
-    "us-east-1c" = {
-      cidr_block         = "10.98.3.0/24"
-      availability_zone  = "us-east-1a"
-      create_nat_gateway = true
+    ipv6_igw = {
+      destination_cidr_block = "::/0"
+      gateway_id             = "igw-1ff7a07b"
     }
   }
-
-  route_tables = {
-    shared = {
-      associated_subnet_keys = ["us-east-1a", "us-east-1a", "us-east-1c"]
-      routes = {
-        igw = {
-          destination_cidr_block = "0.0.0.0/0"
-          gateway_id             = "igw-1ff7a07b"
-        }
-      }
-    }
-  }
-
-  ingress_network_acl_rules = {
-    100 = {
-      protocol    = "-1"
-      rule_action = "Allow"
-      cidr_block  = "0.0.0.0/0"
-      from_port   = 0
-      to_port     = 0
-    }
-  }
-
-  egress_network_acl_rules = {
-    100 = {
-      protocol    = "-1"
-      rule_action = "Allow"
-      cidr_block  = "0.0.0.0/0"
-      from_port   = 0
-      to_port     = 0
-    }
-  }
-
-  tags = {
-    Owner       = "user"
-    Environment = "dev"
-  }
-}
-```
-### Private Subnets
-
-```hcl
-module "private_subnets" {
-  source = "terraform-aws-modules/vpc/aws//modules/subnets"
-
-  name   = "example-private"
-  vpc_id = "vpc-12345678"
-
-  # TODO
 
   tags = {
     Owner       = "user"
@@ -127,7 +67,8 @@ No modules.
 | [aws_network_acl_rule.egress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
 | [aws_network_acl_rule.ingress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
 | [aws_redshift_subnet_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/redshift_subnet_group) | resource |
-| [aws_route_table_association.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association) | resource |
+| [aws_route.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
+| [aws_route_table_association.subnet](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association) | resource |
 | [aws_subnet.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet) | resource |
 
 ## Inputs
@@ -149,6 +90,7 @@ No modules.
 | <a name="input_network_acl_tags"></a> [network\_acl\_tags](#input\_network\_acl\_tags) | Additional tags for the Network ACL | `map(string)` | `{}` | no |
 | <a name="input_rds_subnet_groups"></a> [rds\_subnet\_groups](#input\_rds\_subnet\_groups) | Map of RDS Database subnet group [definitions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_subnet_group) | `any` | `{}` | no |
 | <a name="input_redshift_subnet_groups"></a> [redshift\_subnet\_groups](#input\_redshift\_subnet\_groups) | Map of Redshift subnet group [definitions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/redshift_subnet_group) | `any` | `{}` | no |
+| <a name="input_routes"></a> [routes](#input\_routes) | Map of route definitions to create | `map(any)` | `{}` | no |
 | <a name="input_subnet_timeouts"></a> [subnet\_timeouts](#input\_subnet\_timeouts) | Create and delete timeout configurations for subnets | `map(string)` | `{}` | no |
 | <a name="input_subnets"></a> [subnets](#input\_subnets) | Map of subnet definitions | `any` | `{}` | no |
 | <a name="input_subnets_default"></a> [subnets\_default](#input\_subnets\_default) | Map of subnet default configurations used across all subnets created | `any` | `{}` | no |
@@ -180,7 +122,10 @@ No modules.
 | <a name="output_network_acl_rules_ingress"></a> [network\_acl\_rules\_ingress](#output\_network\_acl\_rules\_ingress) | Map of ingress network ACL rules created and their attributes |
 | <a name="output_rds_subnet_groups"></a> [rds\_subnet\_groups](#output\_rds\_subnet\_groups) | Map of RDS Database subnet groups created and their attributes |
 | <a name="output_redshift_subnet_groups"></a> [redshift\_subnet\_groups](#output\_redshift\_subnet\_groups) | Map of DMS Replication subnet groups created and their attributes |
+| <a name="output_route_table_gateway_association_ids"></a> [route\_table\_gateway\_association\_ids](#output\_route\_table\_gateway\_association\_ids) | List of gateway route table association IDs |
+| <a name="output_route_table_ids"></a> [route\_table\_ids](#output\_route\_table\_ids) | List of route table IDs |
 | <a name="output_route_table_subnet_association_ids"></a> [route\_table\_subnet\_association\_ids](#output\_route\_table\_subnet\_association\_ids) | List of subnet route table association IDs |
+| <a name="output_route_tables"></a> [route\_tables](#output\_route\_tables) | Map of route tables created and their attributes |
 | <a name="output_subnets"></a> [subnets](#output\_subnets) | Map of subnets created and their attributes |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 

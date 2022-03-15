@@ -111,20 +111,20 @@ output "database_subnets_ipv6_cidr_blocks" {
   value       = module.database_subnets.ipv6_cidr_blocks
 }
 
-# output "database_subnet_group" {
-#   description = "ID of database subnet group"
-#   value       = [for group in module.database_subnets.rds_subnet_groups : group.id][0]
-# }
+output "database_subnet_group" {
+  description = "ID of database subnet group"
+  value       = [for group in module.database_subnets.rds_subnet_groups : group.id]
+}
 
-# output "database_subnet_group_name" {
-#   description = "Name of database subnet group"
-#   value       = [for group in module.database_subnets.rds_subnet_groups : group.name][0]
-# }
+output "database_subnet_group_name" {
+  description = "Name of database subnet group"
+  value       = [for group in module.database_subnets.rds_subnet_groups : group.name]
+}
 
 # Route Tables
-output "public_route_table_ids" {
-  description = "List of IDs of public route tables"
-  value       = module.public_subnets.route_table_ids
+output "public_route_table_id" {
+  description = "Public route table ID"
+  value       = module.public_route_table.id
 }
 
 output "public_route_table_association_ids" {
@@ -134,7 +134,7 @@ output "public_route_table_association_ids" {
 
 output "private_route_table_ids" {
   description = "List of IDs of private route tables"
-  value       = module.private_subnets.route_table_ids
+  value       = [for table in module.private_route_tables : table.id]
 }
 
 output "private_route_table_association_ids" {
@@ -142,9 +142,9 @@ output "private_route_table_association_ids" {
   value       = module.private_subnets.route_table_subnet_association_ids
 }
 
-output "database_route_table_ids" {
-  description = "List of IDs of database route tables"
-  value       = module.database_subnets.route_table_ids
+output "database_route_table_id" {
+  description = "Database route table ID"
+  value       = module.database_route_table.id
 }
 
 output "database_route_table_association_ids" {

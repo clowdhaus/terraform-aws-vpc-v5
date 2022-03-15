@@ -43,21 +43,6 @@ resource "aws_subnet" "this" {
 # EC2 Subnet CIDR Reservation
 ################################################################################
 
-# resource "aws_ec2_subnet_cidr_reservation" "this" {
-#   for_each = try(element(values({
-#     for k, v in var.subnets : k => {
-#       # Add subnet map key into CIDR reservation map so we can flatten nested maps with `values()`
-#       for k2, v2 in v.ec2_subnet_cidr_reservations : k2 => merge({ subnet_key = k }, v2)
-#     } if var.create && can(v.ec2_subnet_cidr_reservations)
-#   }), 0), {})
-
-#   description = try(each.value.description, null)
-#   # TODO - is this IPv4 only or does IPv6 work as well?
-#   cidr_block       = each.value.cidr_block
-#   reservation_type = each.value.reservation_type
-#   subnet_id        = aws_subnet.this[each.value.subnet_key].id
-# }
-
 resource "aws_ec2_subnet_cidr_reservation" "this" {
   for_each = { for k, v in var.cidr_reservations : k => v if var.create }
 
@@ -69,64 +54,15 @@ resource "aws_ec2_subnet_cidr_reservation" "this" {
 }
 
 ################################################################################
-# Route Table / Routes
+# Route Table Association
+# See `route` sub-module for associating to gateway
 ################################################################################
 
-resource "aws_route_table" "this" {
-  for_each = { for k, v in var.route_tables : k => v if var.create }
+resource "aws_route_table_association" "this" {
+  for_each = { for k, v in var.subnets : k => v if var.create }
 
-  vpc_id = var.vpc_id
-
-  timeouts {
-    create = try(var.route_table_timeouts.create, null)
-    update = try(var.route_table_timeouts.update, null)
-    delete = try(var.route_table_timeouts.delete, null)
-  }
-
-  tags = merge(
-    var.tags,
-    { Name = "${var.name}-${each.key}" },
-    try(each.value.tags, {})
-  )
-}
-
-resource "aws_route" "this" {
-  for_each = element(values({
-    for k, v in var.route_tables : k => {
-      for k2, v2 in v.routes : k2 => merge({ route_table_key = k }, v2)
-    } # if var.create && can(v.routes) # TODO - this will cause an issue if create == false
-  }), 0)
-
-  route_table_id = try(aws_route_table.this[each.value.route_table_key].id, each.value.route_table_id)
-
-  destination_cidr_block      = try(each.value.destination_ipv4_cidr_block, null)
-  destination_ipv6_cidr_block = try(each.value.destination_ipv6_cidr_block, null)
-  destination_prefix_list_id  = try(each.value.destination_prefix_list_id, null)
-
-  # One of the following target arguments must be supplied:
-  carrier_gateway_id        = try(each.value.carrier_gateway_id, null)
-  egress_only_gateway_id    = try(each.value.egress_only_gateway_id, null)
-  gateway_id                = try(each.value.gateway_id, null)
-  nat_gateway_id            = try(aws_nat_gateway.this[each.value.nat_gateway_key].id, each.value.nat_gateway_id, null)
-  local_gateway_id          = try(each.value.local_gateway_id, null)
-  network_interface_id      = try(each.value.network_interface_id, null)
-  transit_gateway_id        = try(each.value.transit_gateway_id, null)
-  vpc_endpoint_id           = try(each.value.vpc_endpoint_id, null)
-  vpc_peering_connection_id = try(each.value.vpc_peering_connection_id, null)
-}
-
-resource "aws_route_table_association" "subnet" {
-  for_each = { for k, v in var.subnets : k => v.route_table_key if var.create && can(v.route_table_key) }
-
-  subnet_id      = try(aws_subnet.this[each.key].id, null)
-  route_table_id = aws_route_table.this[each.value].id
-}
-
-resource "aws_route_table_association" "gateway" {
-  for_each = { for k, v in var.subnets : k => v.gateway_id if var.create && can(v.gateway_id) }
-
-  gateway_id     = each.value.gateway_key
-  route_table_id = aws_route_table.this[each.value.route_table_key].id
+  subnet_id      = aws_subnet.this[each.key].id
+  route_table_id = try(var.subnets_default.route_table_id, each.value.route_table_id, null)
 }
 
 ################################################################################

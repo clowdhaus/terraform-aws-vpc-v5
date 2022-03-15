@@ -107,22 +107,6 @@ variable "redshift_subnet_groups" {
 }
 
 ################################################################################
-# Route Table
-################################################################################
-
-variable "route_tables" {
-  description = "Map of route table definitions"
-  type        = map(any)
-  default     = {}
-}
-
-variable "route_table_timeouts" {
-  description = "Create, update, and delete timeout configurations for route table"
-  type        = map(string)
-  default     = {}
-}
-
-################################################################################
 # Network ACL
 ################################################################################
 
@@ -149,7 +133,3 @@ variable "network_acl_tags" {
   type        = map(string)
   default     = {}
 }
-
-################################################################################
-# NAT Gateway
-################################################################################
