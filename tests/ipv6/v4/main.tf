@@ -156,7 +156,7 @@ module "private_subnets" {
       ipv4_cidr_block   = "10.0.2.0/24"
       ipv6_cidr_block   = element(local.ipv6_cidr_subnets, 3)
       availability_zone = "${local.region}b"
-      route_table_id    = module.private_route_tables["${local.region}a"].id
+      route_table_id    = module.private_route_tables["${local.region}b"].id
     }
   }
 

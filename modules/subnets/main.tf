@@ -33,8 +33,8 @@ resource "aws_subnet" "this" {
 
   tags = merge(
     var.tags,
-    try(var.subnets_default.tags, {}),
     { Name = "${var.name}-${each.key}" },
+    try(var.subnets_default.tags, {}),
     try(each.value.tags, {})
   )
 }
