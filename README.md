@@ -8,23 +8,12 @@
   <img src="https://github.com/clowdhaus/terraform-aws-vpc-v4/blob/main/.github/images/hld.svg" alt="high level diagram">
 </p>
 
-## Design Goals
+## TODOs
 
-1. Use of `for_each` instead of `count` for stable, isolated changes
-2. n-number of subnet groups with custom naming scheme
-  - Currently in `v3.x` only `private`, `public`, `internal`, `database`, and `redshift` are permitted and using those specific names. This has served well for quite some time but with each new feature release by AWS, this current structure is proving to be too rigid and not scalable. In `v4.x` we aim to provide a more flexible approach that will cover a broad suite of use cases - both current and future. We currently receive a large number of change requests centered around subnets as the core construct; it makes the most sense to split this out into its own module and build around this common construct. A module instantiation will create a "subnet group" - that is, a collection of subnets for some purpose
-3. Flexible, customizable tagging scheme
-  - https://github.com/terraform-aws-modules/terraform-aws-vpc/issues/259
-4. Miscellaneous
-  - Ability to stack CIDR ranges - AWS allows up to 5 CIDR ranges to be stacked on a VPC
-  - Changing between 1 NAT gateway vs 1 NAT Gateway per availability zone should not cause traffic disruptions
-  - Flexible route table association - users can select how they want to associate route tables
-  - Support for AWS Network Firewall
-  - Support for ingress/egress only subnets
-5. Align conventions
-  - `cidr_block` -> `ipv4_cidr_block` to compliment `ipv6_cidr_block`
-  - TODO: default routes vs custom routes
-  - TODO: default NACLs vs custom NACLs
+- Align conventions
+  - ✅ `cidr_block` -> `ipv4_cidr_block` to compliment `ipv6_cidr_block`
+  - [ ] default routes vs custom routes
+  - [ ] default NACLs vs custom NACLs
 
 ## Notes
 
@@ -55,7 +44,7 @@
 - ✅ aws_vpc_ipv6_cidr_block_association
 - ✅ aws_egress_only_internet_gateway
 - ✅ aws_internet_gateway
-- ❌ aws_internet_gateway_attachment -> VPC association handled in `aws_internet_gateway`
+- ✅ aws_internet_gateway_attachment
 - ✅ aws_customer_gateway
 - ✅ aws_vpn_gateway
 - ❌ aws_main_route_table_association -> conflicts with `aws_default_route_table`
@@ -72,7 +61,7 @@ This is where most of the network logic is captured; the design is centered arou
 - ✅ aws_network_acl
 - ❌ aws_network_acl_association -> subnet association handled in `aws_subnet_acl`
 - ✅ aws_network_acl_rule
-- ❌ aws_route -> handled within `aws_route_table` due to lifecycle conflict error
+- ✅ aws_route
 - ✅ aws_route_table
 - ✅ aws_route_table_association
 - ✅ aws_nat_gateway
