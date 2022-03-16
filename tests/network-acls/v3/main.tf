@@ -4,6 +4,12 @@ provider "aws" {
 
 locals {
   region = "eu-west-1"
+  name   = "network-acls"
+
+  tags = {
+    Owner       = "user"
+    Environment = "dev"
+  }
 
   network_acls = {
     default_inbound = [
@@ -163,9 +169,7 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "3.12.0"
 
-  # source = "../../"
-
-  name = "network-acls-example"
+  name = local.name
   cidr = "10.0.0.0/16"
 
   azs                 = ["${local.region}a", "${local.region}b", "${local.region}c"]
@@ -192,10 +196,7 @@ module "vpc" {
     Name = "overridden-name-public"
   }
 
-  tags = {
-    Owner       = "user"
-    Environment = "dev"
-  }
+  tags = local.tags
 
   vpc_tags = {
     Name = "vpc-name"

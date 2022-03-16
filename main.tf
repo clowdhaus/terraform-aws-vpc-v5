@@ -251,7 +251,7 @@ resource "aws_default_network_acl" "this" {
       action          = ingress.value.rule_action # to match regular ACL rule
       from_port       = ingress.value.from_port
       protocol        = ingress.value.protocol
-      rule_no         = ingress.value.rule_number # to match regular ACL rule
+      rule_no         = ingress.key # to match regular ACL rule
       to_port         = ingress.value.to_port
       cidr_block      = try(ingress.value.ipv4_cidr_block, null)
       ipv6_cidr_block = try(ingress.value.ipv6_cidr_block, null)
@@ -265,7 +265,7 @@ resource "aws_default_network_acl" "this" {
       action          = egress.value.rule_action # to match regular ACL rule
       from_port       = egress.value.from_port
       protocol        = egress.value.protocol
-      rule_no         = egress.value.rule_number # to match regular ACL rule
+      rule_no         = egress.key # to match regular ACL rule
       to_port         = egress.value.to_port
       cidr_block      = try(egress.value.ipv4_cidr_block, null)
       ipv6_cidr_block = try(egress.value.ipv6_cidr_block, null)
@@ -279,6 +279,14 @@ resource "aws_default_network_acl" "this" {
     { Name = "${var.name}-default" },
     var.default_network_acl_tags,
   )
+
+  lifecycle {
+    ignore_changes = [
+      # Ignore subnets that are dynamically added/removed here
+      # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_network_acl#managing-subnets-in-a-default-network-acl
+      subnet_ids,
+    ]
+  }
 }
 
 ################################################################################

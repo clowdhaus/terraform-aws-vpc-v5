@@ -294,14 +294,14 @@ variable "manage_default_network_acl" {
 
 variable "default_network_acl_ingress_rules" {
   description = "Ingress rules to be added to the Default Network ACL"
-  type        = list(map(string))
-  default     = []
+  type        = any
+  default     = {}
 }
 
 variable "default_network_acl_egress_rules" {
   description = "Egress rules to be added to the Default Network ACL"
-  type        = list(map(string))
-  default     = []
+  type        = any
+  default     = {}
 }
 
 variable "default_network_acl_tags" {
