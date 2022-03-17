@@ -3,35 +3,33 @@ provider "aws" {
 }
 
 locals {
-  name   = "complete-example"
+  name   = "complete-vpc"
   region = "eu-west-1"
+
   tags = {
     Owner       = "user"
     Environment = "staging"
-    Name        = "complete"
   }
 }
 
 ################################################################################
-# VPC Module
+# VPC
 ################################################################################
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "3.12.0"
 
-  # source = "../../"
-
   name = local.name
-  cidr = "20.10.0.0/16" # 10.0.0.0/8 is reserved for EC2-Classic
+  cidr = "10.10.0.0/16"
 
   azs                 = ["${local.region}a", "${local.region}b", "${local.region}c"]
-  private_subnets     = ["20.10.1.0/24", "20.10.2.0/24", "20.10.3.0/24"]
-  public_subnets      = ["20.10.11.0/24", "20.10.12.0/24", "20.10.13.0/24"]
-  database_subnets    = ["20.10.21.0/24", "20.10.22.0/24", "20.10.23.0/24"]
-  elasticache_subnets = ["20.10.31.0/24", "20.10.32.0/24", "20.10.33.0/24"]
-  redshift_subnets    = ["20.10.41.0/24", "20.10.42.0/24", "20.10.43.0/24"]
-  intra_subnets       = ["20.10.51.0/24", "20.10.52.0/24", "20.10.53.0/24"]
+  private_subnets     = ["10.10.1.0/24", "10.10.2.0/24", "10.10.3.0/24"]
+  public_subnets      = ["10.10.11.0/24", "10.10.12.0/24", "10.10.13.0/24"]
+  database_subnets    = ["10.10.21.0/24", "10.10.22.0/24", "10.10.23.0/24"]
+  elasticache_subnets = ["10.10.31.0/24", "10.10.32.0/24", "10.10.33.0/24"]
+  redshift_subnets    = ["10.10.41.0/24", "10.10.42.0/24", "10.10.43.0/24"]
+  intra_subnets       = ["10.10.51.0/24", "10.10.52.0/24", "10.10.53.0/24"]
 
   create_database_subnet_group = false
 
@@ -81,14 +79,12 @@ module "vpc" {
 }
 
 ################################################################################
-# VPC Endpoints Module
+# VPC Endpoints
 ################################################################################
 
 module "vpc_endpoints" {
   source  = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
   version = "3.12.0"
-
-  # source = "../../modules/vpc-endpoints"
 
   vpc_id             = module.vpc.vpc_id
   security_group_ids = [data.aws_security_group.default.id]

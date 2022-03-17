@@ -180,7 +180,7 @@ No modules.
 | <a name="output_network_acl_rules_ingress"></a> [network\_acl\_rules\_ingress](#output\_network\_acl\_rules\_ingress) | Map of ingress network ACL rules created and their attributes |
 | <a name="output_rds_subnet_groups"></a> [rds\_subnet\_groups](#output\_rds\_subnet\_groups) | Map of RDS Database subnet groups created and their attributes |
 | <a name="output_redshift_subnet_groups"></a> [redshift\_subnet\_groups](#output\_redshift\_subnet\_groups) | Map of DMS Replication subnet groups created and their attributes |
-| <a name="output_route_table_subnet_association_ids"></a> [route\_table\_subnet\_association\_ids](#output\_route\_table\_subnet\_association\_ids) | List of subnet route table association IDs |
+| <a name="output_route_table_association_ids"></a> [route\_table\_association\_ids](#output\_route\_table\_association\_ids) | List of subnet route table association IDs |
 | <a name="output_subnets"></a> [subnets](#output\_subnets) | Map of subnets created and their attributes |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 

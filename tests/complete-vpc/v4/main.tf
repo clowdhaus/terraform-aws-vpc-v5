@@ -3,37 +3,27 @@ provider "aws" {
 }
 
 locals {
-  name   = "complete-example"
+  name   = "complete-vpc"
   region = "eu-west-1"
+
   tags = {
     Owner       = "user"
     Environment = "staging"
-    Name        = "complete"
   }
 }
 
 ################################################################################
-# VPC Module
+# VPC
 ################################################################################
 
 module "vpc" {
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "3.12.0"
+  source = "../../../"
 
-  # source = "../../"
+  name            = local.name
+  ipv4_cidr_block = "10.10.0.0/16" # 10.0.0.0/8 is reserved for EC2-Classic
 
-  name = local.name
-  cidr = "20.10.0.0/16" # 10.0.0.0/8 is reserved for EC2-Classic
-
-  azs                 = ["${local.region}a", "${local.region}b", "${local.region}c"]
-  private_subnets     = ["20.10.1.0/24", "20.10.2.0/24", "20.10.3.0/24"]
-  public_subnets      = ["20.10.11.0/24", "20.10.12.0/24", "20.10.13.0/24"]
-  database_subnets    = ["20.10.21.0/24", "20.10.22.0/24", "20.10.23.0/24"]
-  elasticache_subnets = ["20.10.31.0/24", "20.10.32.0/24", "20.10.33.0/24"]
-  redshift_subnets    = ["20.10.41.0/24", "20.10.42.0/24", "20.10.43.0/24"]
-  intra_subnets       = ["20.10.51.0/24", "20.10.52.0/24", "20.10.53.0/24"]
-
-  create_database_subnet_group = false
+  # Not in v3.x
+  enable_dnssec_config = false
 
   manage_default_network_acl = true
   default_network_acl_tags   = { Name = "${local.name}-default" }
@@ -44,14 +34,8 @@ module "vpc" {
   manage_default_security_group = true
   default_security_group_tags   = { Name = "${local.name}-default" }
 
-  enable_dns_hostnames = true
-  enable_dns_support   = true
-
   enable_classiclink             = true
   enable_classiclink_dns_support = true
-
-  enable_nat_gateway = true
-  single_nat_gateway = true
 
   customer_gateways = {
     IP1 = {
@@ -65,35 +49,324 @@ module "vpc" {
     }
   }
 
-  enable_vpn_gateway = true
+  vpn_gateways = {
+    one = {}
+  }
 
-  enable_dhcp_options              = true
+  create_dhcp_options              = true
   dhcp_options_domain_name         = "service.consul"
   dhcp_options_domain_name_servers = ["127.0.0.1", "10.10.0.2"]
 
-  # VPC Flow Logs (Cloudwatch log group and IAM role will be created)
-  enable_flow_log                      = true
-  create_flow_log_cloudwatch_log_group = true
-  create_flow_log_cloudwatch_iam_role  = true
-  flow_log_max_aggregation_interval    = 60
+  # # VPC Flow Logs (Cloudwatch log group and IAM role will be created)
+  # enable_flow_log                      = true
+  # create_flow_log_cloudwatch_log_group = true
+  # create_flow_log_cloudwatch_iam_role  = true
+  # flow_log_max_aggregation_interval    = 60
 
   tags = local.tags
 }
 
 ################################################################################
-# VPC Endpoints Module
+# Route Tables
+################################################################################
+
+module "public_route_table" {
+  source = "../../../modules/route-table"
+
+  name   = "${local.name}-public"
+  vpc_id = module.vpc.id
+
+  routes = {
+    igw_ipv4 = {
+      destination_ipv4_cidr_block = "0.0.0.0/0"
+      gateway_id                  = module.vpc.internet_gateway_id
+    }
+    igw_ipv6 = {
+      destination_ipv6_cidr_block = "::/0"
+      gateway_id                  = module.vpc.internet_gateway_id
+    }
+  }
+
+  tags = local.tags
+}
+
+module "private_route_table" {
+  source = "../../../modules/route-table"
+
+  name   = "${local.name}-private"
+  vpc_id = module.vpc.id
+
+  routes = {
+    eigw_ipv6 = {
+      destination_ipv6_cidr_block = "::/0"
+      egress_only_gateway_id      = module.vpc.egress_only_internet_gateway_id
+    }
+  }
+
+  tags = local.tags
+}
+
+module "database_route_table" {
+  source = "../../../modules/route-table"
+
+  name   = "${local.name}-database"
+  vpc_id = module.vpc.id
+
+  routes = {
+    igw_ipv4 = {
+      destination_ipv4_cidr_block = "0.0.0.0/0"
+      gateway_id                  = module.vpc.internet_gateway_id
+    }
+    eigw_ipv6 = {
+      destination_ipv6_cidr_block = "::/0"
+      egress_only_gateway_id      = module.vpc.egress_only_internet_gateway_id
+    }
+  }
+
+  tags = local.tags
+}
+
+module "elasticache_route_table" {
+  source = "../../../modules/route-table"
+
+  name   = "${local.name}-elasticache"
+  vpc_id = module.vpc.id
+
+  tags = local.tags
+}
+
+module "redshift_route_table" {
+  source = "../../../modules/route-table"
+
+  name   = "${local.name}-redshift"
+  vpc_id = module.vpc.id
+
+  tags = local.tags
+}
+
+module "intra_route_table" {
+  source = "../../../modules/route-table"
+
+  name   = "${local.name}-intra"
+  vpc_id = module.vpc.id
+
+  tags = local.tags
+}
+
+################################################################################
+# Subnets
+################################################################################
+
+module "public_subnets" {
+  source = "../../../modules/subnets"
+
+  name   = "${local.name}-public"
+  vpc_id = module.vpc.id
+
+  # Backwards compat
+  create_network_acl = false
+
+  subnets_default = {
+    map_public_ip_on_launch = true
+    route_table_id          = module.public_route_table.id
+  }
+
+  subnets = {
+    "${local.region}a" = {
+      ipv4_cidr_block   = "10.10.11.0/24"
+      availability_zone = "${local.region}a"
+    }
+    "${local.region}b" = {
+      ipv4_cidr_block   = "10.10.12.0/24"
+      availability_zone = "${local.region}b"
+    }
+    "${local.region}c" = {
+      ipv4_cidr_block   = "10.10.13.0/24"
+      availability_zone = "${local.region}c"
+    }
+  }
+
+  tags = local.tags
+}
+
+module "private_subnets" {
+  source = "../../../modules/subnets"
+
+  name   = "${local.name}-private"
+  vpc_id = module.vpc.id
+
+  # Backwards compat
+  create_network_acl = false
+
+  subnets_default = {
+    route_table_id = module.private_route_table.id
+  }
+
+  subnets = {
+    "${local.region}a" = {
+      ipv4_cidr_block   = "10.0.1.0/24"
+      availability_zone = "${local.region}a"
+    }
+    "${local.region}b" = {
+      ipv4_cidr_block   = "10.0.2.0/24"
+      availability_zone = "${local.region}b"
+    }
+    "${local.region}c" = {
+      ipv4_cidr_block   = "10.0.3.0/24"
+      availability_zone = "${local.region}c"
+    }
+  }
+
+  tags = local.tags
+}
+
+module "database_subnets" {
+  source = "../../../modules/subnets"
+
+  name   = "${local.name}-database"
+  vpc_id = module.vpc.id
+
+  # Backwards compat
+  create_network_acl = false
+
+  subnets_default = {
+    route_table_id = module.database_route_table.id
+  }
+
+  subnets = {
+    "${local.region}a" = {
+      ipv4_cidr_block   = "10.0.21.0/24"
+      availability_zone = "${local.region}a"
+    }
+    "${local.region}b" = {
+      ipv4_cidr_block   = "10.0.22.0/24"
+      availability_zone = "${local.region}b"
+    }
+    "${local.region}c" = {
+      ipv4_cidr_block   = "10.0.23.0/24"
+      availability_zone = "${local.region}c"
+    }
+  }
+
+  rds_subnet_groups = {
+    database = {
+      name                   = local.name
+      description            = "Database subnet group for ${local.name}"
+      associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
+
+      tags = {
+        Name = local.name
+      }
+    }
+  }
+
+  tags = local.tags
+}
+
+module "elasticache_subnets" {
+  source = "../../../modules/subnets"
+
+  name   = "${local.name}-elasticache"
+  vpc_id = module.vpc.id
+
+  # Backwards compat
+  create_network_acl = false
+
+  subnets_default = {
+    route_table_id = module.elasticache_route_table.id
+  }
+
+  subnets = {
+    "${local.region}a" = {
+      ipv4_cidr_block   = "10.0.31.0/24"
+      availability_zone = "${local.region}a"
+    }
+    "${local.region}b" = {
+      ipv4_cidr_block   = "10.0.32.0/24"
+      availability_zone = "${local.region}b"
+    }
+    "${local.region}c" = {
+      ipv4_cidr_block   = "10.0.33.0/24"
+      availability_zone = "${local.region}c"
+    }
+  }
+
+  tags = local.tags
+}
+
+module "redshift_subnets" {
+  source = "../../../modules/subnets"
+
+  name   = "${local.name}-redshift"
+  vpc_id = module.vpc.id
+
+  # Backwards compat
+  create_network_acl = false
+
+  subnets_default = {
+    route_table_id = module.redshift_route_table.id
+  }
+
+  subnets = {
+    "${local.region}a" = {
+      ipv4_cidr_block   = "10.0.41.0/24"
+      availability_zone = "${local.region}a"
+    }
+    "${local.region}b" = {
+      ipv4_cidr_block   = "10.0.42.0/24"
+      availability_zone = "${local.region}b"
+    }
+    "${local.region}c" = {
+      ipv4_cidr_block   = "10.0.43.0/24"
+      availability_zone = "${local.region}c"
+    }
+  }
+
+  tags = local.tags
+}
+
+module "intra_subnets" {
+  source = "../../../modules/subnets"
+
+  name   = "${local.name}-intra"
+  vpc_id = module.vpc.id
+
+  # Backwards compat
+  create_network_acl = false
+
+  subnets_default = {
+    route_table_id = module.intra_route_table.id
+  }
+
+  subnets = {
+    "${local.region}a" = {
+      ipv4_cidr_block   = "10.0.51.0/24"
+      availability_zone = "${local.region}a"
+    }
+    "${local.region}b" = {
+      ipv4_cidr_block   = "10.0.52.0/24"
+      availability_zone = "${local.region}b"
+    }
+    "${local.region}c" = {
+      ipv4_cidr_block   = "10.0.53.0/24"
+      availability_zone = "${local.region}c"
+    }
+  }
+
+  tags = local.tags
+}
+
+################################################################################
+# VPC Endpoints
 ################################################################################
 
 module "vpc_endpoints" {
-  source  = "terraform-aws-modules/vpc/aws//modules/vpc-endpoints"
-  version = "3.12.0"
-
-  # source = "../../modules/vpc-endpoints"
+  source = "../../../modules/vpc-endpoints"
 
   vpc_id             = module.vpc.vpc_id
   security_group_ids = [data.aws_security_group.default.id]
 
-  endpoints = {
+  vpc_endpoints = {
     s3 = {
       service = "s3"
       tags    = { Name = "s3-vpc-endpoint" }

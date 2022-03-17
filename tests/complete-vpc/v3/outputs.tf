@@ -28,21 +28,6 @@ output "default_route_table_id" {
   value       = module.vpc.default_route_table_id
 }
 
-output "vpc_instance_tenancy" {
-  description = "Tenancy of instances spin up within VPC"
-  value       = module.vpc.vpc_instance_tenancy
-}
-
-output "vpc_enable_dns_support" {
-  description = "Whether or not the VPC has DNS support"
-  value       = module.vpc.vpc_enable_dns_support
-}
-
-output "vpc_enable_dns_hostnames" {
-  description = "Whether or not the VPC has DNS hostname support"
-  value       = module.vpc.vpc_enable_dns_hostnames
-}
-
 output "vpc_main_route_table_id" {
   description = "The ID of the main route table associated with this VPC"
   value       = module.vpc.vpc_main_route_table_id
@@ -106,26 +91,6 @@ output "public_subnets_cidr_blocks" {
 output "public_subnets_ipv6_cidr_blocks" {
   description = "List of IPv6 cidr_blocks of public subnets in an IPv6 enabled VPC"
   value       = module.vpc.public_subnets_ipv6_cidr_blocks
-}
-
-output "outpost_subnets" {
-  description = "List of IDs of outpost subnets"
-  value       = module.vpc.outpost_subnets
-}
-
-output "outpost_subnet_arns" {
-  description = "List of ARNs of outpost subnets"
-  value       = module.vpc.outpost_subnet_arns
-}
-
-output "outpost_subnets_cidr_blocks" {
-  description = "List of cidr_blocks of outpost subnets"
-  value       = module.vpc.outpost_subnets_cidr_blocks
-}
-
-output "outpost_subnets_ipv6_cidr_blocks" {
-  description = "List of IPv6 cidr_blocks of outpost subnets in an IPv6 enabled VPC"
-  value       = module.vpc.outpost_subnets_ipv6_cidr_blocks
 }
 
 output "database_subnets" {
@@ -261,41 +226,6 @@ output "elasticache_route_table_ids" {
 output "intra_route_table_ids" {
   description = "List of IDs of intra route tables"
   value       = module.vpc.intra_route_table_ids
-}
-
-output "public_internet_gateway_route_id" {
-  description = "ID of the internet gateway route"
-  value       = module.vpc.public_internet_gateway_route_id
-}
-
-output "public_internet_gateway_ipv6_route_id" {
-  description = "ID of the IPv6 internet gateway route"
-  value       = module.vpc.public_internet_gateway_ipv6_route_id
-}
-
-output "database_internet_gateway_route_id" {
-  description = "ID of the database internet gateway route"
-  value       = module.vpc.database_internet_gateway_route_id
-}
-
-output "database_nat_gateway_route_ids" {
-  description = "List of IDs of the database nat gateway route"
-  value       = module.vpc.database_nat_gateway_route_ids
-}
-
-output "database_ipv6_egress_route_id" {
-  description = "ID of the database IPv6 egress route"
-  value       = module.vpc.database_ipv6_egress_route_id
-}
-
-output "private_nat_gateway_route_ids" {
-  description = "List of IDs of the private nat gateway route"
-  value       = module.vpc.private_nat_gateway_route_ids
-}
-
-output "private_ipv6_egress_route_ids" {
-  description = "List of IDs of the ipv6 egress route"
-  value       = module.vpc.private_ipv6_egress_route_ids
 }
 
 output "private_route_table_association_ids" {
@@ -461,16 +391,6 @@ output "private_network_acl_id" {
 output "private_network_acl_arn" {
   description = "ARN of the private network ACL"
   value       = module.vpc.private_network_acl_arn
-}
-
-output "outpost_network_acl_id" {
-  description = "ID of the outpost network ACL"
-  value       = module.vpc.outpost_network_acl_id
-}
-
-output "outpost_network_acl_arn" {
-  description = "ARN of the outpost network ACL"
-  value       = module.vpc.outpost_network_acl_arn
 }
 
 output "intra_network_acl_id" {

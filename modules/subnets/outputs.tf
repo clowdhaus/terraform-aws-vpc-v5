@@ -85,7 +85,7 @@ output "ec2_subnet_cidr_reservations" {
 # See `route` sub-module for associating to gateway
 ################################################################################
 
-output "route_table_subnet_association_ids" {
+output "route_table_association_ids" {
   description = "List of subnet route table association IDs"
   value       = [for association in aws_route_table_association.this : association.id]
 }

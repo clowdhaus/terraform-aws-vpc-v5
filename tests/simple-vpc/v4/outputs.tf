@@ -100,12 +100,12 @@ output "private_route_table_id" {
 
 output "private_route_table_subnet_association_ids" {
   description = "List of IDs of the private route table association"
-  value       = module.private_subnets.route_table_subnet_association_ids
+  value       = module.private_subnets.route_table_association_ids
 }
 
 output "public_route_table_subnet_association_ids" {
   description = "List of IDs of the public route table association"
-  value       = module.public_subnets.route_table_subnet_association_ids
+  value       = module.public_subnets.route_table_association_ids
 }
 
 output "dhcp_options_id" {

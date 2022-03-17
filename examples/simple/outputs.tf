@@ -376,7 +376,7 @@ output "public_subnets_route_table_id" {
 
 output "public_route_table_subnet_association_ids" {
   description = "List of subnet route table association IDs"
-  value       = module.public_subnets.route_table_subnet_association_ids
+  value       = module.public_subnets.route_table_association_ids
 }
 
 output "public_route_table_gateway_association_ids" {
@@ -392,7 +392,7 @@ output "private_subnets_route_table_id" {
 
 output "private_route_table_subnet_association_ids" {
   description = "List of subnet route table association IDs"
-  value       = module.private_subnets.route_table_subnet_association_ids
+  value       = module.private_subnets.route_table_association_ids
 }
 
 output "private_route_table_gateway_association_ids" {
