@@ -95,6 +95,20 @@ This is where most of the network logic is captured; the design is centered arou
 - ✅ aws_route53_resolver_firewall_rule_group
 - ✅ aws_route53_resolver_firewall_rule_group_association
 
+### Network Manager
+
+:warning: requires v4.6.0
+
+- [ ] aws_networkmanager_connection
+- [ ] aws_networkmanager_customer_gateway_association
+- [ ] aws_networkmanager_device
+- [ ] aws_networkmanager_global_network
+- [ ] aws_networkmanager_link
+- [ ] aws_networkmanager_link_association
+- [ ] aws_networkmanager_site
+- [ ] aws_networkmanager_transit_gateway_connect_peer_association
+- [ ] aws_networkmanager_transit_gateway_registration
+
 ### EC2 Misc
 
 - [ ] aws_ec2_managed_prefix_list
