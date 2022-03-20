@@ -327,7 +327,7 @@ variable "default_route_table_propagating_vgws" {
 }
 
 variable "default_route_table_routes" {
-  description = "Configuration block of routes. See https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_route_table#route"
+  description = "Configuration block of routes. See [`route`](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_route_table#route) for more information"
   type        = list(map(string))
   default     = []
 }
