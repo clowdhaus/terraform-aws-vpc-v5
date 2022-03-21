@@ -21,15 +21,15 @@ module "vpc" {
   version = "3.12.0"
 
   name = local.name
-  cidr = "10.10.0.0/16"
+  cidr = "172.16.0.0/16" # 10.0.0.0/8 is reserved for EC2-Classic
 
   azs                 = ["${local.region}a", "${local.region}b", "${local.region}c"]
-  private_subnets     = ["10.10.1.0/24", "10.10.2.0/24", "10.10.3.0/24"]
-  public_subnets      = ["10.10.11.0/24", "10.10.12.0/24", "10.10.13.0/24"]
-  database_subnets    = ["10.10.21.0/24", "10.10.22.0/24", "10.10.23.0/24"]
-  elasticache_subnets = ["10.10.31.0/24", "10.10.32.0/24", "10.10.33.0/24"]
-  redshift_subnets    = ["10.10.41.0/24", "10.10.42.0/24", "10.10.43.0/24"]
-  intra_subnets       = ["10.10.51.0/24", "10.10.52.0/24", "10.10.53.0/24"]
+  private_subnets     = ["172.16.1.0/24", "172.16.2.0/24", "172.16.3.0/24"]
+  public_subnets      = ["172.16.11.0/24", "172.16.12.0/24", "172.16.13.0/24"]
+  database_subnets    = ["172.16.21.0/24", "172.16.22.0/24", "172.16.23.0/24"]
+  elasticache_subnets = ["172.16.31.0/24", "172.16.32.0/24", "172.16.33.0/24"]
+  redshift_subnets    = ["172.16.41.0/24", "172.16.42.0/24", "172.16.43.0/24"]
+  intra_subnets       = ["172.16.51.0/24", "172.16.52.0/24", "172.16.53.0/24"]
 
   create_database_subnet_group = false
 
@@ -67,7 +67,7 @@ module "vpc" {
 
   enable_dhcp_options              = true
   dhcp_options_domain_name         = "service.consul"
-  dhcp_options_domain_name_servers = ["127.0.0.1", "10.10.0.2"]
+  dhcp_options_domain_name_servers = ["127.0.0.1", "172.16.0.2"]
 
   # VPC Flow Logs (Cloudwatch log group and IAM role will be created)
   enable_flow_log                      = true
@@ -88,6 +88,7 @@ module "vpc_endpoints" {
 
   vpc_id             = module.vpc.vpc_id
   security_group_ids = [data.aws_security_group.default.id]
+  subnet_ids         = module.vpc.private_subnets
 
   endpoints = {
     s3 = {
@@ -104,67 +105,55 @@ module "vpc_endpoints" {
     ssm = {
       service             = "ssm"
       private_dns_enabled = true
-      subnet_ids          = module.vpc.private_subnets
       security_group_ids  = [aws_security_group.vpc_tls.id]
     },
     ssmmessages = {
       service             = "ssmmessages"
       private_dns_enabled = true
-      subnet_ids          = module.vpc.private_subnets
     },
     lambda = {
       service             = "lambda"
       private_dns_enabled = true
-      subnet_ids          = module.vpc.private_subnets
     },
     ecs = {
       service             = "ecs"
       private_dns_enabled = true
-      subnet_ids          = module.vpc.private_subnets
     },
     ecs_telemetry = {
       service             = "ecs-telemetry"
       private_dns_enabled = true
-      subnet_ids          = module.vpc.private_subnets
     },
     ec2 = {
       service             = "ec2"
       private_dns_enabled = true
-      subnet_ids          = module.vpc.private_subnets
       security_group_ids  = [aws_security_group.vpc_tls.id]
     },
     ec2messages = {
       service             = "ec2messages"
       private_dns_enabled = true
-      subnet_ids          = module.vpc.private_subnets
     },
     ecr_api = {
       service             = "ecr.api"
       private_dns_enabled = true
-      subnet_ids          = module.vpc.private_subnets
       policy              = data.aws_iam_policy_document.generic_endpoint_policy.json
     },
     ecr_dkr = {
       service             = "ecr.dkr"
       private_dns_enabled = true
-      subnet_ids          = module.vpc.private_subnets
       policy              = data.aws_iam_policy_document.generic_endpoint_policy.json
     },
     kms = {
       service             = "kms"
       private_dns_enabled = true
-      subnet_ids          = module.vpc.private_subnets
       security_group_ids  = [aws_security_group.vpc_tls.id]
     },
     codedeploy = {
       service             = "codedeploy"
       private_dns_enabled = true
-      subnet_ids          = module.vpc.private_subnets
     },
     codedeploy_commands_secure = {
       service             = "codedeploy-commands-secure"
       private_dns_enabled = true
-      subnet_ids          = module.vpc.private_subnets
     },
   }
 

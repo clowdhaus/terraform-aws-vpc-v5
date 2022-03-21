@@ -208,21 +208,6 @@ output "private_route_table_ids" {
   value       = module.vpc.private_route_table_ids
 }
 
-output "database_route_table_ids" {
-  description = "List of IDs of database route tables"
-  value       = module.vpc.database_route_table_ids
-}
-
-output "redshift_route_table_ids" {
-  description = "List of IDs of redshift route tables"
-  value       = module.vpc.redshift_route_table_ids
-}
-
-output "elasticache_route_table_ids" {
-  description = "List of IDs of elasticache route tables"
-  value       = module.vpc.elasticache_route_table_ids
-}
-
 output "intra_route_table_ids" {
   description = "List of IDs of intra route tables"
   value       = module.vpc.intra_route_table_ids
@@ -231,26 +216,6 @@ output "intra_route_table_ids" {
 output "private_route_table_association_ids" {
   description = "List of IDs of the private route table association"
   value       = module.vpc.private_route_table_association_ids
-}
-
-output "database_route_table_association_ids" {
-  description = "List of IDs of the database route table association"
-  value       = module.vpc.database_route_table_association_ids
-}
-
-output "redshift_route_table_association_ids" {
-  description = "List of IDs of the redshift route table association"
-  value       = module.vpc.redshift_route_table_association_ids
-}
-
-output "redshift_public_route_table_association_ids" {
-  description = "List of IDs of the public redshidt route table association"
-  value       = module.vpc.redshift_public_route_table_association_ids
-}
-
-output "elasticache_route_table_association_ids" {
-  description = "List of IDs of the elasticache route table association"
-  value       = module.vpc.elasticache_route_table_association_ids
 }
 
 output "intra_route_table_association_ids" {
@@ -442,11 +407,6 @@ output "vpc_flow_log_id" {
 output "vpc_flow_log_destination_arn" {
   description = "The ARN of the destination for VPC Flow Logs"
   value       = module.vpc.vpc_flow_log_destination_arn
-}
-
-output "vpc_flow_log_destination_type" {
-  description = "The type of the destination for VPC Flow Logs"
-  value       = module.vpc.vpc_flow_log_destination_type
 }
 
 output "vpc_flow_log_cloudwatch_iam_role_arn" {
