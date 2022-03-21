@@ -20,7 +20,7 @@ module "vpc" {
   source = "../../../"
 
   name            = local.name
-  ipv4_cidr_block = "10.30.0.0/16"
+  ipv4_cidr_block = "10.10.0.0/16"
 
   # Not in v3.x
   enable_dnssec_config          = false
@@ -41,11 +41,14 @@ module "vpc_flow_log" {
   vpc_id = module.vpc.id
 
   create_cloudwatch_log_group            = true
-  cloudwatch_log_group_name              = "/aws/flow-log/vpc-${module.vpc.id}"
-  cloudwatch_log_group_retention_in_days = 7
+  cloudwatch_log_group_name              = "/aws/vpc-flow-log/${module.vpc.id}"
+  cloudwatch_log_group_retention_in_days = 0
   create_cloudwatch_iam_role             = true
+  max_aggregation_interval               = 60
 
-  tags = local.tags
+  tags = merge(local.tags, {
+    Name = "vpc-flow-logs-cloudwatch-logs-default"
+  })
 }
 
 ################################################################################
@@ -77,6 +80,8 @@ module "public_subnets" {
 
   name   = "${local.name}-public"
   vpc_id = module.vpc.id
+
+  create_network_acl = false
 
   subnets_default = {
     map_public_ip_on_launch = true

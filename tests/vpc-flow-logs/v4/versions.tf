@@ -6,11 +6,6 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 4.4"
     }
-
-    random = {
-      source  = "hashicorp/random"
-      version = ">= 2"
-    }
   }
 
   # Used to aid in diffing across v3/v4 in separate folders
