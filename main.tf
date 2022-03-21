@@ -245,35 +245,6 @@ resource "aws_default_network_acl" "this" {
 
   default_network_acl_id = try(aws_vpc.this[0].default_network_acl_id, null)
 
-  dynamic "ingress" {
-    for_each = var.default_network_acl_ingress_rules
-    content {
-      action          = ingress.value.rule_action # to match regular ACL rule
-      from_port       = ingress.value.from_port
-      protocol        = ingress.value.protocol
-      rule_no         = ingress.key # to match regular ACL rule
-      to_port         = ingress.value.to_port
-      cidr_block      = try(ingress.value.ipv4_cidr_block, null)
-      ipv6_cidr_block = try(ingress.value.ipv6_cidr_block, null)
-      icmp_code       = try(ingress.value.icmp_code, null)
-      icmp_type       = try(ingress.value.icmp_type, null)
-    }
-  }
-  dynamic "egress" {
-    for_each = var.default_network_acl_egress_rules
-    content {
-      action          = egress.value.rule_action # to match regular ACL rule
-      from_port       = egress.value.from_port
-      protocol        = egress.value.protocol
-      rule_no         = egress.key # to match regular ACL rule
-      to_port         = egress.value.to_port
-      cidr_block      = try(egress.value.ipv4_cidr_block, null)
-      ipv6_cidr_block = try(egress.value.ipv6_cidr_block, null)
-      icmp_code       = try(egress.value.icmp_code, null)
-      icmp_type       = try(egress.value.icmp_type, null)
-    }
-  }
-
   tags = merge(
     var.tags,
     { Name = "${var.name}-default" },
@@ -285,8 +256,45 @@ resource "aws_default_network_acl" "this" {
       # Ignore subnets that are dynamically added/removed here
       # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_network_acl#managing-subnets-in-a-default-network-acl
       subnet_ids,
+      # Ignore ingress/egress since those are controlled below
+      ingress,
+      egress,
     ]
   }
+}
+
+resource "aws_network_acl_rule" "default_ingress" {
+  for_each = { for k, v in var.default_network_acl_ingress_rules : k => v if var.create && var.manage_default_network_acl }
+
+  network_acl_id = aws_default_network_acl.this[0].id
+
+  rule_number     = each.key
+  egress          = false
+  protocol        = each.value.protocol
+  rule_action     = each.value.rule_action
+  cidr_block      = try(each.value.ipv4_cidr_block, null)
+  ipv6_cidr_block = try(each.value.ipv6_cidr_block, null)
+  from_port       = try(each.value.from_port, null)
+  to_port         = try(each.value.to_port, null)
+  icmp_type       = try(each.value.icmp_type, null)
+  icmp_code       = try(each.value.icmp_code, null)
+}
+
+resource "aws_network_acl_rule" "default_egress" {
+  for_each = { for k, v in var.default_network_acl_egress_rules : k => v if var.create && var.manage_default_network_acl }
+
+  network_acl_id = aws_default_network_acl.this[0].id
+
+  rule_number     = each.key
+  egress          = true
+  protocol        = each.value.protocol
+  rule_action     = each.value.rule_action
+  cidr_block      = try(each.value.ipv4_cidr_block, null)
+  ipv6_cidr_block = try(each.value.ipv6_cidr_block, null)
+  from_port       = try(each.value.from_port, null)
+  to_port         = try(each.value.to_port, null)
+  icmp_type       = try(each.value.icmp_type, null)
+  icmp_code       = try(each.value.icmp_code, null)
 }
 
 ################################################################################
@@ -298,26 +306,6 @@ resource "aws_default_route_table" "this" {
 
   default_route_table_id = aws_vpc.this[0].default_route_table_id
   propagating_vgws       = var.default_route_table_propagating_vgws
-
-  dynamic "route" {
-    for_each = var.default_route_table_routes
-    content {
-      # One of the following destinations must be provided
-      cidr_block                 = route.value.ipv4_cidr_block
-      ipv6_cidr_block            = try(route.value.ipv6_cidr_block, null)
-      destination_prefix_list_id = try(route.value.destination_prefix_list_id, null)
-
-      # One of the following targets must be provided
-      egress_only_gateway_id    = try(route.value.egress_only_gateway_id, null)
-      gateway_id                = try(route.value.gateway_id, null)
-      instance_id               = try(route.value.instance_id, null)
-      nat_gateway_id            = try(route.value.nat_gateway_id, null)
-      network_interface_id      = try(route.value.network_interface_id, null)
-      transit_gateway_id        = try(route.value.transit_gateway_id, null)
-      vpc_endpoint_id           = try(route.value.vpc_endpoint_id, null)
-      vpc_peering_connection_id = try(route.value.vpc_peering_connection_id, null)
-    }
-  }
 
   dynamic "timeouts" {
     for_each = var.default_route_table_timeouts
@@ -332,6 +320,40 @@ resource "aws_default_route_table" "this" {
     { Name = "${var.name}-default" },
     var.default_route_table_tags,
   )
+
+  lifecycle {
+    ignore_changes = [
+      # Ignore route since that is controlled below
+      route,
+    ]
+  }
+}
+
+resource "aws_route" "default" {
+  for_each = { for k, v in var.default_route_table_routes : k => v if var.create && var.manage_default_route_table }
+
+  route_table_id = aws_default_route_table.this[0].id
+
+  destination_cidr_block      = try(each.value.destination_ipv4_cidr_block, null)
+  destination_ipv6_cidr_block = try(each.value.destination_ipv6_cidr_block, null)
+  destination_prefix_list_id  = try(each.value.destination_prefix_list_id, null)
+
+  # One of the following target arguments must be supplied:
+  carrier_gateway_id        = try(each.value.carrier_gateway_id, null)
+  egress_only_gateway_id    = try(each.value.egress_only_gateway_id, null)
+  gateway_id                = try(each.value.gateway_id, null)
+  nat_gateway_id            = try(each.value.nat_gateway_id, null)
+  local_gateway_id          = try(each.value.local_gateway_id, null)
+  network_interface_id      = try(each.value.network_interface_id, null)
+  transit_gateway_id        = try(each.value.transit_gateway_id, null)
+  vpc_endpoint_id           = try(each.value.vpc_endpoint_id, null)
+  vpc_peering_connection_id = try(each.value.vpc_peering_connection_id, null)
+
+  timeouts {
+    create = try(each.value.timeouts.create, null)
+    update = try(each.value.timeouts.update, null)
+    delete = try(each.value.timeouts.delete, null)
+  }
 }
 
 ################################################################################

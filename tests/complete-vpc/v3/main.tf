@@ -87,7 +87,7 @@ module "vpc_endpoints" {
   version = "3.12.0"
 
   vpc_id             = module.vpc.vpc_id
-  security_group_ids = [data.aws_security_group.default.id]
+  security_group_ids = [aws_security_group.vpc_tls.id]
   subnet_ids         = module.vpc.private_subnets
 
   endpoints = {
@@ -105,7 +105,6 @@ module "vpc_endpoints" {
     ssm = {
       service             = "ssm"
       private_dns_enabled = true
-      security_group_ids  = [aws_security_group.vpc_tls.id]
     },
     ssmmessages = {
       service             = "ssmmessages"
@@ -119,14 +118,13 @@ module "vpc_endpoints" {
       service             = "ecs"
       private_dns_enabled = true
     },
-    ecs_telemetry = {
+    ecs-telemetry = {
       service             = "ecs-telemetry"
       private_dns_enabled = true
     },
     ec2 = {
       service             = "ec2"
       private_dns_enabled = true
-      security_group_ids  = [aws_security_group.vpc_tls.id]
     },
     ec2messages = {
       service             = "ec2messages"
@@ -145,13 +143,12 @@ module "vpc_endpoints" {
     kms = {
       service             = "kms"
       private_dns_enabled = true
-      security_group_ids  = [aws_security_group.vpc_tls.id]
     },
     codedeploy = {
       service             = "codedeploy"
       private_dns_enabled = true
     },
-    codedeploy_commands_secure = {
+    codedeploy-commands-secure = {
       service             = "codedeploy-commands-secure"
       private_dns_enabled = true
     },
@@ -166,11 +163,6 @@ module "vpc_endpoints" {
 ################################################################################
 # Supporting Resources
 ################################################################################
-
-data "aws_security_group" "default" {
-  name   = "default"
-  vpc_id = module.vpc.vpc_id
-}
 
 data "aws_iam_policy_document" "dynamodb_endpoint_policy" {
   statement {

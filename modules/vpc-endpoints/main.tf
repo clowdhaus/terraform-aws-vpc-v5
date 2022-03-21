@@ -5,7 +5,7 @@
 data "aws_vpc_endpoint_service" "this" {
   for_each = { for k, v in var.vpc_endpoints : k => v if var.create }
 
-  service      = try(each.value.service, null)
+  service      = try(each.value.service, each.key, null)
   service_name = try(each.value.service_name, null)
 
   filter {
@@ -22,13 +22,17 @@ resource "aws_vpc_endpoint" "this" {
   vpc_endpoint_type = try(each.value.service_type, "Interface")
   auto_accept       = try(each.value.auto_accept, null)
 
-  security_group_ids  = try(each.value.service_type, "Interface") == "Interface" ? distinct(concat(var.security_group_ids, try(each.value.security_group_ids, []))) : null
-  subnet_ids          = try(each.value.service_type, "Interface") == "Interface" ? distinct(concat(var.subnet_ids, try(each.value.subnet_ids, []))) : null
-  route_table_ids     = try(each.value.service_type, "Interface") == "Gateway" ? try(each.value.route_table_ids, null) : null
-  policy              = try(each.value.policy, null)
-  private_dns_enabled = try(each.value.service_type, "Interface") == "Interface" ? try(each.value.private_dns_enabled, null) : null
+  security_group_ids  = try(each.value.service_type, "Interface") == "Interface" ? try(each.value.security_group_ids, var.vpc_endpoint_defaults.security_group_ids, []) : null
+  subnet_ids          = try(each.value.service_type, "Interface") == "Interface" ? try(each.value.subnet_ids, var.vpc_endpoint_defaults.subnet_ids, []) : null
+  route_table_ids     = try(each.value.service_type, "Interface") == "Gateway" ? try(each.value.route_table_ids, var.vpc_endpoint_defaults.route_table_ids, null) : null
+  policy              = try(each.value.policy, var.vpc_endpoint_defaults.policy, null)
+  private_dns_enabled = try(each.value.service_type, "Interface") == "Interface" ? try(each.value.private_dns_enabled, var.vpc_endpoint_defaults.private_dns_enabled, null) : null
 
-  tags = merge(var.tags, try(each.value.tags, {}))
+  tags = merge(
+    var.tags,
+    { Name = data.aws_vpc_endpoint_service.this[each.key].service },
+    try(each.value.tags, {})
+  )
 
   timeouts {
     create = try(var.vpc_endpoint_timeouts.create, null)

@@ -36,7 +36,7 @@ tf state mv 'module.vpc.aws_subnet.redshift[2]' 'module.redshift_subnets.aws_sub
 tf state mv 'module.vpc.aws_subnet.intra[0]' 'module.intra_subnets.aws_subnet.this["eu-west-1a"]'
 tf state mv 'module.vpc.aws_subnet.intra[1]' 'module.intra_subnets.aws_subnet.this["eu-west-1b"]'
 tf state mv 'module.vpc.aws_subnet.intra[2]' 'module.intra_subnets.aws_subnet.this["eu-west-1c"]'
-cd
+
 tf state mv 'module.vpc.aws_route_table.public[0]'  'module.public_route_table.aws_route_table.this[0]'
 tf state mv 'module.vpc.aws_route_table.private[0]' 'module.private_route_table.aws_route_table.this[0]'
 tf state mv 'module.vpc.aws_route_table.intra[0]' 'module.intra_route_table.aws_route_table.this[0]'

@@ -26,16 +26,10 @@ variable "vpc_endpoints" {
   default     = {}
 }
 
-variable "security_group_ids" {
-  description = "Default security group IDs to associate with the VPC endpoints"
-  type        = list(string)
-  default     = []
-}
-
-variable "subnet_ids" {
-  description = "Default subnets IDs to associate with the VPC endpoints"
-  type        = list(string)
-  default     = []
+variable "vpc_endpoint_defaults" {
+  description = "Map of VPC endpoint default configurations used across all endpoints created"
+  type        = any
+  default     = {}
 }
 
 variable "vpc_endpoint_timeouts" {

@@ -12,12 +12,13 @@
 
 - Align conventions
   - ✅ `cidr_block` -> `ipv4_cidr_block` to compliment `ipv6_cidr_block`
-  - [ ] default routes vs custom routes
-  - [ ] default NACLs vs custom NACLs
+  - ✅ default routes vs custom routes
+  - ✅ default NACLs vs custom NACLs
 
 ## Notes
 
- - VPC Endpoints
+- https://docs.aws.amazon.com/ram/latest/userguide/shareable.html
+- VPC Endpoints
   - One per AZ; subnets may wrap around and double/triple/etc. within an AZ, but VPC endpoints have to be separate
 - IPAM
   - One public scope - default public scope created by IPAM
@@ -157,6 +158,7 @@ Note below on Client VPN
 ### Client VPN
 
 TODO - change [terraform-aws-vpn-gateway](https://github.com/terraform-aws-modules/terraform-aws-vpn-gateway) into `terraform-aws-vpn` with two sub-modules:
+
 1. `client`
 2. `gateway`
 
@@ -284,6 +286,9 @@ No modules.
 | [aws_egress_only_internet_gateway.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/egress_only_internet_gateway) | resource |
 | [aws_internet_gateway.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway) | resource |
 | [aws_internet_gateway_attachment.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway_attachment) | resource |
+| [aws_network_acl_rule.default_egress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
+| [aws_network_acl_rule.default_ingress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
+| [aws_route.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
 | [aws_route53_resolver_dnssec_config.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_resolver_dnssec_config) | resource |
 | [aws_route53_resolver_query_log_config.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_resolver_query_log_config) | resource |
 | [aws_route53_resolver_query_log_config_association.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_resolver_query_log_config_association) | resource |

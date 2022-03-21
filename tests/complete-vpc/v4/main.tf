@@ -378,75 +378,43 @@ module "intra_subnets" {
 module "vpc_endpoints" {
   source = "../../../modules/vpc-endpoints"
 
-  vpc_id             = module.vpc.id
-  security_group_ids = [data.aws_security_group.default.id]
-  subnet_ids         = module.private_subnets.ids
+  vpc_id = module.vpc.id
+
+  vpc_endpoint_defaults = {
+    security_group_ids  = [aws_security_group.vpc_tls.id]
+    subnet_ids          = module.private_subnets.ids
+    private_dns_enabled = true
+  }
 
   vpc_endpoints = {
     s3 = {
-      service = "s3"
-      tags    = { Name = "s3-vpc-endpoint" }
+      private_dns_enabled = false
+      tags                = { Name = "s3-vpc-endpoint" }
     },
     dynamodb = {
-      service         = "dynamodb"
       service_type    = "Gateway"
       route_table_ids = [module.intra_route_table.id, module.private_route_table.id, module.public_route_table.id]
       policy          = data.aws_iam_policy_document.dynamodb_endpoint_policy.json
       tags            = { Name = "dynamodb-vpc-endpoint" }
     },
-    ssm = {
-      service             = "ssm"
-      private_dns_enabled = true
-      security_group_ids  = [aws_security_group.vpc_tls.id]
-    },
-    ssmmessages = {
-      service             = "ssmmessages"
-      private_dns_enabled = true
-    },
-    lambda = {
-      service             = "lambda"
-      private_dns_enabled = true
-    },
-    ecs = {
-      service             = "ecs"
-      private_dns_enabled = true
-    },
-    ecs_telemetry = {
-      service             = "ecs-telemetry"
-      private_dns_enabled = true
-    },
-    ec2 = {
-      service             = "ec2"
-      private_dns_enabled = true
-      security_group_ids  = [aws_security_group.vpc_tls.id]
-    },
-    ec2messages = {
-      service             = "ec2messages"
-      private_dns_enabled = true
-    },
+    ssm           = {},
+    ssmmessages   = {},
+    lambda        = {},
+    ecs           = {},
+    ecs-telemetry = {},
+    ec2           = {},
+    ec2messages   = {},
     ecr_api = {
-      service             = "ecr.api"
-      private_dns_enabled = true
-      policy              = data.aws_iam_policy_document.generic_endpoint_policy.json
+      service = "ecr.api"
+      policy  = data.aws_iam_policy_document.generic_endpoint_policy.json
     },
     ecr_dkr = {
-      service             = "ecr.dkr"
-      private_dns_enabled = true
-      policy              = data.aws_iam_policy_document.generic_endpoint_policy.json
+      service = "ecr.dkr"
+      policy  = data.aws_iam_policy_document.generic_endpoint_policy.json
     },
-    kms = {
-      service             = "kms"
-      private_dns_enabled = true
-      security_group_ids  = [aws_security_group.vpc_tls.id]
-    },
-    codedeploy = {
-      service             = "codedeploy"
-      private_dns_enabled = true
-    },
-    codedeploy_commands_secure = {
-      service             = "codedeploy-commands-secure"
-      private_dns_enabled = true
-    },
+    kms                        = {},
+    codedeploy                 = {},
+    codedeploy-commands-secure = {},
   }
 
   tags = merge(local.tags, {
@@ -458,11 +426,6 @@ module "vpc_endpoints" {
 ################################################################################
 # Supporting Resources
 ################################################################################
-
-data "aws_security_group" "default" {
-  name   = "default"
-  vpc_id = module.vpc.id
-}
 
 data "aws_iam_policy_document" "dynamodb_endpoint_policy" {
   statement {
