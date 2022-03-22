@@ -86,6 +86,20 @@ output "dns_query_log_config_association_id" {
 }
 
 ################################################################################
+# DNS Firewall Rule Group Association
+################################################################################
+
+output "dns_firewall_config_id" {
+  description = "The ID of the firewall configuration"
+  value       = try(aws_route53_resolver_firewall_config.this[0].id, null)
+}
+
+output "dns_firewall_rule_group_associations" {
+  description = "Map of Route53 resolver firewall rule group associations and their attributes"
+  value       = aws_route53_resolver_firewall_rule_group_association.this
+}
+
+################################################################################
 # DHCP Options Set
 ################################################################################
 

@@ -143,6 +143,28 @@ variable "dns_query_log_destintion_arn" {
 }
 
 ################################################################################
+# DNS Firewall Rule Group Association
+################################################################################
+
+variable "enable_dns_firewall" {
+  description = "Controls if Route53 Resolver DNS Firewall is enabled/disabled"
+  type        = bool
+  default     = false
+}
+
+variable "dns_firewall_fail_open" {
+  description = "Determines how Route 53 Resolver handles queries during failures. Valid values: `ENABLED`, `DISABLED`. Defaults is `ENABLED`"
+  type        = string
+  default     = "ENABLED"
+}
+
+variable "dns_firewall_rule_group_associations" {
+  description = "Map of Route53 Resolver Firewall Rule Groups to associate with the VPC"
+  type        = any
+  default     = {}
+}
+
+################################################################################
 # DHCP Options Set
 ################################################################################
 

@@ -450,21 +450,17 @@ output "network_firewall_logging_configuration_id" {
 }
 
 ################################################################################
-# DNS Firewall Config
+# DNS Firewall
 ################################################################################
 
 output "dns_firewall_config_id" {
   description = "The ID of the firewall configuration"
-  value       = module.dns_firewall.config_id
+  value       = module.vpc.dns_firewall_config_id
 }
 
-################################################################################
-# DNS Firewall Domain List
-################################################################################
-
-output "dns_firewall_domain_lists" {
-  description = "Map of all domain lists created and their attributes"
-  value       = module.dns_firewall.domain_lists
+output "dns_firewall_rule_group_associations" {
+  description = "Map of Route53 resolver firewall rule group associations and their attributes"
+  value       = module.vpc.dns_firewall_rule_group_associations
 }
 
 ################################################################################
@@ -473,38 +469,25 @@ output "dns_firewall_domain_lists" {
 
 output "dns_firewall_rule_group_arn" {
   description = "The ARN (Amazon Resource Name) of the rule group"
-  value       = module.dns_firewall.rule_group_arn
+  value       = module.dns_firewall_rule_group.arn
 }
 
 output "dns_firewall_rule_group_id" {
   description = "The ID of the rule group"
-  value       = module.dns_firewall.rule_group_id
+  value       = module.dns_firewall_rule_group.id
 }
 
 output "dns_firewall_rule_group_share_status" {
   description = "Whether the rule group is shared with other AWS accounts, or was shared with the current account by another AWS account. Sharing is configured through AWS Resource Access Manager (AWS RAM). Valid values: `NOT_SHARED`, `SHARED_BY_ME`, `SHARED_WITH_ME`"
-  value       = module.dns_firewall.rule_group_share_status
+  value       = module.dns_firewall_rule_group.share_status
 }
 
-################################################################################
-# DNS Firewall Rule
-################################################################################
+output "dns_firewall_rule_group_domain_lists" {
+  description = "Map of all domain lists created and their attributes"
+  value       = module.dns_firewall_rule_group.domain_lists
+}
 
-output "dns_firewall_rules" {
+output "dns_firewall_rule_group_rules" {
   description = "Map of all rules created and their attributes"
-  value       = module.dns_firewall.rules
-}
-
-################################################################################
-# DNS Firewall Rule Group Association
-################################################################################
-
-output "dns_firewall_rule_group_association_arn" {
-  description = "The ARN (Amazon Resource Name) of the rule group association"
-  value       = module.dns_firewall.rule_group_association_arn
-}
-
-output "dns_firewall_rule_group_association_id" {
-  description = "The ID of the rule group association"
-  value       = module.dns_firewall.rule_group_association_id
+  value       = module.dns_firewall_rule_group.rules
 }

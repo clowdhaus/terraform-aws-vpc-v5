@@ -34,7 +34,7 @@ Note that this example may create resources which will incur monetary charges on
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_dns_firewall"></a> [dns\_firewall](#module\_dns\_firewall) | ../../modules/dns-firewall | n/a |
+| <a name="module_dns_firewall_rule_group"></a> [dns\_firewall\_rule\_group](#module\_dns\_firewall\_rule\_group) | ../../modules/dns-firewall-rule-group | n/a |
 | <a name="module_network_firewall"></a> [network\_firewall](#module\_network\_firewall) | ../../modules/network-firewall | n/a |
 | <a name="module_public_route_table"></a> [public\_route\_table](#module\_public\_route\_table) | ../../modules/route-table | n/a |
 | <a name="module_public_subnets"></a> [public\_subnets](#module\_public\_subnets) | ../../modules/subnets | n/a |
@@ -84,13 +84,12 @@ No inputs.
 | <a name="output_dhcp_options_association_id"></a> [dhcp\_options\_association\_id](#output\_dhcp\_options\_association\_id) | The ID of the DHCP Options set association |
 | <a name="output_dhcp_options_id"></a> [dhcp\_options\_id](#output\_dhcp\_options\_id) | The ID of the DHCP options set |
 | <a name="output_dns_firewall_config_id"></a> [dns\_firewall\_config\_id](#output\_dns\_firewall\_config\_id) | The ID of the firewall configuration |
-| <a name="output_dns_firewall_domain_lists"></a> [dns\_firewall\_domain\_lists](#output\_dns\_firewall\_domain\_lists) | Map of all domain lists created and their attributes |
 | <a name="output_dns_firewall_rule_group_arn"></a> [dns\_firewall\_rule\_group\_arn](#output\_dns\_firewall\_rule\_group\_arn) | The ARN (Amazon Resource Name) of the rule group |
-| <a name="output_dns_firewall_rule_group_association_arn"></a> [dns\_firewall\_rule\_group\_association\_arn](#output\_dns\_firewall\_rule\_group\_association\_arn) | The ARN (Amazon Resource Name) of the rule group association |
-| <a name="output_dns_firewall_rule_group_association_id"></a> [dns\_firewall\_rule\_group\_association\_id](#output\_dns\_firewall\_rule\_group\_association\_id) | The ID of the rule group association |
+| <a name="output_dns_firewall_rule_group_associations"></a> [dns\_firewall\_rule\_group\_associations](#output\_dns\_firewall\_rule\_group\_associations) | Map of Route53 resolver firewall rule group associations and their attributes |
+| <a name="output_dns_firewall_rule_group_domain_lists"></a> [dns\_firewall\_rule\_group\_domain\_lists](#output\_dns\_firewall\_rule\_group\_domain\_lists) | Map of all domain lists created and their attributes |
 | <a name="output_dns_firewall_rule_group_id"></a> [dns\_firewall\_rule\_group\_id](#output\_dns\_firewall\_rule\_group\_id) | The ID of the rule group |
+| <a name="output_dns_firewall_rule_group_rules"></a> [dns\_firewall\_rule\_group\_rules](#output\_dns\_firewall\_rule\_group\_rules) | Map of all rules created and their attributes |
 | <a name="output_dns_firewall_rule_group_share_status"></a> [dns\_firewall\_rule\_group\_share\_status](#output\_dns\_firewall\_rule\_group\_share\_status) | Whether the rule group is shared with other AWS accounts, or was shared with the current account by another AWS account. Sharing is configured through AWS Resource Access Manager (AWS RAM). Valid values: `NOT_SHARED`, `SHARED_BY_ME`, `SHARED_WITH_ME` |
-| <a name="output_dns_firewall_rules"></a> [dns\_firewall\_rules](#output\_dns\_firewall\_rules) | Map of all rules created and their attributes |
 | <a name="output_dns_query_log_config_arn"></a> [dns\_query\_log\_config\_arn](#output\_dns\_query\_log\_config\_arn) | The ARN (Amazon Resource Name) of the Route 53 Resolver query logging configuration |
 | <a name="output_dns_query_log_config_association_id"></a> [dns\_query\_log\_config\_association\_id](#output\_dns\_query\_log\_config\_association\_id) | he ID of the Route 53 Resolver query logging configuration association |
 | <a name="output_dns_query_log_config_id"></a> [dns\_query\_log\_config\_id](#output\_dns\_query\_log\_config\_id) | The ID of the Route 53 Resolver query logging configuration |

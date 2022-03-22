@@ -126,6 +126,7 @@ No modules.
 | [aws_network_acl.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl) | resource |
 | [aws_network_acl_rule.egress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
 | [aws_network_acl_rule.ingress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
+| [aws_ram_resource_association.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ram_resource_association) | resource |
 | [aws_redshift_subnet_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/redshift_subnet_group) | resource |
 | [aws_route_table_association.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association) | resource |
 | [aws_subnet.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet) | resource |
@@ -178,6 +179,7 @@ No modules.
 | <a name="output_network_acl_id"></a> [network\_acl\_id](#output\_network\_acl\_id) | The ARN of the network ACL |
 | <a name="output_network_acl_rules_egress"></a> [network\_acl\_rules\_egress](#output\_network\_acl\_rules\_egress) | Map of egress network ACL rules created and their attributes |
 | <a name="output_network_acl_rules_ingress"></a> [network\_acl\_rules\_ingress](#output\_network\_acl\_rules\_ingress) | Map of ingress network ACL rules created and their attributes |
+| <a name="output_ram_resource_associations"></a> [ram\_resource\_associations](#output\_ram\_resource\_associations) | Map of RAM resource associations created and their attributes |
 | <a name="output_rds_subnet_groups"></a> [rds\_subnet\_groups](#output\_rds\_subnet\_groups) | Map of RDS Database subnet groups created and their attributes |
 | <a name="output_redshift_subnet_groups"></a> [redshift\_subnet\_groups](#output\_redshift\_subnet\_groups) | Map of DMS Replication subnet groups created and their attributes |
 | <a name="output_route_table_association_ids"></a> [route\_table\_association\_ids](#output\_route\_table\_association\_ids) | List of subnet route table association IDs |

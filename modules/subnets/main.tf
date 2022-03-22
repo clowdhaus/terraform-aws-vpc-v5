@@ -54,6 +54,17 @@ resource "aws_ec2_subnet_cidr_reservation" "this" {
 }
 
 ################################################################################
+# RAM Resource Association
+################################################################################
+
+resource "aws_ram_resource_association" "this" {
+  for_each = { for k, v in var.subnets : k => v if var.create && can(v.resource_share_arn) }
+
+  resource_arn       = aws_subnet.this[each.key].arn
+  resource_share_arn = each.value.resource_share_arn
+}
+
+################################################################################
 # Route Table Association
 # See `route` sub-module for associating to gateway
 ################################################################################

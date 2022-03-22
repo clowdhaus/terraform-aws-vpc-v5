@@ -1,6 +1,6 @@
 # Terraform AWS Modules
 
-- [DNS Firewall](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/modules/dns-firewall)
+- [DNS Firewall Rule Group](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/modules/dns-firewall-rule-group)
 - [Flow Log](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/modules/flow-log)
 - [IPAM Pool](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/modules/ipam-pool)
 - [IPAM](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/modules/ipam)

@@ -81,6 +81,15 @@ output "ec2_subnet_cidr_reservations" {
 }
 
 ################################################################################
+# RAM Resource Association
+################################################################################
+
+output "ram_resource_associations" {
+  description = "Map of RAM resource associations created and their attributes"
+  value       = aws_ram_resource_association.this
+}
+
+################################################################################
 # Route Table Association
 # See `route` sub-module for associating to gateway
 ################################################################################

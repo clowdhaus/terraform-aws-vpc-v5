@@ -92,6 +92,30 @@ resource "aws_route53_resolver_query_log_config_association" "this" {
 }
 
 ################################################################################
+# DNS Firewall Rule Group Association
+################################################################################
+
+resource "aws_route53_resolver_firewall_config" "this" {
+  count = var.create && var.enable_dns_firewall ? 1 : 0
+
+  resource_id        = aws_vpc.this[0].id
+  firewall_fail_open = var.dns_firewall_fail_open
+}
+
+resource "aws_route53_resolver_firewall_rule_group_association" "this" {
+  for_each = { for k, v in var.dns_firewall_rule_group_associations : k => v if var.create && var.enable_dns_firewall }
+
+  name   = try(each.value.name, "${var.name}-${each.key}")
+  vpc_id = aws_vpc.this[0].id
+
+  firewall_rule_group_id = each.value.firewall_rule_group_id
+  mutation_protection    = try(each.value.mutation_protection, null)
+  priority               = each.value.priority
+
+  tags = merge(var.tags, try(each.value.tags, {}))
+}
+
+################################################################################
 # DHCP Options Set
 ################################################################################
 

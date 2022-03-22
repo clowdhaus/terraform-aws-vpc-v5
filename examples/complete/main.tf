@@ -38,6 +38,18 @@ module "vpc" {
     }
   }
 
+  # DNS Firewall
+  enable_dns_firewall = true
+  dns_firewall_rule_group_associations = {
+    one = {
+      name                   = local.name
+      firewall_rule_group_id = module.dns_firewall_rule_group.id
+      priority               = 101
+      # Disable for test/example
+      mutation_protection = "DISABLED"
+    }
+  }
+
   # DNS Query Logging
   enable_dns_query_logging     = true
   dns_query_log_destintion_arn = aws_s3_bucket.dns_query_logs.arn
@@ -74,7 +86,6 @@ module "vpc_flow_log" {
 # Route Tables
 ################################################################################
 
-
 module "public_route_table" {
   source = "../../modules/route-table"
 
@@ -97,8 +108,6 @@ module "public_route_table" {
 
 module "public_subnets" {
   source = "../../modules/subnets"
-
-  # Because IGW exists in `module.vpc`, we implictly depend on that first (for NAT Gateway/EIP requirements)
 
   name   = "${local.name}-public"
   vpc_id = module.vpc.id
@@ -166,14 +175,10 @@ module "public_subnets" {
 # DNS Firewall Module
 ################################################################################
 
-module "dns_firewall" {
-  source = "../../modules/dns-firewall"
+module "dns_firewall_rule_group" {
+  source = "../../modules/dns-firewall-rule-group"
 
-  name   = local.name
-  vpc_id = module.vpc.id
-
-  # Disable for test/example
-  mutation_protection = "DISABLED"
+  name = local.name
 
   rules = {
     block = {
