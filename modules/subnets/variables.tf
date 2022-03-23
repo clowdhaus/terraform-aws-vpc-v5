@@ -105,31 +105,3 @@ variable "redshift_subnet_groups" {
   type        = any
   default     = {}
 }
-
-################################################################################
-# Network ACL
-################################################################################
-
-variable "create_network_acl" {
-  description = "Controls creation of Network ACL resources"
-  type        = bool
-  default     = true
-}
-
-variable "network_acl_ingress_rules" {
-  description = "Network ACL ingress rules to be added to the Network ACL"
-  type        = map(any)
-  default     = {}
-}
-
-variable "network_acl_egress_rules" {
-  description = "Network ACL egresss rules to be added to the Network ACL"
-  type        = map(any)
-  default     = {}
-}
-
-variable "network_acl_tags" {
-  description = "Additional tags for the Network ACL"
-  type        = map(string)
-  default     = {}
-}

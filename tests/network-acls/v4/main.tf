@@ -236,7 +236,6 @@ module "public_route_table" {
   tags = local.tags
 }
 
-
 module "private_route_table" {
   source = "../../../modules/route-table"
 
@@ -286,18 +285,14 @@ module "public_subnets" {
     }
   }
 
-  network_acl_ingress_rules = merge(local.network_acls.default_inbound, local.network_acls.public_inbound)
-  network_acl_egress_rules  = merge(local.network_acls.default_outbound, local.network_acls.public_outbound)
-
   tags = local.tags
 }
 
 module "private_subnets" {
   source = "../../../modules/subnets"
 
-  name               = "${local.name}-private"
-  vpc_id             = module.vpc.id
-  create_network_acl = false
+  name   = "${local.name}-private"
+  vpc_id = module.vpc.id
 
   subnets_default = {
     route_table_id = module.private_route_table.id
@@ -354,7 +349,32 @@ module "elasticache_subnets" {
     }
   }
 
-  network_acl_ingress_rules = {
+  tags = local.tags
+}
+
+################################################################################
+# Network ACL
+################################################################################
+
+module "public_network_acl" {
+  source = "../../../modules/network-acl"
+
+  vpc_id     = module.vpc.id
+  subnet_ids = module.public_subnets.ids
+
+  ingress_rules = merge(local.network_acls.default_inbound, local.network_acls.public_inbound)
+  egress_rules  = merge(local.network_acls.default_outbound, local.network_acls.public_outbound)
+
+  tags = local.tags
+}
+
+module "elasticache_network_acl" {
+  source = "../../../modules/network-acl"
+
+  vpc_id     = module.vpc.id
+  subnet_ids = module.elasticache_subnets.ids
+
+  ingress_rules = {
     100 = {
       rule_action     = "allow"
       from_port       = 0
@@ -363,7 +383,7 @@ module "elasticache_subnets" {
       ipv4_cidr_block = "0.0.0.0/0"
     }
   }
-  network_acl_egress_rules = merge(local.network_acls.default_outbound, local.network_acls.elasticache_outbound)
+  egress_rules = merge(local.network_acls.default_outbound, local.network_acls.elasticache_outbound)
 
   tags = local.tags
 }

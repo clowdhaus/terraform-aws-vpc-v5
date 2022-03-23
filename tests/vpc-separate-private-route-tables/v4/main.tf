@@ -104,9 +104,6 @@ module "public_subnets" {
   name   = "${local.name}-public"
   vpc_id = module.vpc.id
 
-  # Backwards compat
-  create_network_acl = false
-
   subnets_default = {
     map_public_ip_on_launch = true
     route_table_id          = module.public_route_table.id
@@ -137,9 +134,6 @@ module "private_subnets" {
   name   = "${local.name}-private"
   vpc_id = module.vpc.id
 
-  # Backwards compat
-  create_network_acl = false
-
   subnets_default = {
     route_table_id = module.private_route_table.id
   }
@@ -167,9 +161,6 @@ module "database_subnets" {
 
   name   = "${local.name}-database"
   vpc_id = module.vpc.id
-
-  # Backwards compat
-  create_network_acl = false
 
   subnets_default = {
     route_table_id = module.database_route_table.id
@@ -211,9 +202,6 @@ module "elasticache_subnets" {
   name   = "${local.name}-elasticache"
   vpc_id = module.vpc.id
 
-  # Backwards compat
-  create_network_acl = false
-
   subnets_default = {
     route_table_id = module.elasticache_route_table.id
   }
@@ -253,9 +241,6 @@ module "redshift_subnets" {
 
   name   = "${local.name}-redshift"
   vpc_id = module.vpc.id
-
-  # Backwards compat
-  create_network_acl = false
 
   subnets_default = {
     route_table_id = module.redshift_route_table.id

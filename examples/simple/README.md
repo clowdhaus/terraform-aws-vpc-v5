@@ -103,10 +103,6 @@ No inputs.
 | <a name="output_private_subnet_ipv6_cidr_blocks"></a> [private\_subnet\_ipv6\_cidr\_blocks](#output\_private\_subnet\_ipv6\_cidr\_blocks) | List of subnet IPv6 CIDR blocks |
 | <a name="output_private_subnets"></a> [private\_subnets](#output\_private\_subnets) | Map of subnets created and their attributes |
 | <a name="output_private_subnets_ec2_subnet_cidr_reservations"></a> [private\_subnets\_ec2\_subnet\_cidr\_reservations](#output\_private\_subnets\_ec2\_subnet\_cidr\_reservations) | Map of EC2 subnet CIDR reservations created and their attributes |
-| <a name="output_private_subnets_network_acl_arn"></a> [private\_subnets\_network\_acl\_arn](#output\_private\_subnets\_network\_acl\_arn) | The ID of the network ACL |
-| <a name="output_private_subnets_network_acl_id"></a> [private\_subnets\_network\_acl\_id](#output\_private\_subnets\_network\_acl\_id) | The ARN of the network ACL |
-| <a name="output_private_subnets_network_acl_rules_egress"></a> [private\_subnets\_network\_acl\_rules\_egress](#output\_private\_subnets\_network\_acl\_rules\_egress) | Map of egress network ACL rules created and their attributes |
-| <a name="output_private_subnets_network_acl_rules_ingress"></a> [private\_subnets\_network\_acl\_rules\_ingress](#output\_private\_subnets\_network\_acl\_rules\_ingress) | Map of ingress network ACL rules created and their attributes |
 | <a name="output_private_subnets_route_table_id"></a> [private\_subnets\_route\_table\_id](#output\_private\_subnets\_route\_table\_id) | List of route table IDs |
 | <a name="output_public_route_table_gateway_association_ids"></a> [public\_route\_table\_gateway\_association\_ids](#output\_public\_route\_table\_gateway\_association\_ids) | List of subnet route table association IDs |
 | <a name="output_public_route_table_subnet_association_ids"></a> [public\_route\_table\_subnet\_association\_ids](#output\_public\_route\_table\_subnet\_association\_ids) | List of subnet route table association IDs |
@@ -116,10 +112,6 @@ No inputs.
 | <a name="output_public_subnet_ipv6_cidr_blocks"></a> [public\_subnet\_ipv6\_cidr\_blocks](#output\_public\_subnet\_ipv6\_cidr\_blocks) | List of subnet IPv6 CIDR blocks |
 | <a name="output_public_subnets"></a> [public\_subnets](#output\_public\_subnets) | Map of subnets created and their attributes |
 | <a name="output_public_subnets_ec2_subnet_cidr_reservations"></a> [public\_subnets\_ec2\_subnet\_cidr\_reservations](#output\_public\_subnets\_ec2\_subnet\_cidr\_reservations) | Map of EC2 subnet CIDR reservations created and their attributes |
-| <a name="output_public_subnets_network_acl_arn"></a> [public\_subnets\_network\_acl\_arn](#output\_public\_subnets\_network\_acl\_arn) | The ID of the network ACL |
-| <a name="output_public_subnets_network_acl_id"></a> [public\_subnets\_network\_acl\_id](#output\_public\_subnets\_network\_acl\_id) | The ARN of the network ACL |
-| <a name="output_public_subnets_network_acl_rules_egress"></a> [public\_subnets\_network\_acl\_rules\_egress](#output\_public\_subnets\_network\_acl\_rules\_egress) | Map of egress network ACL rules created and their attributes |
-| <a name="output_public_subnets_network_acl_rules_ingress"></a> [public\_subnets\_network\_acl\_rules\_ingress](#output\_public\_subnets\_network\_acl\_rules\_ingress) | Map of ingress network ACL rules created and their attributes |
 | <a name="output_public_subnets_route_table_id"></a> [public\_subnets\_route\_table\_id](#output\_public\_subnets\_route\_table\_id) | List of route table IDs |
 | <a name="output_vpn_gateways"></a> [vpn\_gateways](#output\_vpn\_gateways) | Map of VPN Gateways and their attributes |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

@@ -123,9 +123,6 @@ No modules.
 | [aws_memorydb_subnet_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/memorydb_subnet_group) | resource |
 | [aws_nat_gateway.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/nat_gateway) | resource |
 | [aws_neptune_subnet_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/neptune_subnet_group) | resource |
-| [aws_network_acl.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl) | resource |
-| [aws_network_acl_rule.egress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
-| [aws_network_acl_rule.ingress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_acl_rule) | resource |
 | [aws_ram_resource_association.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ram_resource_association) | resource |
 | [aws_redshift_subnet_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/redshift_subnet_group) | resource |
 | [aws_route_table_association.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association) | resource |
@@ -137,7 +134,6 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_cidr_reservations"></a> [cidr\_reservations](#input\_cidr\_reservations) | Map of CIDR reservations to create | `any` | `{}` | no |
 | <a name="input_create"></a> [create](#input\_create) | Controls if network ACL resources should be created | `bool` | `true` | no |
-| <a name="input_create_network_acl"></a> [create\_network\_acl](#input\_create\_network\_acl) | Controls creation of Network ACL resources | `bool` | `true` | no |
 | <a name="input_dax_subnet_groups"></a> [dax\_subnet\_groups](#input\_dax\_subnet\_groups) | Map of DAX subnet group [definitions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dax_subnet_group) | `any` | `{}` | no |
 | <a name="input_dms_replication_subnet_groups"></a> [dms\_replication\_subnet\_groups](#input\_dms\_replication\_subnet\_groups) | Map of DMS replication subnet group [definitions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/dms_replication_subnet_group) | `any` | `{}` | no |
 | <a name="input_docdb_subnet_groups"></a> [docdb\_subnet\_groups](#input\_docdb\_subnet\_groups) | Map of DocumentDB subnet group [definitions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/docdb_subnet_group) | `any` | `{}` | no |
@@ -145,9 +141,6 @@ No modules.
 | <a name="input_memorydb_subnet_groups"></a> [memorydb\_subnet\_groups](#input\_memorydb\_subnet\_groups) | Map of MemoryDB subnet group [definitions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/memorydb_subnet_group) | `any` | `{}` | no |
 | <a name="input_name"></a> [name](#input\_name) | Default name to be used as a prefix for the resources created (if a custom name is not provided) | `string` | `""` | no |
 | <a name="input_neptune_subnet_groups"></a> [neptune\_subnet\_groups](#input\_neptune\_subnet\_groups) | Map of Neptune subnet group [definitions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/neptune_subnet_group) | `any` | `{}` | no |
-| <a name="input_network_acl_egress_rules"></a> [network\_acl\_egress\_rules](#input\_network\_acl\_egress\_rules) | Network ACL egresss rules to be added to the Network ACL | `map(any)` | `{}` | no |
-| <a name="input_network_acl_ingress_rules"></a> [network\_acl\_ingress\_rules](#input\_network\_acl\_ingress\_rules) | Network ACL ingress rules to be added to the Network ACL | `map(any)` | `{}` | no |
-| <a name="input_network_acl_tags"></a> [network\_acl\_tags](#input\_network\_acl\_tags) | Additional tags for the Network ACL | `map(string)` | `{}` | no |
 | <a name="input_rds_subnet_groups"></a> [rds\_subnet\_groups](#input\_rds\_subnet\_groups) | Map of RDS Database subnet group [definitions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_subnet_group) | `any` | `{}` | no |
 | <a name="input_redshift_subnet_groups"></a> [redshift\_subnet\_groups](#input\_redshift\_subnet\_groups) | Map of Redshift subnet group [definitions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/redshift_subnet_group) | `any` | `{}` | no |
 | <a name="input_subnet_timeouts"></a> [subnet\_timeouts](#input\_subnet\_timeouts) | Create and delete timeout configurations for subnets | `map(string)` | `{}` | no |
@@ -175,10 +168,6 @@ No modules.
 | <a name="output_nat_gateway_public_ips"></a> [nat\_gateway\_public\_ips](#output\_nat\_gateway\_public\_ips) | List of NAT gateway public IPs |
 | <a name="output_nat_gateways"></a> [nat\_gateways](#output\_nat\_gateways) | Map of NAT gateway(s) created and their attributes |
 | <a name="output_neptune_subnet_groups"></a> [neptune\_subnet\_groups](#output\_neptune\_subnet\_groups) | Map of Neptune subnet groups created and their attributes |
-| <a name="output_network_acl_arn"></a> [network\_acl\_arn](#output\_network\_acl\_arn) | The ID of the network ACL |
-| <a name="output_network_acl_id"></a> [network\_acl\_id](#output\_network\_acl\_id) | The ARN of the network ACL |
-| <a name="output_network_acl_rules_egress"></a> [network\_acl\_rules\_egress](#output\_network\_acl\_rules\_egress) | Map of egress network ACL rules created and their attributes |
-| <a name="output_network_acl_rules_ingress"></a> [network\_acl\_rules\_ingress](#output\_network\_acl\_rules\_ingress) | Map of ingress network ACL rules created and their attributes |
 | <a name="output_ram_resource_associations"></a> [ram\_resource\_associations](#output\_ram\_resource\_associations) | Map of RAM resource associations created and their attributes |
 | <a name="output_rds_subnet_groups"></a> [rds\_subnet\_groups](#output\_rds\_subnet\_groups) | Map of RDS Database subnet groups created and their attributes |
 | <a name="output_redshift_subnet_groups"></a> [redshift\_subnet\_groups](#output\_redshift\_subnet\_groups) | Map of DMS Replication subnet groups created and their attributes |

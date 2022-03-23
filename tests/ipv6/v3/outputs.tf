@@ -183,37 +183,6 @@ output "egress_only_internet_gateway_id" {
   value       = module.vpc.egress_only_internet_gateway_id
 }
 
-# Network ACLs
-output "public_network_acl_id" {
-  description = "ID of the public network ACL"
-  value       = module.vpc.public_network_acl_id
-}
-
-output "public_network_acl_arn" {
-  description = "ARN of the public network ACL"
-  value       = module.vpc.public_network_acl_arn
-}
-
-output "private_network_acl_id" {
-  description = "ID of the private network ACL"
-  value       = module.vpc.private_network_acl_id
-}
-
-output "private_network_acl_arn" {
-  description = "ARN of the private network ACL"
-  value       = module.vpc.private_network_acl_arn
-}
-
-output "database_network_acl_id" {
-  description = "ID of the database network ACL"
-  value       = module.vpc.database_network_acl_id
-}
-
-output "database_network_acl_arn" {
-  description = "ARN of the database network ACL"
-  value       = module.vpc.database_network_acl_arn
-}
-
 # VPC flow log
 output "vpc_flow_log_id" {
   description = "The ID of the Flow Log resource"

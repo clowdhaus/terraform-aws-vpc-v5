@@ -401,52 +401,6 @@ output "private_route_table_gateway_association_ids" {
 }
 
 ################################################################################
-# Network ACL
-################################################################################
-
-# Public
-output "public_subnets_network_acl_arn" {
-  description = "The ID of the network ACL"
-  value       = module.public_subnets.network_acl_arn
-}
-
-output "public_subnets_network_acl_id" {
-  description = "The ARN of the network ACL"
-  value       = module.public_subnets.network_acl_id
-}
-
-output "public_subnets_network_acl_rules_ingress" {
-  description = "Map of ingress network ACL rules created and their attributes"
-  value       = module.public_subnets.network_acl_rules_ingress
-}
-
-output "public_subnets_network_acl_rules_egress" {
-  description = "Map of egress network ACL rules created and their attributes"
-  value       = module.public_subnets.network_acl_rules_egress
-}
-
-# Private
-output "private_subnets_network_acl_arn" {
-  description = "The ID of the network ACL"
-  value       = module.private_subnets.network_acl_arn
-}
-
-output "private_subnets_network_acl_id" {
-  description = "The ARN of the network ACL"
-  value       = module.private_subnets.network_acl_id
-}
-
-output "private_subnets_network_acl_rules_ingress" {
-  description = "Map of ingress network ACL rules created and their attributes"
-  value       = module.private_subnets.network_acl_rules_ingress
-}
-
-output "private_subnets_network_acl_rules_egress" {
-  description = "Map of egress network ACL rules created and their attributes"
-  value       = module.private_subnets.network_acl_rules_egress
-}
-
-################################################################################
 # NAT Gateway
 ################################################################################
 

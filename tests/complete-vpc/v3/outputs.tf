@@ -338,66 +338,6 @@ output "default_vpc_main_route_table_id" {
   value       = module.vpc.default_vpc_main_route_table_id
 }
 
-output "public_network_acl_id" {
-  description = "ID of the public network ACL"
-  value       = module.vpc.public_network_acl_id
-}
-
-output "public_network_acl_arn" {
-  description = "ARN of the public network ACL"
-  value       = module.vpc.public_network_acl_arn
-}
-
-output "private_network_acl_id" {
-  description = "ID of the private network ACL"
-  value       = module.vpc.private_network_acl_id
-}
-
-output "private_network_acl_arn" {
-  description = "ARN of the private network ACL"
-  value       = module.vpc.private_network_acl_arn
-}
-
-output "intra_network_acl_id" {
-  description = "ID of the intra network ACL"
-  value       = module.vpc.intra_network_acl_id
-}
-
-output "intra_network_acl_arn" {
-  description = "ARN of the intra network ACL"
-  value       = module.vpc.intra_network_acl_arn
-}
-
-output "database_network_acl_id" {
-  description = "ID of the database network ACL"
-  value       = module.vpc.database_network_acl_id
-}
-
-output "database_network_acl_arn" {
-  description = "ARN of the database network ACL"
-  value       = module.vpc.database_network_acl_arn
-}
-
-output "redshift_network_acl_id" {
-  description = "ID of the redshift network ACL"
-  value       = module.vpc.redshift_network_acl_id
-}
-
-output "redshift_network_acl_arn" {
-  description = "ARN of the redshift network ACL"
-  value       = module.vpc.redshift_network_acl_arn
-}
-
-output "elasticache_network_acl_id" {
-  description = "ID of the elasticache network ACL"
-  value       = module.vpc.elasticache_network_acl_id
-}
-
-output "elasticache_network_acl_arn" {
-  description = "ARN of the elasticache network ACL"
-  value       = module.vpc.elasticache_network_acl_arn
-}
-
 # VPC flow log
 output "vpc_flow_log_id" {
   description = "The ID of the Flow Log resource"

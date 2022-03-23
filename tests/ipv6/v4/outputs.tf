@@ -176,24 +176,3 @@ output "igw_arn" {
   description = "The ARN of the Internet Gateway"
   value       = module.vpc.internet_gateway_arn
 }
-
-# Network ACLs
-output "public_network_acl_id" {
-  description = "ID of the public network ACL"
-  value       = module.public_subnets.network_acl_arn
-}
-
-output "public_network_acl_arn" {
-  description = "ARN of the public network ACL"
-  value       = module.public_subnets.network_acl_arn
-}
-
-output "private_network_acl_id" {
-  description = "ID of the private network ACL"
-  value       = module.private_subnets.network_acl_arn
-}
-
-output "private_network_acl_arn" {
-  description = "ARN of the private network ACL"
-  value       = module.private_subnets.network_acl_arn
-}

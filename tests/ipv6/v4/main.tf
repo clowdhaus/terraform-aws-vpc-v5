@@ -111,9 +111,6 @@ module "public_subnets" {
   name   = "${local.name}-public"
   vpc_id = module.vpc.id
 
-  # Backwards compat
-  create_network_acl = false
-
   subnets_default = {
     assign_ipv6_address_on_creation = true
     map_public_ip_on_launch         = true
@@ -142,9 +139,6 @@ module "private_subnets" {
   name   = "${local.name}-private"
   vpc_id = module.vpc.id
 
-  # Backwards compat
-  create_network_acl = false
-
   subnets = {
     "${local.region}a" = {
       ipv4_cidr_block   = "10.0.1.0/24"
@@ -168,9 +162,6 @@ module "database_subnets" {
 
   name   = "${local.name}-database"
   vpc_id = module.vpc.id
-
-  # Backwards compat
-  create_network_acl = false
 
   subnets_default = {
     assign_ipv6_address_on_creation = true

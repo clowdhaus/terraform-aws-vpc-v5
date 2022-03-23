@@ -81,8 +81,6 @@ module "public_subnets" {
   name   = "${local.name}-public"
   vpc_id = module.vpc.id
 
-  create_network_acl = false
-
   subnets_default = {
     map_public_ip_on_launch = true
     route_table_id          = module.public_route_table.id

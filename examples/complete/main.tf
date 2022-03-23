@@ -103,7 +103,7 @@ module "public_route_table" {
 }
 
 ################################################################################
-# Subnets Module
+# Subnets
 ################################################################################
 
 module "public_subnets" {
@@ -148,7 +148,20 @@ module "public_subnets" {
     }
   }
 
-  network_acl_ingress_rules = {
+  tags = local.tags
+}
+
+################################################################################
+# Network ACL
+################################################################################
+
+module "public_network_acl" {
+  source = "../../modules/network-acl"
+
+  vpc_id     = module.vpc.id
+  subnet_ids = module.public_subnets.ids
+
+  ingress_rules = {
     100 = {
       protocol        = "-1"
       rule_action     = "Allow"
@@ -158,7 +171,7 @@ module "public_subnets" {
     }
   }
 
-  network_acl_egress_rules = {
+  egress_rules = {
     100 = {
       protocol        = "-1"
       rule_action     = "Allow"

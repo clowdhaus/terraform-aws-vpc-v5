@@ -208,26 +208,6 @@ output "vgw_arn" {
   value       = module.vpc.vgw_arn
 }
 
-output "public_network_acl_id" {
-  description = "ID of the public network ACL"
-  value       = module.vpc.public_network_acl_id
-}
-
-output "public_network_acl_arn" {
-  description = "ARN of the public network ACL"
-  value       = module.vpc.public_network_acl_arn
-}
-
-output "private_network_acl_id" {
-  description = "ID of the private network ACL"
-  value       = module.vpc.private_network_acl_id
-}
-
-output "private_network_acl_arn" {
-  description = "ARN of the private network ACL"
-  value       = module.vpc.private_network_acl_arn
-}
-
 # VPC flow log
 output "vpc_flow_log_id" {
   description = "The ID of the Flow Log resource"

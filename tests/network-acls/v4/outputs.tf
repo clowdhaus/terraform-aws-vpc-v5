@@ -165,30 +165,20 @@ output "igw_arn" {
 # Network ACLs
 output "public_network_acl_id" {
   description = "ID of the public network ACL"
-  value       = module.public_subnets.network_acl_id
+  value       = module.public_network_acl.id
 }
 
 output "public_network_acl_arn" {
   description = "ARN of the public network ACL"
-  value       = module.public_subnets.network_acl_arn
-}
-
-output "private_network_acl_id" {
-  description = "ID of the private network ACL"
-  value       = module.private_subnets.network_acl_id
-}
-
-output "private_network_acl_arn" {
-  description = "ARN of the private network ACL"
-  value       = module.private_subnets.network_acl_arn
+  value       = module.public_network_acl.arn
 }
 
 output "elasticache_network_acl_id" {
   description = "ID of the elasticache network ACL"
-  value       = module.elasticache_subnets.network_acl_id
+  value       = module.elasticache_network_acl.id
 }
 
 output "elasticache_network_acl_arn" {
   description = "ARN of the elasticache network ACL"
-  value       = module.elasticache_subnets.network_acl_arn
+  value       = module.elasticache_network_acl.arn
 }
