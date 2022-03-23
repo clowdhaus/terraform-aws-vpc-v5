@@ -51,14 +51,15 @@
 - ❌ aws_main_route_table_association -> conflicts with `aws_default_route_table`
 - ✅ aws_route53_resolver_dnssec_config -> https://github.com/terraform-aws-modules/terraform-aws-vpc/issues/559
 - ✅ aws_route53_resolver_query_log_config
+  - ❌ aws_ram_resource_association -> users can use a shared query log config within the module
 - ✅ aws_route53_resolver_query_log_config_association
-- [ ] aws_ram_resource_share -> RAM ties in with `aws_ram_resource_association` from `subnet`
 
 ### Subnet
 
 This is where most of the network logic is captured; the design is centered around the subnet and its usage patterns
 
 - ✅ aws_subnet
+  - ✅ aws_ram_resource_association
 - ✅ aws_network_acl
 - ❌ aws_network_acl_association -> subnet association handled in `aws_subnet_acl`
 - ✅ aws_network_acl_rule
@@ -67,7 +68,6 @@ This is where most of the network logic is captured; the design is centered arou
 - ✅ aws_route_table_association
 - ✅ aws_nat_gateway
 - ✅ aws_ec2_subnet_cidr_reservation
-- [ ] aws_ram_resource_association -> RAM
 
 ### VPC Endpoint
 
@@ -84,7 +84,9 @@ This is where most of the network logic is captured; the design is centered arou
 
 - ✅ aws_networkfirewall_firewall
 - ✅ aws_networkfirewall_firewall_policy
+  - [ ] aws_ram_resource_association
 - ✅ aws_networkfirewall_rule_group
+  - [ ] aws_ram_resource_association
 - ✅ aws_networkfirewall_resource_policy
 - ✅ aws_networkfirewall_logging_configuration
 
@@ -94,6 +96,7 @@ This is where most of the network logic is captured; the design is centered arou
 - ✅ aws_route53_resolver_firewall_domain_list
 - ✅ aws_route53_resolver_firewall_rule
 - ✅ aws_route53_resolver_firewall_rule_group
+  - ✅ aws_ram_resource_association
 - ✅ aws_route53_resolver_firewall_rule_group_association
 
 ### Network Manager
@@ -123,6 +126,7 @@ This is where most of the network logic is captured; the design is centered arou
 - ✅ aws_vpc_ipam
 - ❌ aws_vpc_ipam_organization_admin_account -> provision in root account for multi-account setup
 - ✅ aws_vpc_ipam_pool
+  - [ ] aws_ram_resource_association
 - ✅ aws_vpc_ipam_pool_cidr
 - ✅ aws_vpc_ipam_pool_cidr_allocation
 - ✅ aws_vpc_ipam_preview_next_cidr
