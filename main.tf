@@ -75,8 +75,14 @@ resource "aws_route53_resolver_dnssec_config" "this" {
   resource_id = aws_vpc.this[0].id
 }
 
+# Route53 resolver query log config is shareable via RAM
+# https://docs.aws.amazon.com/ram/latest/userguide/shareable.html#shareable-r53
+# So users can enable query logging but provide the externally created config ID:
+# enable_dns_query_logging        = true
+# create_dns_query_logging_config = false
+# dns_query_loggin_config         = "<externally-created>"
 resource "aws_route53_resolver_query_log_config" "this" {
-  count = var.create && var.enable_dns_query_logging ? 1 : 0
+  count = var.create && var.enable_dns_query_logging && var.create_dns_query_log_config ? 1 : 0
 
   name            = var.name
   destination_arn = var.dns_query_log_destintion_arn
@@ -87,7 +93,7 @@ resource "aws_route53_resolver_query_log_config" "this" {
 resource "aws_route53_resolver_query_log_config_association" "this" {
   count = var.create && var.enable_dns_query_logging ? 1 : 0
 
-  resolver_query_log_config_id = aws_route53_resolver_query_log_config.this[0].id
+  resolver_query_log_config_id = var.create_dns_query_log_config ? aws_route53_resolver_query_log_config.this[0].id : var.dns_query_log_config_id
   resource_id                  = aws_vpc.this[0].id
 }
 

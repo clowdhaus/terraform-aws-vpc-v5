@@ -136,6 +136,18 @@ variable "enable_dns_query_logging" {
   default     = false
 }
 
+variable "create_dns_query_log_config" {
+  description = "Controls if Route53 Resolver DNS Query Log Config is created. If `false`, then `dns_query_log_config_id` must be provided if `enable_dns_query_logging` is `true`"
+  type        = bool
+  default     = true
+}
+
+variable "dns_query_log_config_id" {
+  description = "The ID of an existing Route53 Resolver DNS Query Log Config to associate with the VPC"
+  type        = string
+  default     = null
+}
+
 variable "dns_query_log_destintion_arn" {
   description = "The ARN of the resource that you want Route 53 Resolver to send query logs. You can send query logs to an S3 bucket, a CloudWatch Logs log group, or a Kinesis Data Firehose delivery stream"
   type        = string
