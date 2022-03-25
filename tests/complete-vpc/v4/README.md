@@ -34,15 +34,15 @@ Note that this example may create resources which can cost money (AWS Elastic IP
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_database_subnets"></a> [database\_subnets](#module\_database\_subnets) | ../../../modules/subnets | n/a |
-| <a name="module_elasticache_subnets"></a> [elasticache\_subnets](#module\_elasticache\_subnets) | ../../../modules/subnets | n/a |
+| <a name="module_database_subnets"></a> [database\_subnets](#module\_database\_subnets) | ../../../modules/subnet | n/a |
+| <a name="module_elasticache_subnets"></a> [elasticache\_subnets](#module\_elasticache\_subnets) | ../../../modules/subnet | n/a |
 | <a name="module_intra_route_table"></a> [intra\_route\_table](#module\_intra\_route\_table) | ../../../modules/route-table | n/a |
-| <a name="module_intra_subnets"></a> [intra\_subnets](#module\_intra\_subnets) | ../../../modules/subnets | n/a |
+| <a name="module_intra_subnets"></a> [intra\_subnets](#module\_intra\_subnets) | ../../../modules/subnet | n/a |
 | <a name="module_private_route_table"></a> [private\_route\_table](#module\_private\_route\_table) | ../../../modules/route-table | n/a |
-| <a name="module_private_subnets"></a> [private\_subnets](#module\_private\_subnets) | ../../../modules/subnets | n/a |
+| <a name="module_private_subnets"></a> [private\_subnets](#module\_private\_subnets) | ../../../modules/subnet | n/a |
 | <a name="module_public_route_table"></a> [public\_route\_table](#module\_public\_route\_table) | ../../../modules/route-table | n/a |
-| <a name="module_public_subnets"></a> [public\_subnets](#module\_public\_subnets) | ../../../modules/subnets | n/a |
-| <a name="module_redshift_subnets"></a> [redshift\_subnets](#module\_redshift\_subnets) | ../../../modules/subnets | n/a |
+| <a name="module_public_subnets"></a> [public\_subnets](#module\_public\_subnets) | ../../../modules/subnet | n/a |
+| <a name="module_redshift_subnets"></a> [redshift\_subnets](#module\_redshift\_subnets) | ../../../modules/subnet | n/a |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | ../../../ | n/a |
 | <a name="module_vpc_endpoints"></a> [vpc\_endpoints](#module\_vpc\_endpoints) | ../../../modules/vpc-endpoints | n/a |
 | <a name="module_vpc_flow_log"></a> [vpc\_flow\_log](#module\_vpc\_flow\_log) | ../../../modules/flow-log | n/a |

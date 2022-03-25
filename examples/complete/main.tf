@@ -83,57 +83,32 @@ module "vpc_flow_log" {
 }
 
 ################################################################################
-# Route Tables
-################################################################################
-
-module "public_route_table" {
-  source = "../../modules/route-table"
-
-  name   = "${local.name}-public"
-  vpc_id = module.vpc.id
-
-  routes = {
-    igw = {
-      destination_ipv4_cidr_block = "0.0.0.0/0"
-      gateway_id                  = module.vpc.internet_gateway_id
-    }
-  }
-
-  tags = local.tags
-}
-
-################################################################################
 # Subnets
 ################################################################################
 
-module "public_subnets" {
-  source = "../../modules/subnets"
+module "public_subnet" {
+  source = "../../modules/subnet"
 
-  name   = "${local.name}-public"
-  vpc_id = module.vpc.id
-
-  subnets_default = {
-    map_public_ip_on_launch = true
-    route_table_id          = module.public_route_table.id
-  }
-
-  subnets = {
+  for_each = {
     "${local.region}a" = {
-      ipv4_cidr_block    = "10.98.1.0/24"
-      availability_zone  = "${local.region}a"
-      create_nat_gateway = true
+      ipv4_cidr_block = "10.98.1.0/24"
     }
     "${local.region}b" = {
-      ipv4_cidr_block   = "10.98.2.0/24"
-      availability_zone = "${local.region}b"
+      ipv4_cidr_block = "10.98.2.0/24"
     }
     "${local.region}c" = {
-      ipv4_cidr_block   = "10.98.3.0/24"
-      availability_zone = "${local.region}c"
+      ipv4_cidr_block = "10.98.3.0/24"
     }
   }
 
-  cidr_reservations = {
+  name   = "${local.name}-public-${each.key}"
+  vpc_id = module.vpc.id
+
+  availability_zone       = each.key
+  map_public_ip_on_launch = true
+  ipv4_cidr_block         = each.value.ipv4_cidr_block
+
+  cidr_reservations = each.key == "${local.region}a" ? {
     one = {
       subnet_key       = "${local.region}a"
       description      = "Example EC2 subnet CIDR reservation"
@@ -145,6 +120,13 @@ module "public_subnets" {
       description      = "Example EC2 subnet CIDR reservation"
       cidr_block       = "10.98.1.16/28"
       reservation_type = "prefix"
+    }
+  } : {}
+
+  routes = {
+    igw = {
+      destination_ipv4_cidr_block = "0.0.0.0/0"
+      gateway_id                  = module.vpc.internet_gateway_id
     }
   }
 
@@ -159,7 +141,7 @@ module "public_network_acl" {
   source = "../../modules/network-acl"
 
   vpc_id     = module.vpc.id
-  subnet_ids = module.public_subnets.ids
+  subnet_ids = [for subnet in module.public_subnet : subnet.id]
 
   ingress_rules = {
     100 = {
@@ -241,7 +223,7 @@ module "network_firewall" {
   description = "Example network firewall"
 
   vpc_id         = module.vpc.id
-  subnet_mapping = module.public_subnets.ids
+  subnet_mapping = [for subnet in module.public_subnet : subnet.id]
 
   # Disable for testing
   delete_protection        = false

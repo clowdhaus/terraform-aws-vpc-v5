@@ -35,7 +35,7 @@ No providers.
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_public_route_table"></a> [public\_route\_table](#module\_public\_route\_table) | ../../../modules/route-table | n/a |
-| <a name="module_public_subnets"></a> [public\_subnets](#module\_public\_subnets) | ../../../modules/subnets | n/a |
+| <a name="module_public_subnets"></a> [public\_subnets](#module\_public\_subnets) | ../../../modules/subnet | n/a |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | ../../../ | n/a |
 | <a name="module_vpc_flow_log"></a> [vpc\_flow\_log](#module\_vpc\_flow\_log) | ../../../modules/flow-log | n/a |
 

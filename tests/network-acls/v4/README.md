@@ -35,12 +35,12 @@ No providers.
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_elasticache_network_acl"></a> [elasticache\_network\_acl](#module\_elasticache\_network\_acl) | ../../../modules/network-acl | n/a |
-| <a name="module_elasticache_subnets"></a> [elasticache\_subnets](#module\_elasticache\_subnets) | ../../../modules/subnets | n/a |
+| <a name="module_elasticache_subnets"></a> [elasticache\_subnets](#module\_elasticache\_subnets) | ../../../modules/subnet | n/a |
 | <a name="module_private_route_table"></a> [private\_route\_table](#module\_private\_route\_table) | ../../../modules/route-table | n/a |
-| <a name="module_private_subnets"></a> [private\_subnets](#module\_private\_subnets) | ../../../modules/subnets | n/a |
+| <a name="module_private_subnets"></a> [private\_subnets](#module\_private\_subnets) | ../../../modules/subnet | n/a |
 | <a name="module_public_network_acl"></a> [public\_network\_acl](#module\_public\_network\_acl) | ../../../modules/network-acl | n/a |
 | <a name="module_public_route_table"></a> [public\_route\_table](#module\_public\_route\_table) | ../../../modules/route-table | n/a |
-| <a name="module_public_subnets"></a> [public\_subnets](#module\_public\_subnets) | ../../../modules/subnets | n/a |
+| <a name="module_public_subnets"></a> [public\_subnets](#module\_public\_subnets) | ../../../modules/subnet | n/a |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | ../../../ | n/a |
 
 ## Resources

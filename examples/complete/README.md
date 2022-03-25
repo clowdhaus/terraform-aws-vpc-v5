@@ -37,8 +37,7 @@ Note that this example may create resources which will incur monetary charges on
 | <a name="module_dns_firewall_rule_group"></a> [dns\_firewall\_rule\_group](#module\_dns\_firewall\_rule\_group) | ../../modules/dns-firewall-rule-group | n/a |
 | <a name="module_network_firewall"></a> [network\_firewall](#module\_network\_firewall) | ../../modules/network-firewall | n/a |
 | <a name="module_public_network_acl"></a> [public\_network\_acl](#module\_public\_network\_acl) | ../../modules/network-acl | n/a |
-| <a name="module_public_route_table"></a> [public\_route\_table](#module\_public\_route\_table) | ../../modules/route-table | n/a |
-| <a name="module_public_subnets"></a> [public\_subnets](#module\_public\_subnets) | ../../modules/subnets | n/a |
+| <a name="module_public_subnet"></a> [public\_subnet](#module\_public\_subnet) | ../../modules/subnet | n/a |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | ../../ | n/a |
 | <a name="module_vpc_flow_log"></a> [vpc\_flow\_log](#module\_vpc\_flow\_log) | ../../modules/flow-log | n/a |
 
@@ -129,15 +128,14 @@ No inputs.
 | <a name="output_public_network_acl_id"></a> [public\_network\_acl\_id](#output\_public\_network\_acl\_id) | The ARN of the network ACL |
 | <a name="output_public_network_acl_rules_egress"></a> [public\_network\_acl\_rules\_egress](#output\_public\_network\_acl\_rules\_egress) | Map of egress network ACL rules created and their attributes |
 | <a name="output_public_network_acl_rules_ingress"></a> [public\_network\_acl\_rules\_ingress](#output\_public\_network\_acl\_rules\_ingress) | Map of ingress network ACL rules created and their attributes |
-| <a name="output_public_route_table_gateway_association_ids"></a> [public\_route\_table\_gateway\_association\_ids](#output\_public\_route\_table\_gateway\_association\_ids) | List of subnet route table association IDs |
-| <a name="output_public_route_table_id"></a> [public\_route\_table\_id](#output\_public\_route\_table\_id) | Public route table ID |
-| <a name="output_public_route_table_subnet_association_ids"></a> [public\_route\_table\_subnet\_association\_ids](#output\_public\_route\_table\_subnet\_association\_ids) | List of subnet route table association IDs |
-| <a name="output_public_subnet_arns"></a> [public\_subnet\_arns](#output\_public\_subnet\_arns) | List of subnet ARNs |
-| <a name="output_public_subnet_ids"></a> [public\_subnet\_ids](#output\_public\_subnet\_ids) | List of subnet IDs |
-| <a name="output_public_subnet_ipv4_cidr_blocks"></a> [public\_subnet\_ipv4\_cidr\_blocks](#output\_public\_subnet\_ipv4\_cidr\_blocks) | List of subnet IPv4 CIDR blocks |
-| <a name="output_public_subnet_ipv6_cidr_blocks"></a> [public\_subnet\_ipv6\_cidr\_blocks](#output\_public\_subnet\_ipv6\_cidr\_blocks) | List of subnet IPv6 CIDR blocks |
-| <a name="output_public_subnets"></a> [public\_subnets](#output\_public\_subnets) | Map of public subnets created and their attributes |
-| <a name="output_public_subnets_ec2_subnet_cidr_reservations"></a> [public\_subnets\_ec2\_subnet\_cidr\_reservations](#output\_public\_subnets\_ec2\_subnet\_cidr\_reservations) | Map of EC2 subnet CIDR reservations created and their attributes |
+| <a name="output_public_route_table_gateway_association_ids"></a> [public\_route\_table\_gateway\_association\_ids](#output\_public\_route\_table\_gateway\_association\_ids) | Public subnet route table association IDs |
+| <a name="output_public_route_table_subnet_association_ids"></a> [public\_route\_table\_subnet\_association\_ids](#output\_public\_route\_table\_subnet\_association\_ids) | Public subnet route table association IDs |
+| <a name="output_public_subnet_arns"></a> [public\_subnet\_arns](#output\_public\_subnet\_arns) | Public subnet ARNs |
+| <a name="output_public_subnet_ec2_subnet_cidr_reservations"></a> [public\_subnet\_ec2\_subnet\_cidr\_reservations](#output\_public\_subnet\_ec2\_subnet\_cidr\_reservations) | Map of public subnet EC2 CIDR reservations created and their attributes |
+| <a name="output_public_subnet_ids"></a> [public\_subnet\_ids](#output\_public\_subnet\_ids) | Public subnet IDs |
+| <a name="output_public_subnet_ipv4_cidr_blocks"></a> [public\_subnet\_ipv4\_cidr\_blocks](#output\_public\_subnet\_ipv4\_cidr\_blocks) | Public subnet IPv4 CIDR blocks |
+| <a name="output_public_subnet_ipv6_cidr_blocks"></a> [public\_subnet\_ipv6\_cidr\_blocks](#output\_public\_subnet\_ipv6\_cidr\_blocks) | Public subnet IPv6 CIDR blocks |
+| <a name="output_public_subnet_route_table_id"></a> [public\_subnet\_route\_table\_id](#output\_public\_subnet\_route\_table\_id) | Public subnet route table IDs |
 | <a name="output_vpn_gateways"></a> [vpn\_gateways](#output\_vpn\_gateways) | Map of VPN Gateways and their attributes |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 

@@ -36,10 +36,8 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_private_route_table"></a> [private\_route\_table](#module\_private\_route\_table) | ../../modules/route-table | n/a |
-| <a name="module_private_subnets"></a> [private\_subnets](#module\_private\_subnets) | ../../modules/subnets | n/a |
-| <a name="module_public_route_table"></a> [public\_route\_table](#module\_public\_route\_table) | ../../modules/route-table | n/a |
-| <a name="module_public_subnets"></a> [public\_subnets](#module\_public\_subnets) | ../../modules/subnets | n/a |
+| <a name="module_private_subnet"></a> [private\_subnet](#module\_private\_subnet) | ../../modules/subnet | n/a |
+| <a name="module_public_subnet"></a> [public\_subnet](#module\_public\_subnet) | ../../modules/subnet | n/a |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | ../../ | n/a |
 
 ## Resources
@@ -83,6 +81,7 @@ No inputs.
 | <a name="output_dnssec_config_arn"></a> [dnssec\_config\_arn](#output\_dnssec\_config\_arn) | The ARN for a configuration for DNSSEC validation |
 | <a name="output_dnssec_config_id"></a> [dnssec\_config\_id](#output\_dnssec\_config\_id) | The ID for a configuration for DNSSEC validation |
 | <a name="output_egress_only_internet_gateway_id"></a> [egress\_only\_internet\_gateway\_id](#output\_egress\_only\_internet\_gateway\_id) | The ID of the Egress-Only Internet Gateway |
+| <a name="output_eip_private_ip"></a> [eip\_private\_ip](#output\_eip\_private\_ip) | Contains the private IP address |
 | <a name="output_id"></a> [id](#output\_id) | The ID of the VPC |
 | <a name="output_internet_gateway_arn"></a> [internet\_gateway\_arn](#output\_internet\_gateway\_arn) | The ARN of the Internet Gateway |
 | <a name="output_internet_gateway_id"></a> [internet\_gateway\_id](#output\_internet\_gateway\_id) | The ID of the Internet Gateway |
@@ -93,25 +92,18 @@ No inputs.
 | <a name="output_ipv6_cidr_block_associations"></a> [ipv6\_cidr\_block\_associations](#output\_ipv6\_cidr\_block\_associations) | Map of IPv6 CIDR block associations and their attributes |
 | <a name="output_ipv6_cidr_block_network_border_group"></a> [ipv6\_cidr\_block\_network\_border\_group](#output\_ipv6\_cidr\_block\_network\_border\_group) | The Network Border Group Zone name |
 | <a name="output_main_route_table_id"></a> [main\_route\_table\_id](#output\_main\_route\_table\_id) | The ID of the main route table associated with this VPC. Note that you can change a VPC's main route table by using an `aws_main_route_table_association` |
-| <a name="output_nat_gateways"></a> [nat\_gateways](#output\_nat\_gateways) | Map of NAT gateway(s) created and their attributes |
-| <a name="output_nat_gateways_elastic_ips"></a> [nat\_gateways\_elastic\_ips](#output\_nat\_gateways\_elastic\_ips) | Map of EIP(s) created and their attributes |
-| <a name="output_private_route_table_gateway_association_ids"></a> [private\_route\_table\_gateway\_association\_ids](#output\_private\_route\_table\_gateway\_association\_ids) | List of subnet route table association IDs |
-| <a name="output_private_route_table_subnet_association_ids"></a> [private\_route\_table\_subnet\_association\_ids](#output\_private\_route\_table\_subnet\_association\_ids) | List of subnet route table association IDs |
-| <a name="output_private_subnet_arns"></a> [private\_subnet\_arns](#output\_private\_subnet\_arns) | List of subnet ARNs |
-| <a name="output_private_subnet_ids"></a> [private\_subnet\_ids](#output\_private\_subnet\_ids) | List of subnet IDs |
-| <a name="output_private_subnet_ipv4_cidr_blocks"></a> [private\_subnet\_ipv4\_cidr\_blocks](#output\_private\_subnet\_ipv4\_cidr\_blocks) | List of subnet IPv4 CIDR blocks |
-| <a name="output_private_subnet_ipv6_cidr_blocks"></a> [private\_subnet\_ipv6\_cidr\_blocks](#output\_private\_subnet\_ipv6\_cidr\_blocks) | List of subnet IPv6 CIDR blocks |
-| <a name="output_private_subnets"></a> [private\_subnets](#output\_private\_subnets) | Map of subnets created and their attributes |
-| <a name="output_private_subnets_ec2_subnet_cidr_reservations"></a> [private\_subnets\_ec2\_subnet\_cidr\_reservations](#output\_private\_subnets\_ec2\_subnet\_cidr\_reservations) | Map of EC2 subnet CIDR reservations created and their attributes |
-| <a name="output_private_subnets_route_table_id"></a> [private\_subnets\_route\_table\_id](#output\_private\_subnets\_route\_table\_id) | List of route table IDs |
-| <a name="output_public_route_table_gateway_association_ids"></a> [public\_route\_table\_gateway\_association\_ids](#output\_public\_route\_table\_gateway\_association\_ids) | List of subnet route table association IDs |
-| <a name="output_public_route_table_subnet_association_ids"></a> [public\_route\_table\_subnet\_association\_ids](#output\_public\_route\_table\_subnet\_association\_ids) | List of subnet route table association IDs |
-| <a name="output_public_subnet_arns"></a> [public\_subnet\_arns](#output\_public\_subnet\_arns) | List of subnet ARNs |
-| <a name="output_public_subnet_ids"></a> [public\_subnet\_ids](#output\_public\_subnet\_ids) | List of subnet IDs |
-| <a name="output_public_subnet_ipv4_cidr_blocks"></a> [public\_subnet\_ipv4\_cidr\_blocks](#output\_public\_subnet\_ipv4\_cidr\_blocks) | List of subnet IPv4 CIDR blocks |
-| <a name="output_public_subnet_ipv6_cidr_blocks"></a> [public\_subnet\_ipv6\_cidr\_blocks](#output\_public\_subnet\_ipv6\_cidr\_blocks) | List of subnet IPv6 CIDR blocks |
-| <a name="output_public_subnets"></a> [public\_subnets](#output\_public\_subnets) | Map of subnets created and their attributes |
-| <a name="output_public_subnets_ec2_subnet_cidr_reservations"></a> [public\_subnets\_ec2\_subnet\_cidr\_reservations](#output\_public\_subnets\_ec2\_subnet\_cidr\_reservations) | Map of EC2 subnet CIDR reservations created and their attributes |
-| <a name="output_public_subnets_route_table_id"></a> [public\_subnets\_route\_table\_id](#output\_public\_subnets\_route\_table\_id) | List of route table IDs |
+| <a name="output_nat_gateway_id"></a> [nat\_gateway\_id](#output\_nat\_gateway\_id) | The ID of the NAT Gateway |
+| <a name="output_private_route_table_subnet_association_ids"></a> [private\_route\_table\_subnet\_association\_ids](#output\_private\_route\_table\_subnet\_association\_ids) | Private subnet route table association IDs |
+| <a name="output_private_subnet_arns"></a> [private\_subnet\_arns](#output\_private\_subnet\_arns) | Private subnet ARNs |
+| <a name="output_private_subnet_ids"></a> [private\_subnet\_ids](#output\_private\_subnet\_ids) | Private subnet IDs |
+| <a name="output_private_subnet_ipv4_cidr_blocks"></a> [private\_subnet\_ipv4\_cidr\_blocks](#output\_private\_subnet\_ipv4\_cidr\_blocks) | Private subnet IPv4 CIDR blocks |
+| <a name="output_private_subnet_ipv6_cidr_blocks"></a> [private\_subnet\_ipv6\_cidr\_blocks](#output\_private\_subnet\_ipv6\_cidr\_blocks) | Private subnet IPv6 CIDR blocks |
+| <a name="output_private_subnet_route_table_id"></a> [private\_subnet\_route\_table\_id](#output\_private\_subnet\_route\_table\_id) | Private subnet route table IDs |
+| <a name="output_public_route_table_subnet_association_ids"></a> [public\_route\_table\_subnet\_association\_ids](#output\_public\_route\_table\_subnet\_association\_ids) | Public subnet route table association IDs |
+| <a name="output_public_subnet_arns"></a> [public\_subnet\_arns](#output\_public\_subnet\_arns) | Public subnet ARNs |
+| <a name="output_public_subnet_ids"></a> [public\_subnet\_ids](#output\_public\_subnet\_ids) | Public subnet IDs |
+| <a name="output_public_subnet_ipv4_cidr_blocks"></a> [public\_subnet\_ipv4\_cidr\_blocks](#output\_public\_subnet\_ipv4\_cidr\_blocks) | Public subnet IPv4 CIDR blocks |
+| <a name="output_public_subnet_ipv6_cidr_blocks"></a> [public\_subnet\_ipv6\_cidr\_blocks](#output\_public\_subnet\_ipv6\_cidr\_blocks) | Public subnet IPv6 CIDR blocks |
+| <a name="output_public_subnet_route_table_id"></a> [public\_subnet\_route\_table\_id](#output\_public\_subnet\_route\_table\_id) | Public subnet route table IDs |
 | <a name="output_vpn_gateways"></a> [vpn\_gateways](#output\_vpn\_gateways) | Map of VPN Gateways and their attributes |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

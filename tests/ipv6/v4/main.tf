@@ -106,7 +106,7 @@ module "database_route_table" {
 ################################################################################
 
 module "public_subnets" {
-  source = "../../../modules/subnets"
+  source = "../../../modules/subnet"
 
   name   = "${local.name}-public"
   vpc_id = module.vpc.id
@@ -134,7 +134,7 @@ module "public_subnets" {
 }
 
 module "private_subnets" {
-  source = "../../../modules/subnets"
+  source = "../../../modules/subnet"
 
   name   = "${local.name}-private"
   vpc_id = module.vpc.id
@@ -158,7 +158,7 @@ module "private_subnets" {
 }
 
 module "database_subnets" {
-  source = "../../../modules/subnets"
+  source = "../../../modules/subnet"
 
   name   = "${local.name}-database"
   vpc_id = module.vpc.id

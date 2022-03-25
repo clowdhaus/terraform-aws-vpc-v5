@@ -297,57 +297,44 @@ output "default_vpc_main_route_table_id" {
 # Subnet
 ################################################################################
 
-output "public_subnets" {
-  description = "Map of public subnets created and their attributes"
-  value       = module.public_subnets.subnets
-}
-
 output "public_subnet_arns" {
-  description = "List of subnet ARNs"
-  value       = module.public_subnets.arns
+  description = "Public subnet ARNs"
+  value       = [for subnet in module.public_subnet : subnet.arn]
 }
 
 output "public_subnet_ids" {
-  description = "List of subnet IDs"
-  value       = module.public_subnets.ids
+  description = "Public subnet IDs"
+  value       = [for subnet in module.public_subnet : subnet.id]
 }
 
 output "public_subnet_ipv4_cidr_blocks" {
-  description = "List of subnet IPv4 CIDR blocks"
-  value       = module.public_subnets.ipv4_cidr_blocks
+  description = "Public subnet IPv4 CIDR blocks"
+  value       = [for subnet in module.public_subnet : subnet.ipv4_cidr_block]
 }
 
 output "public_subnet_ipv6_cidr_blocks" {
-  description = "List of subnet IPv6 CIDR blocks"
-  value       = module.public_subnets.ipv6_cidr_blocks
+  description = "Public subnet IPv6 CIDR blocks"
+  value       = compact([for subnet in module.public_subnet : subnet.ipv6_cidr_block])
 }
 
-################################################################################
-# EC2 Subnet CIDR Reservation
-################################################################################
-
-output "public_subnets_ec2_subnet_cidr_reservations" {
-  description = "Map of EC2 subnet CIDR reservations created and their attributes"
-  value       = module.public_subnets.ec2_subnet_cidr_reservations
+output "public_subnet_ec2_subnet_cidr_reservations" {
+  description = "Map of public subnet EC2 CIDR reservations created and their attributes"
+  value       = flatten([for subnet in module.public_subnet : subnet.ec2_subnet_cidr_reservations])
 }
 
-################################################################################
-# Route Table
-################################################################################
-
-output "public_route_table_id" {
-  description = "Public route table ID"
-  value       = module.public_route_table.id
+output "public_subnet_route_table_id" {
+  description = "Public subnet route table IDs"
+  value       = [for subnet in module.public_subnet : subnet.route_table_id]
 }
 
 output "public_route_table_subnet_association_ids" {
-  description = "List of subnet route table association IDs"
-  value       = module.public_subnets.route_table_association_ids
+  description = "Public subnet route table association IDs"
+  value       = [for subnet in module.public_subnet : subnet.route_table_subnet_association_id]
 }
 
 output "public_route_table_gateway_association_ids" {
-  description = "List of subnet route table association IDs"
-  value       = module.public_route_table.gateway_association_ids
+  description = "Public subnet route table association IDs"
+  value       = [for subnet in module.public_subnet : subnet.route_table_gateway_association_ids]
 }
 
 ################################################################################

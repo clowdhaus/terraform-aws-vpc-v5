@@ -31,11 +31,11 @@ No providers.
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_database_route_table"></a> [database\_route\_table](#module\_database\_route\_table) | ../../../modules/route-table | n/a |
-| <a name="module_database_subnets"></a> [database\_subnets](#module\_database\_subnets) | ../../../modules/subnets | n/a |
+| <a name="module_database_subnets"></a> [database\_subnets](#module\_database\_subnets) | ../../../modules/subnet | n/a |
 | <a name="module_private_route_tables"></a> [private\_route\_tables](#module\_private\_route\_tables) | ../../../modules/route-table | n/a |
-| <a name="module_private_subnets"></a> [private\_subnets](#module\_private\_subnets) | ../../../modules/subnets | n/a |
+| <a name="module_private_subnets"></a> [private\_subnets](#module\_private\_subnets) | ../../../modules/subnet | n/a |
 | <a name="module_public_route_table"></a> [public\_route\_table](#module\_public\_route\_table) | ../../../modules/route-table | n/a |
-| <a name="module_public_subnets"></a> [public\_subnets](#module\_public\_subnets) | ../../../modules/subnets | n/a |
+| <a name="module_public_subnets"></a> [public\_subnets](#module\_public\_subnets) | ../../../modules/subnet | n/a |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | ../../../ | n/a |
 
 ## Resources

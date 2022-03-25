@@ -6,5 +6,5 @@
 - [IPAM](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/modules/ipam)
 - [Network Firewall](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/modules/network-firewall)
 - [Route Table](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/modules/route-table)
-- [Subnets](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/modules/subnets)
+- [Subnet](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/modules/subnet)
 - [VPC Endpoints](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/modules/vpc-endpoints)

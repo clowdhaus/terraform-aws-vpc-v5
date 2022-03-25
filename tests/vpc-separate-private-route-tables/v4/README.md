@@ -33,15 +33,15 @@ No providers.
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_database_route_table"></a> [database\_route\_table](#module\_database\_route\_table) | ../../../modules/route-table | n/a |
-| <a name="module_database_subnets"></a> [database\_subnets](#module\_database\_subnets) | ../../../modules/subnets | n/a |
+| <a name="module_database_subnets"></a> [database\_subnets](#module\_database\_subnets) | ../../../modules/subnet | n/a |
 | <a name="module_elasticache_route_table"></a> [elasticache\_route\_table](#module\_elasticache\_route\_table) | ../../../modules/route-table | n/a |
-| <a name="module_elasticache_subnets"></a> [elasticache\_subnets](#module\_elasticache\_subnets) | ../../../modules/subnets | n/a |
+| <a name="module_elasticache_subnets"></a> [elasticache\_subnets](#module\_elasticache\_subnets) | ../../../modules/subnet | n/a |
 | <a name="module_private_route_table"></a> [private\_route\_table](#module\_private\_route\_table) | ../../../modules/route-table | n/a |
-| <a name="module_private_subnets"></a> [private\_subnets](#module\_private\_subnets) | ../../../modules/subnets | n/a |
+| <a name="module_private_subnets"></a> [private\_subnets](#module\_private\_subnets) | ../../../modules/subnet | n/a |
 | <a name="module_public_route_table"></a> [public\_route\_table](#module\_public\_route\_table) | ../../../modules/route-table | n/a |
-| <a name="module_public_subnets"></a> [public\_subnets](#module\_public\_subnets) | ../../../modules/subnets | n/a |
+| <a name="module_public_subnets"></a> [public\_subnets](#module\_public\_subnets) | ../../../modules/subnet | n/a |
 | <a name="module_redshift_route_table"></a> [redshift\_route\_table](#module\_redshift\_route\_table) | ../../../modules/route-table | n/a |
-| <a name="module_redshift_subnets"></a> [redshift\_subnets](#module\_redshift\_subnets) | ../../../modules/subnets | n/a |
+| <a name="module_redshift_subnets"></a> [redshift\_subnets](#module\_redshift\_subnets) | ../../../modules/subnet | n/a |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | ../../../ | n/a |
 
 ## Resources

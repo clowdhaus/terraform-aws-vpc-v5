@@ -76,7 +76,7 @@ module "public_route_table" {
 ################################################################################
 
 module "public_subnets" {
-  source = "../../../modules/subnets"
+  source = "../../../modules/subnet"
 
   name   = "${local.name}-public"
   vpc_id = module.vpc.id

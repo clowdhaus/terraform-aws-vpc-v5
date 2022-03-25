@@ -80,53 +80,6 @@ output "dns_query_log_config_association_id" {
   value       = module.vpc.dns_query_log_config_association_id
 }
 
-# ################################################################################
-# # Flow Log
-# ################################################################################
-
-# output "flow_log_arn" {
-#   description = "The VPC flow log ARN"
-#   value       = module.vpc.flow_log_arn
-# }
-
-# output "flow_log_id" {
-#   description = "The VPC flow log ID"
-#   value       = module.vpc.flow_log_id
-# }
-
-# ################################################################################
-# # Flow Log CloudWatch Log Group
-# ################################################################################
-
-# output "flow_log_cloudwatch_log_group_name" {
-#   description = "Name of cloudwatch log group created"
-#   value       = module.vpc.flow_log_cloudwatch_log_group_name
-# }
-
-# output "flow_log_cloudwatch_log_group_arn" {
-#   description = "ARN of cloudwatch log group created"
-#   value       = module.vpc.flow_log_cloudwatch_log_group_arn
-# }
-
-# ################################################################################
-# # Flow Log CloudWatch Log Group IAM Role
-# ################################################################################
-
-# output "flow_log_iam_role_name" {
-#   description = "Name of the flow log CloudWatch IAM role"
-#   value       = module.vpc.flow_log_iam_role_name
-# }
-
-# output "flow_log_iam_role_arn" {
-#   description = "ARN of the flow log CloudWatch IAM role"
-#   value       = module.vpc.flow_log_iam_role_arn
-# }
-
-# output "flow_log_iam_role_unique_id" {
-#   description = "Stable and unique string identifying the flow log CloudWatch IAM role"
-#   value       = module.vpc.flow_log_iam_role_unique_id
-# }
-
 ################################################################################
 # DHCP Options Set
 ################################################################################
@@ -298,118 +251,77 @@ output "default_vpc_main_route_table_id" {
 ################################################################################
 
 # Public
-output "public_subnets" {
-  description = "Map of subnets created and their attributes"
-  value       = module.public_subnets.subnets
-}
-
 output "public_subnet_arns" {
-  description = "List of subnet ARNs"
-  value       = module.public_subnets.arns
+  description = "Public subnet ARNs"
+  value       = [for subnet in module.public_subnet : subnet.arn]
 }
 
 output "public_subnet_ids" {
-  description = "List of subnet IDs"
-  value       = module.public_subnets.ids
+  description = "Public subnet IDs"
+  value       = [for subnet in module.public_subnet : subnet.id]
 }
 
 output "public_subnet_ipv4_cidr_blocks" {
-  description = "List of subnet IPv4 CIDR blocks"
-  value       = module.public_subnets.ipv4_cidr_blocks
+  description = "Public subnet IPv4 CIDR blocks"
+  value       = [for subnet in module.public_subnet : subnet.ipv4_cidr_block]
 }
 
 output "public_subnet_ipv6_cidr_blocks" {
-  description = "List of subnet IPv6 CIDR blocks"
-  value       = module.public_subnets.ipv6_cidr_blocks
+  description = "Public subnet IPv6 CIDR blocks"
+  value       = compact([for subnet in module.public_subnet : subnet.ipv6_cidr_block])
 }
 
-# Private
-output "private_subnets" {
-  description = "Map of subnets created and their attributes"
-  value       = module.private_subnets.subnets
-}
-
-output "private_subnet_arns" {
-  description = "List of subnet ARNs"
-  value       = module.private_subnets.arns
-}
-
-output "private_subnet_ids" {
-  description = "List of subnet IDs"
-  value       = module.private_subnets.ids
-}
-
-output "private_subnet_ipv4_cidr_blocks" {
-  description = "List of subnet IPv4 CIDR blocks"
-  value       = module.private_subnets.ipv4_cidr_blocks
-}
-
-output "private_subnet_ipv6_cidr_blocks" {
-  description = "List of subnet IPv6 CIDR blocks"
-  value       = module.private_subnets.ipv6_cidr_blocks
-}
-
-################################################################################
-# EC2 Subnet CIDR Reservation
-################################################################################
-
-# Public
-output "public_subnets_ec2_subnet_cidr_reservations" {
-  description = "Map of EC2 subnet CIDR reservations created and their attributes"
-  value       = module.public_subnets.ec2_subnet_cidr_reservations
-}
-
-# Private
-output "private_subnets_ec2_subnet_cidr_reservations" {
-  description = "Map of EC2 subnet CIDR reservations created and their attributes"
-  value       = module.private_subnets.ec2_subnet_cidr_reservations
-}
-
-################################################################################
-# Route Table
-################################################################################
-
-output "public_subnets_route_table_id" {
-  description = "List of route table IDs"
-  value       = module.public_route_table.id
+output "public_subnet_route_table_id" {
+  description = "Public subnet route table IDs"
+  value       = [for subnet in module.public_subnet : subnet.route_table_id]
 }
 
 output "public_route_table_subnet_association_ids" {
-  description = "List of subnet route table association IDs"
-  value       = module.public_subnets.route_table_association_ids
-}
-
-output "public_route_table_gateway_association_ids" {
-  description = "List of subnet route table association IDs"
-  value       = module.public_route_table.gateway_association_ids
+  description = "Public subnet route table association IDs"
+  value       = [for subnet in module.public_subnet : subnet.route_table_subnet_association_id]
 }
 
 # Private
-output "private_subnets_route_table_id" {
-  description = "List of route table IDs"
-  value       = module.private_route_table.id
+output "private_subnet_arns" {
+  description = "Private subnet ARNs"
+  value       = [for subnet in module.private_subnet : subnet.arn]
+}
+
+output "private_subnet_ids" {
+  description = "Private subnet IDs"
+  value       = [for subnet in module.private_subnet : subnet.id]
+}
+
+output "private_subnet_ipv4_cidr_blocks" {
+  description = "Private subnet IPv4 CIDR blocks"
+  value       = compact([for subnet in module.private_subnet : subnet.ipv4_cidr_block])
+}
+
+output "private_subnet_ipv6_cidr_blocks" {
+  description = "Private subnet IPv6 CIDR blocks"
+  value       = compact([for subnet in module.private_subnet : subnet.ipv6_cidr_block])
+}
+
+output "private_subnet_route_table_id" {
+  description = "Private subnet route table IDs"
+  value       = [for subnet in module.private_subnet : subnet.route_table_id]
 }
 
 output "private_route_table_subnet_association_ids" {
-  description = "List of subnet route table association IDs"
-  value       = module.private_subnets.route_table_association_ids
-}
-
-output "private_route_table_gateway_association_ids" {
-  description = "List of subnet route table association IDs"
-  value       = module.private_route_table.gateway_association_ids
+  description = "Private subnet route table association IDs"
+  value       = [for subnet in module.private_subnet : subnet.route_table_subnet_association_id]
 }
 
 ################################################################################
 # NAT Gateway
 ################################################################################
 
-output "nat_gateways" {
-  description = "Map of NAT gateway(s) created and their attributes"
-  value       = module.public_subnets.nat_gateways
+output "nat_gateway_id" {
+  description = "The ID of the NAT Gateway"
+  value       = module.public_subnet["${local.region}a"].nat_gateway_id
 }
 
-output "nat_gateways_elastic_ips" {
-  description = "Map of EIP(s) created and their attributes"
-  value       = module.public_subnets.elastic_ips
+output "eip_private_ip" {
+  description = "Contains the private IP address"
+  value       = module.public_subnet["${local.region}a"].eip_private_ip
 }
