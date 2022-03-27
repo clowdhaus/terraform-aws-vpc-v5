@@ -48,64 +48,45 @@ output "vpc_owner_id" {
   value       = module.vpc.owner_id
 }
 
-output "private_subnets" {
-  description = "List of IDs of private subnets"
-  value       = module.private_subnets.ids
-}
-
+# Subnet
 output "private_subnet_arns" {
   description = "List of ARNs of private subnets"
-  value       = module.private_subnets.arns
+  value       = [for subnet in module.private_subnet : subnet.arn]
 }
 
 output "private_subnets_ipv4_cidr_blocks" {
   description = "List of cidr_blocks of private subnets"
-  value       = module.private_subnets.ipv4_cidr_blocks
+  value       = [for subnet in module.private_subnet : subnet.ipv4_cidr_block]
 }
 
 output "private_subnets_ipv6_cidr_blocks" {
   description = "List of IPv6 cidr_blocks of private subnets in an IPv6 enabled VPC"
-  value       = module.private_subnets.ipv6_cidr_blocks
-}
-
-output "public_subnets" {
-  description = "List of IDs of public subnets"
-  value       = module.public_subnets.ids
+  value       = compact([for subnet in module.private_subnet : subnet.ipv6_cidr_block])
 }
 
 output "public_subnet_arns" {
   description = "List of ARNs of public subnets"
-  value       = module.public_subnets.arns
+  value       = [for subnet in module.public_subnet : subnet.arn]
 }
 
 output "public_subnets_ipv4_cidr_blocks" {
   description = "List of cidr_blocks of public subnets"
-  value       = module.public_subnets.ipv4_cidr_blocks
+  value       = [for subnet in module.public_subnet : subnet.ipv4_cidr_block]
 }
 
 output "public_subnets_ipv6_cidr_blocks" {
   description = "List of IPv6 cidr_blocks of public subnets in an IPv6 enabled VPC"
-  value       = module.public_subnets.ipv6_cidr_blocks
+  value       = compact([for subnet in module.public_subnet : subnet.ipv6_cidr_block])
 }
 
 output "public_route_table_id" {
   description = "List of IDs of public route tables"
-  value       = module.public_route_table.id
+  value       = [for subnet in module.public_subnet : subnet.route_table_id]
 }
 
 output "private_route_table_id" {
   description = "List of IDs of private route tables"
-  value       = module.private_route_table.id
-}
-
-output "private_route_table_subnet_association_ids" {
-  description = "List of IDs of the private route table association"
-  value       = module.private_subnets.route_table_association_ids
-}
-
-output "public_route_table_subnet_association_ids" {
-  description = "List of IDs of the public route table association"
-  value       = module.public_subnets.route_table_association_ids
+  value       = [for subnet in module.private_subnet : subnet.route_table_id]
 }
 
 output "dhcp_options_id" {
@@ -115,12 +96,12 @@ output "dhcp_options_id" {
 
 output "nat_public_ips" {
   description = "List of public Elastic IPs created for AWS NAT Gateway"
-  value       = module.public_subnets.nat_gateway_public_ips
+  value       = [for subnet in module.public_subnet : subnet.eip_public_ip]
 }
 
 output "natgw_ids" {
   description = "List of NAT Gateway IDs"
-  value       = module.public_subnets.nat_gateway_ids
+  value       = [for subnet in module.public_subnet : subnet.nat_gateway_id]
 }
 
 output "igw_id" {

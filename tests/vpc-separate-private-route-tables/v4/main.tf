@@ -32,14 +32,33 @@ module "vpc" {
 }
 
 ################################################################################
-# Route Tables
+# Subnets
 ################################################################################
 
-module "public_route_table" {
-  source = "../../../modules/route-table"
+module "public_subnet" {
+  source = "../../../modules/subnet"
 
-  name   = "${local.name}-public"
+  for_each = {
+    "${local.region}a" = {
+      ipv4_cidr_block = "10.10.11.0/24"
+    }
+    "${local.region}b" = {
+      ipv4_cidr_block = "10.10.12.0/24"
+    }
+    "${local.region}c" = {
+      ipv4_cidr_block = "10.10.13.0/24"
+    }
+  }
+
+  name   = "${local.name}-public-${each.key}"
   vpc_id = module.vpc.id
+
+  availability_zone       = each.key
+  map_public_ip_on_launch = true
+  ipv4_cidr_block         = each.value.ipv4_cidr_block
+
+  # Just create onc NAT Gateway
+  create_nat_gateway = each.key == "${local.region}a"
 
   routes = {
     igw_ipv4 = {
@@ -51,227 +70,105 @@ module "public_route_table" {
   tags = local.tags
 }
 
-module "private_route_table" {
-  source = "../../../modules/route-table"
+module "private_subnet" {
+  source = "../../../modules/subnet"
 
-  name   = "${local.name}-private"
+  for_each = {
+    "${local.region}a" = {
+      ipv4_cidr_block = "10.10.1.0/24"
+    }
+    "${local.region}b" = {
+      ipv4_cidr_block = "10.10.2.0/24"
+    }
+    "${local.region}c" = {
+      ipv4_cidr_block = "10.10.3.0/24"
+    }
+  }
+
+  name   = "${local.name}-private-${each.key}"
   vpc_id = module.vpc.id
+
+  availability_zone = each.key
+  ipv4_cidr_block   = each.value.ipv4_cidr_block
 
   routes = {
     nat_gw_ipv4 = {
       destination_ipv4_cidr_block = "0.0.0.0/0"
-      nat_gateway_id              = module.public_subnets.nat_gateways["${local.region}a"].id
+      nat_gateway_id              = module.public_subnet["${local.region}a"].nat_gateway_id
     }
   }
 
   tags = local.tags
 }
 
-module "database_route_table" {
-  source = "../../../modules/route-table"
-
-  name   = "${local.name}-database"
-  vpc_id = module.vpc.id
-
-  tags = local.tags
-}
-
-module "elasticache_route_table" {
-  source = "../../../modules/route-table"
-
-  name   = "${local.name}-elasticache"
-  vpc_id = module.vpc.id
-
-  tags = local.tags
-}
-
-module "redshift_route_table" {
-  source = "../../../modules/route-table"
-
-  name   = "${local.name}-redshift"
-  vpc_id = module.vpc.id
-
-  tags = local.tags
-}
-
-################################################################################
-# Subnets
-################################################################################
-
-module "public_subnets" {
+module "database_subnet" {
   source = "../../../modules/subnet"
 
-  name   = "${local.name}-public"
-  vpc_id = module.vpc.id
-
-  subnets_default = {
-    map_public_ip_on_launch = true
-    route_table_id          = module.public_route_table.id
-  }
-
-  subnets = {
+  for_each = {
     "${local.region}a" = {
-      ipv4_cidr_block    = "10.10.11.0/24"
-      availability_zone  = "${local.region}a"
-      create_nat_gateway = true
+      ipv4_cidr_block = "10.10.21.0/24"
     }
     "${local.region}b" = {
-      ipv4_cidr_block   = "10.10.12.0/24"
-      availability_zone = "${local.region}b"
+      ipv4_cidr_block = "10.10.22.0/24"
     }
     "${local.region}c" = {
-      ipv4_cidr_block   = "10.10.13.0/24"
-      availability_zone = "${local.region}c"
+      ipv4_cidr_block = "10.10.23.0/24"
     }
   }
+
+  name   = "${local.name}-database-${each.key}"
+  vpc_id = module.vpc.id
+
+  availability_zone = each.key
+  ipv4_cidr_block   = each.value.ipv4_cidr_block
 
   tags = local.tags
 }
 
-module "private_subnets" {
+module "elasticache_subnet" {
   source = "../../../modules/subnet"
 
-  name   = "${local.name}-private"
-  vpc_id = module.vpc.id
-
-  subnets_default = {
-    route_table_id = module.private_route_table.id
-  }
-
-  subnets = {
+  for_each = {
     "${local.region}a" = {
-      ipv4_cidr_block   = "10.10.1.0/24"
-      availability_zone = "${local.region}a"
+      ipv4_cidr_block = "10.10.31.0/24"
     }
     "${local.region}b" = {
-      ipv4_cidr_block   = "10.10.2.0/24"
-      availability_zone = "${local.region}b"
+      ipv4_cidr_block = "10.10.32.0/24"
     }
     "${local.region}c" = {
-      ipv4_cidr_block   = "10.10.3.0/24"
-      availability_zone = "${local.region}c"
+      ipv4_cidr_block = "10.10.33.0/24"
     }
   }
+
+  name   = "${local.name}-elasticache-${each.key}"
+  vpc_id = module.vpc.id
+
+  availability_zone = each.key
+  ipv4_cidr_block   = each.value.ipv4_cidr_block
 
   tags = local.tags
 }
 
-module "database_subnets" {
+module "redshift_subnet" {
   source = "../../../modules/subnet"
 
-  name   = "${local.name}-database"
-  vpc_id = module.vpc.id
-
-  subnets_default = {
-    route_table_id = module.database_route_table.id
-  }
-
-  subnets = {
+  for_each = {
     "${local.region}a" = {
-      ipv4_cidr_block   = "10.10.21.0/24"
-      availability_zone = "${local.region}a"
+      ipv4_cidr_block = "10.10.41.0/24"
     }
     "${local.region}b" = {
-      ipv4_cidr_block   = "10.10.22.0/24"
-      availability_zone = "${local.region}b"
+      ipv4_cidr_block = "10.10.42.0/24"
     }
     "${local.region}c" = {
-      ipv4_cidr_block   = "10.10.23.0/24"
-      availability_zone = "${local.region}c"
+      ipv4_cidr_block = "10.10.43.0/24"
     }
   }
 
-  rds_subnet_groups = {
-    database = {
-      name                   = local.name
-      description            = "Database subnet group for ${local.name}"
-      associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
-
-      tags = {
-        Name = local.name
-      }
-    }
-  }
-
-  tags = local.tags
-}
-
-module "elasticache_subnets" {
-  source = "../../../modules/subnet"
-
-  name   = "${local.name}-elasticache"
+  name   = "${local.name}-redshift-${each.key}"
   vpc_id = module.vpc.id
 
-  subnets_default = {
-    route_table_id = module.elasticache_route_table.id
-  }
-
-  subnets = {
-    "${local.region}a" = {
-      ipv4_cidr_block   = "10.10.31.0/24"
-      availability_zone = "${local.region}a"
-    }
-    "${local.region}b" = {
-      ipv4_cidr_block   = "10.10.32.0/24"
-      availability_zone = "${local.region}b"
-    }
-    "${local.region}c" = {
-      ipv4_cidr_block   = "10.10.33.0/24"
-      availability_zone = "${local.region}c"
-    }
-  }
-
-  elasticache_subnet_groups = {
-    elasticache = {
-      name                   = local.name
-      description            = "ElastiCache subnet group for ${local.name}"
-      associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
-
-      tags = {
-        Name = local.name
-      }
-    }
-  }
-
-  tags = local.tags
-}
-
-module "redshift_subnets" {
-  source = "../../../modules/subnet"
-
-  name   = "${local.name}-redshift"
-  vpc_id = module.vpc.id
-
-  subnets_default = {
-    route_table_id = module.redshift_route_table.id
-  }
-
-  subnets = {
-    "${local.region}a" = {
-      ipv4_cidr_block   = "10.10.41.0/24"
-      availability_zone = "${local.region}a"
-    }
-    "${local.region}b" = {
-      ipv4_cidr_block   = "10.10.42.0/24"
-      availability_zone = "${local.region}b"
-    }
-    "${local.region}c" = {
-      ipv4_cidr_block   = "10.10.43.0/24"
-      availability_zone = "${local.region}c"
-    }
-  }
-
-  redshift_subnet_groups = {
-    redshift = {
-      name                   = local.name
-      description            = "Redshift subnet group for ${local.name}"
-      associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
-
-      tags = {
-        Name = local.name
-      }
-    }
-  }
+  availability_zone = each.key
+  ipv4_cidr_block   = each.value.ipv4_cidr_block
 
   tags = local.tags
 }

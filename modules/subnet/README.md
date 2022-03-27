@@ -155,11 +155,13 @@ No modules.
 | <a name="input_nat_gateway_connectivity_type"></a> [nat\_gateway\_connectivity\_type](#input\_nat\_gateway\_connectivity\_type) | Connectivity type for the gateway. Valid values are `private` and `public`. Defaults to `public` | `string` | `null` | no |
 | <a name="input_outpost_arn"></a> [outpost\_arn](#input\_outpost\_arn) | The Amazon Resource Name (ARN) of the Outpost | `string` | `null` | no |
 | <a name="input_private_dns_hostname_type_on_launch"></a> [private\_dns\_hostname\_type\_on\_launch](#input\_private\_dns\_hostname\_type\_on\_launch) | The type of hostnames to assign to instances in the subnet at launch. For IPv6-only subnets, an instance DNS name must be based on the instance ID. For dual-stack and IPv4-only subnets, you can specify whether DNS names use the instance IPv4 address or the instance ID | `string` | `null` | no |
+| <a name="input_resource_share_arn"></a> [resource\_share\_arn](#input\_resource\_share\_arn) | Amazon Resource Name (ARN) of the RAM Resource Share | `string` | `null` | no |
 | <a name="input_route_table_id"></a> [route\_table\_id](#input\_route\_table\_id) | The ID of an exissting route table to associate with the subnet | `string` | `null` | no |
 | <a name="input_route_table_tags"></a> [route\_table\_tags](#input\_route\_table\_tags) | Additional tags for the VPC | `map(string)` | `{}` | no |
 | <a name="input_route_table_timeouts"></a> [route\_table\_timeouts](#input\_route\_table\_timeouts) | Create, update, and delete timeout configurations for route table | `map(string)` | `{}` | no |
 | <a name="input_route_timeouts"></a> [route\_timeouts](#input\_route\_timeouts) | Default create, update, and delete timeout configurations for routes | `map(string)` | `{}` | no |
 | <a name="input_routes"></a> [routes](#input\_routes) | Map of route definitions to create | `map(any)` | `{}` | no |
+| <a name="input_share_subnet"></a> [share\_subnet](#input\_share\_subnet) | Controls if the subnet should be shared via RAM resource association | `bool` | `false` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to add to all resources | `map(string)` | `{}` | no |
 | <a name="input_timeouts"></a> [timeouts](#input\_timeouts) | Create and delete timeout configurations for subnet | `map(string)` | `{}` | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | The ID of the VPC the resources are created within | `string` | `""` | no |

@@ -52,26 +52,6 @@ module "vpc_flow_log" {
 }
 
 ################################################################################
-# Route Tables
-################################################################################
-
-module "public_route_table" {
-  source = "../../../modules/route-table"
-
-  name   = "${local.name}-public"
-  vpc_id = module.vpc.id
-
-  routes = {
-    igw = {
-      destination_ipv4_cidr_block = "0.0.0.0/0"
-      gateway_id                  = module.vpc.internet_gateway_id
-    }
-  }
-
-  tags = local.tags
-}
-
-################################################################################
 # Subnets Module
 ################################################################################
 
@@ -81,15 +61,14 @@ module "public_subnets" {
   name   = "${local.name}-public"
   vpc_id = module.vpc.id
 
-  subnets_default = {
-    map_public_ip_on_launch = true
-    route_table_id          = module.public_route_table.id
-  }
+  map_public_ip_on_launch = true
+  ipv4_cidr_block         = "10.10.101.0/24"
+  availability_zone       = "${local.region}a"
 
-  subnets = {
-    "${local.region}a" = {
-      ipv4_cidr_block   = "10.10.101.0/24"
-      availability_zone = "${local.region}a"
+  routes = {
+    igw = {
+      destination_ipv4_cidr_block = "0.0.0.0/0"
+      gateway_id                  = module.vpc.internet_gateway_id
     }
   }
 

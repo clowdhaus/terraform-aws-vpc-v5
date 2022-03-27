@@ -39,14 +39,30 @@ module "vpc" {
 }
 
 ################################################################################
-# Route Tables
+# Subnets
 ################################################################################
 
-module "public_route_table" {
-  source = "../../../modules/route-table"
+module "public_subnet" {
+  source = "../../../modules/subnet"
 
-  name   = "${local.name}-public"
+  for_each = {
+    "${local.region}a" = {
+      ipv4_cidr_block = "10.0.101.0/24"
+    }
+    "${local.region}b" = {
+      ipv4_cidr_block = "10.0.102.0/24"
+    }
+    "${local.region}c" = {
+      ipv4_cidr_block = "10.0.103.0/24"
+    }
+  }
+
+  name   = "${local.name}-public-${each.key}"
   vpc_id = module.vpc.id
+
+  availability_zone       = each.key
+  map_public_ip_on_launch = true
+  ipv4_cidr_block         = each.value.ipv4_cidr_block
 
   routes = {
     igw_ipv4 = {
@@ -64,84 +80,31 @@ module "public_route_table" {
   })
 }
 
+module "private_subnet" {
+  source = "../../../modules/subnet"
 
-module "private_route_table" {
-  source = "../../../modules/route-table"
+  for_each = {
+    "${local.region}a" = {
+      ipv4_cidr_block = "10.0.1.0/24"
+    }
+    "${local.region}b" = {
+      ipv4_cidr_block = "10.0.2.0/24"
+    }
+    "${local.region}c" = {
+      ipv4_cidr_block = "10.0.3.0/24"
+    }
+  }
 
-  name   = "${local.name}-private"
+  name   = "${local.name}-private-${each.key}"
   vpc_id = module.vpc.id
+
+  availability_zone = each.key
+  ipv4_cidr_block   = each.value.ipv4_cidr_block
 
   routes = {
     igw_ipv6 = {
       destination_ipv6_cidr_block = "::/0"
       egress_only_gateway_id      = module.vpc.egress_only_internet_gateway_id
-    }
-  }
-
-  tags = local.tags
-}
-
-################################################################################
-# Subnets
-################################################################################
-
-module "public_subnets" {
-  source = "../../../modules/subnet"
-
-  name   = "${local.name}-public"
-  vpc_id = module.vpc.id
-
-  subnets_default = {
-    map_public_ip_on_launch = true
-    route_table_id          = module.public_route_table.id
-    tags = {
-      Name = "overridden-name-public"
-    }
-  }
-
-  subnets = {
-    "${local.region}a" = {
-      ipv4_cidr_block   = "10.0.101.0/24"
-      availability_zone = "${local.region}a"
-    }
-    "${local.region}b" = {
-      ipv4_cidr_block   = "10.0.102.0/24"
-      availability_zone = "${local.region}b"
-    }
-    "${local.region}c" = {
-      ipv4_cidr_block   = "10.0.103.0/24"
-      availability_zone = "${local.region}c"
-    }
-  }
-
-  tags = merge(local.tags, {
-    Name = "overridden-name-public"
-  })
-}
-
-
-module "private_subnets" {
-  source = "../../../modules/subnet"
-
-  name   = "${local.name}-private"
-  vpc_id = module.vpc.id
-
-  subnets_default = {
-    route_table_id = module.private_route_table.id
-  }
-
-  subnets = {
-    "${local.region}a" = {
-      ipv4_cidr_block   = "10.0.1.0/24"
-      availability_zone = "${local.region}a"
-    }
-    "${local.region}b" = {
-      ipv4_cidr_block   = "10.0.2.0/24"
-      availability_zone = "${local.region}b"
-    }
-    "${local.region}c" = {
-      ipv4_cidr_block   = "10.0.3.0/24"
-      availability_zone = "${local.region}c"
     }
   }
 

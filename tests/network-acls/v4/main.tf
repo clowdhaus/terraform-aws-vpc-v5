@@ -213,14 +213,30 @@ module "vpc" {
 }
 
 ################################################################################
-# Route Tables
+# Subnets
 ################################################################################
 
-module "public_route_table" {
-  source = "../../../modules/route-table"
+module "public_subnet" {
+  source = "../../../modules/subnet"
 
-  name   = "${local.name}-public"
+  for_each = {
+    "${local.region}a" = {
+      ipv4_cidr_block = "10.0.101.0/24"
+    }
+    "${local.region}b" = {
+      ipv4_cidr_block = "10.0.102.0/24"
+    }
+    "${local.region}c" = {
+      ipv4_cidr_block = "10.0.103.0/24"
+    }
+  }
+
+  name   = "${local.name}-public-${each.key}"
   vpc_id = module.vpc.id
+
+  availability_zone       = each.key
+  map_public_ip_on_launch = true
+  ipv4_cidr_block         = each.value.ipv4_cidr_block
 
   routes = {
     igw_ipv4 = {
@@ -236,11 +252,26 @@ module "public_route_table" {
   tags = local.tags
 }
 
-module "private_route_table" {
-  source = "../../../modules/route-table"
+module "private_subnet" {
+  source = "../../../modules/subnet"
 
-  name   = "${local.name}-private"
+  for_each = {
+    "${local.region}a" = {
+      ipv4_cidr_block = "10.0.1.0/24"
+    }
+    "${local.region}b" = {
+      ipv4_cidr_block = "10.0.2.0/24"
+    }
+    "${local.region}c" = {
+      ipv4_cidr_block = "10.0.3.0/24"
+    }
+  }
+
+  name   = "${local.name}-private-${each.key}"
   vpc_id = module.vpc.id
+
+  availability_zone = each.key
+  ipv4_cidr_block   = each.value.ipv4_cidr_block
 
   routes = {
     eigw_ipv6 = {
@@ -252,102 +283,26 @@ module "private_route_table" {
   tags = local.tags
 }
 
-################################################################################
-# Subnets
-################################################################################
-
-module "public_subnets" {
+module "elasticache_subnet" {
   source = "../../../modules/subnet"
 
-  name   = "${local.name}-public"
-  vpc_id = module.vpc.id
-
-  subnets_default = {
-    map_public_ip_on_launch = true
-    route_table_id          = module.public_route_table.id
-    tags = {
-      Name = "overridden-name-public"
-    }
-  }
-
-  subnets = {
+  for_each = {
     "${local.region}a" = {
-      ipv4_cidr_block   = "10.0.101.0/24"
-      availability_zone = "${local.region}a"
+      ipv4_cidr_block = "10.0.201.0/24"
     }
     "${local.region}b" = {
-      ipv4_cidr_block   = "10.0.102.0/24"
-      availability_zone = "${local.region}b"
+      ipv4_cidr_block = "10.0.202.0/24"
     }
     "${local.region}c" = {
-      ipv4_cidr_block   = "10.0.103.0/24"
-      availability_zone = "${local.region}c"
+      ipv4_cidr_block = "10.0.203.0/24"
     }
   }
 
-  tags = local.tags
-}
-
-module "private_subnets" {
-  source = "../../../modules/subnet"
-
-  name   = "${local.name}-private"
+  name   = "${local.name}-elasticache-${each.key}"
   vpc_id = module.vpc.id
 
-  subnets_default = {
-    route_table_id = module.private_route_table.id
-  }
-
-  subnets = {
-    "${local.region}a" = {
-      ipv4_cidr_block   = "10.0.1.0/24"
-      availability_zone = "${local.region}a"
-    }
-    "${local.region}b" = {
-      ipv4_cidr_block   = "10.0.2.0/24"
-      availability_zone = "${local.region}b"
-    }
-    "${local.region}c" = {
-      ipv4_cidr_block   = "10.0.3.0/24"
-      availability_zone = "${local.region}c"
-    }
-  }
-
-  tags = local.tags
-}
-
-module "elasticache_subnets" {
-  source = "../../../modules/subnet"
-
-  name   = "${local.name}-elasticache"
-  vpc_id = module.vpc.id
-
-  subnets_default = {
-    route_table_id = module.private_route_table.id
-  }
-
-  subnets = {
-    "${local.region}a" = {
-      ipv4_cidr_block   = "10.0.201.0/24"
-      availability_zone = "${local.region}a"
-    }
-    "${local.region}b" = {
-      ipv4_cidr_block   = "10.0.202.0/24"
-      availability_zone = "${local.region}b"
-    }
-    "${local.region}c" = {
-      ipv4_cidr_block   = "10.0.203.0/24"
-      availability_zone = "${local.region}c"
-    }
-  }
-
-  elasticache_subnet_groups = {
-    elasticache = {
-      name                   = local.name
-      description            = "ElastiCache subnet group for ${local.name}"
-      associated_subnet_keys = ["${local.region}a", "${local.region}b", "${local.region}c"]
-    }
-  }
+  availability_zone = each.key
+  ipv4_cidr_block   = each.value.ipv4_cidr_block
 
   tags = local.tags
 }
@@ -360,7 +315,7 @@ module "public_network_acl" {
   source = "../../../modules/network-acl"
 
   vpc_id     = module.vpc.id
-  subnet_ids = module.public_subnets.ids
+  subnet_ids = [for subnet in module.public_subnet : subnet.id]
 
   ingress_rules = merge(local.network_acls.default_inbound, local.network_acls.public_inbound)
   egress_rules  = merge(local.network_acls.default_outbound, local.network_acls.public_outbound)
@@ -372,7 +327,7 @@ module "elasticache_network_acl" {
   source = "../../../modules/network-acl"
 
   vpc_id     = module.vpc.id
-  subnet_ids = module.elasticache_subnets.ids
+  subnet_ids = [for subnet in module.elasticache_subnet : subnet.id]
 
   ingress_rules = {
     100 = {
