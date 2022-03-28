@@ -10,8 +10,13 @@
 
 ## TODOs
 
+- Network firewall
+  - Allow users to use in standalone mode for RAM sharing (i.e. - not create firewall/logging config but create rule group and/or policy)
+  - This won't get split out like the DNS firewall due to subnet mapping
+    - Consider supporting both resources in both places - sub-modules will need to be standalone
 - Align conventions
   - ✅ `cidr_block` -> `ipv4_cidr_block` to compliment `ipv6_cidr_block`
+    - Except for `ipam` where resources use the pairing of `cidr` and `address_family` (down to AWS provider/API)
   - ✅ default routes vs custom routes
   - ✅ default NACLs vs custom NACLs
 
@@ -26,33 +31,34 @@
 
 ## Supported Resources
 
-### Defaults
-
-- ✅ aws_default_network_acl
-- ✅ aws_default_route_table
-- ✅ aws_default_security_group
-- ❌ aws_default_subnet
-- ✅ aws_default_vpc
-- ✅ aws_default_vpc_dhcp_options
-
 ### VPC (Core)
 
 - ✅ aws_vpc
-- ✅ aws_flow_log
-- ✅ aws_vpc_dhcp_options
-- ✅ aws_vpc_dhcp_options_association
 - ✅ aws_vpc_ipv4_cidr_block_association
 - ✅ aws_vpc_ipv6_cidr_block_association
-- ✅ aws_egress_only_internet_gateway
+- ✅ aws_route53_resolver_dnssec_config
+- ✅ aws_route53_resolver_query_log_config
+  - ✅ aws_route53_resolver_query_log_config_association
+  - ❌ aws_ram_resource_association -> users can use a shared query log config within the module
+- ✅ aws_route53_resolver_firewall_config
+  - ✅ aws_route53_resolver_firewall_rule_group_association
+- ✅ aws_vpc_dhcp_options
+  - ✅ aws_vpc_dhcp_options_association
 - ✅ aws_internet_gateway
-- ✅ aws_internet_gateway_attachment
+  - ✅ aws_internet_gateway_attachment
+- ✅ aws_egress_only_internet_gateway
 - ✅ aws_customer_gateway
 - ✅ aws_vpn_gateway
+- ✅ aws_default_security_group
+- ✅ aws_default_network_acl
+  - ✅ aws_network_acl_rule: ingress
+  - ✅ aws_network_acl_rule: egress
+- ✅ aws_default_route_table
+  - ✅ aws_route
+- ✅ aws_default_vpc
+- ✅ aws_default_vpc_dhcp_options
 - ❌ aws_main_route_table_association -> conflicts with `aws_default_route_table`
-- ✅ aws_route53_resolver_dnssec_config -> https://github.com/terraform-aws-modules/terraform-aws-vpc/issues/559
-- ✅ aws_route53_resolver_query_log_config
-  - ❌ aws_ram_resource_association -> users can use a shared query log config within the module
-- ✅ aws_route53_resolver_query_log_config_association
+- ❌ aws_default_subnet
 
 ### Subnet
 
@@ -60,14 +66,17 @@ This is where most of the network logic is captured; the design is centered arou
 
 - ✅ aws_subnet
   - ✅ aws_ram_resource_association
-- ✅ aws_network_acl
-- ❌ aws_network_acl_association -> subnet association handled in `aws_subnet_acl`
-- ✅ aws_network_acl_rule
-- ✅ aws_route
-- ✅ aws_route_table
-- ✅ aws_route_table_association
-- ✅ aws_nat_gateway
 - ✅ aws_ec2_subnet_cidr_reservation
+- ✅ aws_network_acl
+  - ❌ aws_network_acl_association -> subnet association handled in `aws_subnet_acl`
+- ✅ aws_network_acl_rule
+- ✅ aws_route_table
+  - ✅ aws_route
+  - ✅ aws_route_table_association
+    - ✅ aws_route_table_association: subnet
+    - ✅ aws_route_table_association: gateway(s)
+- ✅ aws_nat_gateway
+  - ✅ aws_eip
 
 ### VPC Endpoint
 
@@ -90,14 +99,34 @@ This is where most of the network logic is captured; the design is centered arou
 - ✅ aws_networkfirewall_resource_policy
 - ✅ aws_networkfirewall_logging_configuration
 
-### DNS Firewall
+### DNS Firewall Rule Group
 
-- ✅ aws_route53_resolver_firewall_config
-- ✅ aws_route53_resolver_firewall_domain_list
-- ✅ aws_route53_resolver_firewall_rule
 - ✅ aws_route53_resolver_firewall_rule_group
   - ✅ aws_ram_resource_association
-- ✅ aws_route53_resolver_firewall_rule_group_association
+- ✅ aws_route53_resolver_firewall_domain_list
+- ✅ aws_route53_resolver_firewall_rule
+
+### IPAM
+
+- ✅ aws_vpc_ipam
+- ✅ aws_vpc_ipam_scope
+- ✅ aws_vpc_ipam_pool
+  - [ ] aws_ram_resource_association
+- ❌ aws_vpc_ipam_organization_admin_account -> provision in root account for multi-account setup
+
+### IPAM Pool
+
+- ✅ aws_vpc_ipam_pool
+  - [ ] aws_ram_resource_association
+- ✅ aws_vpc_ipam_pool_cidr
+- ✅ aws_vpc_ipam_pool_cidr_allocation
+- ✅ aws_vpc_ipam_preview_next_cidr
+
+### VPC Flow Log
+
+- ✅ aws_flow_log
+  - ✅ aws_cloudwatch_log_group
+    - ✅ aws_iam_role
 
 ### Network Manager
 
@@ -121,26 +150,15 @@ This is where most of the network logic is captured; the design is centered arou
 - [ ] aws_ec2_transit_gateway_connect
 - [ ] aws_ec2_transit_gateway_connect_peer
 
-### IPAM
-
-- ✅ aws_vpc_ipam
-- ❌ aws_vpc_ipam_organization_admin_account -> provision in root account for multi-account setup
-- ✅ aws_vpc_ipam_pool
-  - [ ] aws_ram_resource_association
-- ✅ aws_vpc_ipam_pool_cidr
-- ✅ aws_vpc_ipam_pool_cidr_allocation
-- ✅ aws_vpc_ipam_preview_next_cidr
-- ✅ aws_vpc_ipam_scope
-
 ## Resources Not Supported
 
 ### VPC Peering
 
-Holding off on this for now - TGW is more popular now than peering
+TODO - consider support as sub-module or standalone module
 
-- [ ] aws_vpc_peering_connection
-- [ ] aws_vpc_peering_connection_accepter
-- [ ] aws_vpc_peering_connection_options
+- ❌ aws_vpc_peering_connection
+- ❌ aws_vpc_peering_connection_accepter
+- ❌ aws_vpc_peering_connection_options
 
 ### Resource Access Manager (RAM)
 
