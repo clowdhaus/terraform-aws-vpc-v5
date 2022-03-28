@@ -6,6 +6,24 @@ locals {
   region = "eu-west-1"
   name   = "network-acls"
 
+  subnets = {
+    "${local.region}a" = {
+      public_ipv4_cidr_block      = "10.0.0.0/24"
+      private_ipv4_cidr_block     = "10.0.10.0/24"
+      elasticache_ipv4_cidr_block = "10.0.20.0/24"
+    }
+    "${local.region}b" = {
+      public_ipv4_cidr_block      = "10.0.1.0/24"
+      private_ipv4_cidr_block     = "10.0.11.0/24"
+      elasticache_ipv4_cidr_block = "10.0.21.0/24"
+    }
+    "${local.region}c" = {
+      public_ipv4_cidr_block      = "10.0.2.0/24"
+      private_ipv4_cidr_block     = "10.0.12.0/24"
+      elasticache_ipv4_cidr_block = "10.0.22.0/24"
+    }
+  }
+
   tags = {
     Owner       = "user"
     Environment = "dev"
@@ -219,24 +237,14 @@ module "vpc" {
 module "public_subnet" {
   source = "../../../modules/subnet"
 
-  for_each = {
-    "${local.region}a" = {
-      ipv4_cidr_block = "10.0.101.0/24"
-    }
-    "${local.region}b" = {
-      ipv4_cidr_block = "10.0.102.0/24"
-    }
-    "${local.region}c" = {
-      ipv4_cidr_block = "10.0.103.0/24"
-    }
-  }
+  for_each = local.subnets
 
   name   = "${local.name}-public-${each.key}"
   vpc_id = module.vpc.id
 
   availability_zone       = each.key
   map_public_ip_on_launch = true
-  ipv4_cidr_block         = each.value.ipv4_cidr_block
+  ipv4_cidr_block         = each.value.public_ipv4_cidr_block
 
   routes = {
     igw_ipv4 = {
@@ -255,23 +263,13 @@ module "public_subnet" {
 module "private_subnet" {
   source = "../../../modules/subnet"
 
-  for_each = {
-    "${local.region}a" = {
-      ipv4_cidr_block = "10.0.1.0/24"
-    }
-    "${local.region}b" = {
-      ipv4_cidr_block = "10.0.2.0/24"
-    }
-    "${local.region}c" = {
-      ipv4_cidr_block = "10.0.3.0/24"
-    }
-  }
+  for_each = local.subnets
 
   name   = "${local.name}-private-${each.key}"
   vpc_id = module.vpc.id
 
   availability_zone = each.key
-  ipv4_cidr_block   = each.value.ipv4_cidr_block
+  ipv4_cidr_block   = each.value.private_ipv4_cidr_block
 
   routes = {
     eigw_ipv6 = {
@@ -286,23 +284,13 @@ module "private_subnet" {
 module "elasticache_subnet" {
   source = "../../../modules/subnet"
 
-  for_each = {
-    "${local.region}a" = {
-      ipv4_cidr_block = "10.0.201.0/24"
-    }
-    "${local.region}b" = {
-      ipv4_cidr_block = "10.0.202.0/24"
-    }
-    "${local.region}c" = {
-      ipv4_cidr_block = "10.0.203.0/24"
-    }
-  }
+  for_each = local.subnets
 
   name   = "${local.name}-elasticache-${each.key}"
   vpc_id = module.vpc.id
 
   availability_zone = each.key
-  ipv4_cidr_block   = each.value.ipv4_cidr_block
+  ipv4_cidr_block   = each.value.elasticache_ipv4_cidr_block
 
   tags = local.tags
 }

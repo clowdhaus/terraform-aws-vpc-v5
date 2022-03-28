@@ -6,6 +6,21 @@ locals {
   name   = "vpc-ex-${replace(basename(path.cwd), "_", "-")}"
   region = "eu-west-1"
 
+  subnets = {
+    "${local.region}a" = {
+      public_ipv4_cidr_block  = "10.0.0.0/24"
+      private_ipv4_cidr_block = "10.0.10.0/24"
+    }
+    "${local.region}b" = {
+      public_ipv4_cidr_block  = "10.0.1.0/24"
+      private_ipv4_cidr_block = "10.0.11.0/24"
+    }
+    "${local.region}c" = {
+      public_ipv4_cidr_block  = "10.0.2.0/24"
+      private_ipv4_cidr_block = "10.0.12.0/24"
+    }
+  }
+
   tags = {
     Example    = local.name
     GithubRepo = "terraform-aws-vpc-v4"
@@ -22,7 +37,7 @@ module "vpc" {
   name            = local.name
   ipv4_cidr_block = "10.0.0.0/16"
 
-  # Faster
+  # Faster deploy
   enable_dnssec_config = false
 
   create_egress_only_internet_gateway = true
@@ -37,26 +52,16 @@ module "vpc" {
 module "public_subnet" {
   source = "../../modules/subnet"
 
-  for_each = {
-    "${local.region}a" = {
-      ipv4_cidr_block = "10.0.100.0/24"
-    }
-    "${local.region}b" = {
-      ipv4_cidr_block = "10.0.101.0/24"
-    }
-    "${local.region}c" = {
-      ipv4_cidr_block = "10.0.102.0/24"
-    }
-  }
+  for_each = local.subnets
 
   name   = "${local.name}-public-${each.key}"
   vpc_id = module.vpc.id
 
   availability_zone       = each.key
   map_public_ip_on_launch = true
-  ipv4_cidr_block         = each.value.ipv4_cidr_block
+  ipv4_cidr_block         = each.value.public_ipv4_cidr_block
 
-  # Just create onc NAT Gateway
+  # Just create one NAT Gateway
   create_nat_gateway = each.key == "${local.region}a"
 
   routes = {
@@ -76,20 +81,13 @@ module "public_subnet" {
 module "private_subnet" {
   source = "../../modules/subnet"
 
+  for_each = local.subnets
+
   name   = "${local.name}-private"
   vpc_id = module.vpc.id
 
-  for_each = {
-    "${local.region}a" = {
-      ipv4_cidr_block = "10.0.10.0/24"
-    }
-    "${local.region}b" = {
-      ipv4_cidr_block = "10.0.11.0/24"
-    }
-    "${local.region}c" = {
-      ipv4_cidr_block = "10.0.12.0/24"
-    }
-  }
+  availability_zone = each.key
+  ipv4_cidr_block   = each.value.private_ipv4_cidr_block
 
   routes = {
     igw_ipv4 = {

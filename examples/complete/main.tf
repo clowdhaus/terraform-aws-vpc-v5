@@ -7,6 +7,18 @@ locals {
   region     = "eu-west-1"
   account_id = data.aws_caller_identity.current.account_id
 
+  subnets = {
+    "${local.region}a" = {
+      public_ipv4_cidr_block = "10.0.0.0/24"
+    }
+    "${local.region}b" = {
+      public_ipv4_cidr_block = "10.0.0.0/24"
+    }
+    "${local.region}c" = {
+      public_ipv4_cidr_block = "10.0.0.0/24"
+    }
+  }
+
   tags = {
     Example    = local.name
     GithubRepo = "terraform-aws-vpc-v4"
@@ -23,14 +35,14 @@ module "vpc" {
   source = "../../"
 
   name                 = local.name
-  ipv4_cidr_block      = "10.99.0.0/16"
+  ipv4_cidr_block      = "10.0.0.0/17"
   enable_dns_hostnames = true
   vpc_tags             = { vpc_tags = true }
 
   ipv4_cidr_block_associations = {
     # This matches the provider API to avoid re-creating the association
-    "10.98.0.0/16" = {
-      ipv4_cidr_block = "10.98.0.0/16"
+    "10.0.128.0/17" = {
+      ipv4_cidr_block = "10.0.128.0/17"
       timeouts = {
         create = "12m"
         delete = "12m"
@@ -89,36 +101,26 @@ module "vpc_flow_log" {
 module "public_subnet" {
   source = "../../modules/subnet"
 
-  for_each = {
-    "${local.region}a" = {
-      ipv4_cidr_block = "10.98.1.0/24"
-    }
-    "${local.region}b" = {
-      ipv4_cidr_block = "10.98.2.0/24"
-    }
-    "${local.region}c" = {
-      ipv4_cidr_block = "10.98.3.0/24"
-    }
-  }
+  for_each = local.subnets
 
   name   = "${local.name}-public-${each.key}"
   vpc_id = module.vpc.id
 
   availability_zone       = each.key
   map_public_ip_on_launch = true
-  ipv4_cidr_block         = each.value.ipv4_cidr_block
+  ipv4_cidr_block         = each.value.public_ipv4_cidr_block
 
   cidr_reservations = each.key == "${local.region}a" ? {
     one = {
       subnet_key       = "${local.region}a"
       description      = "Example EC2 subnet CIDR reservation"
-      cidr_block       = "10.98.1.0/28"
+      cidr_block       = "10.0.0.0/28"
       reservation_type = "prefix"
     }
     two = {
       subnet_key       = "${local.region}b"
       description      = "Example EC2 subnet CIDR reservation"
-      cidr_block       = "10.98.1.16/28"
+      cidr_block       = "10.0.0.16/28"
       reservation_type = "prefix"
     }
   } : {}
@@ -335,7 +337,7 @@ module "network_firewall" {
           ip_sets = [{
             key = "WEBSERVERS_HOSTS"
             ip_set = {
-              definition = ["10.0.0.0/16", "10.0.1.0/24", "192.168.0.0/16"]
+              definition = ["10.1.0.0/16", "10.1.1.0/24", "192.168.0.0/16"]
             }
             }, {
             key = "EXTERNAL_HOST"
