@@ -10,13 +10,13 @@
 
 ## TODOs
 
-- Network firewall
-  - Allow users to use in standalone mode for RAM sharing (i.e. - not create firewall/logging config but create rule group and/or policy)
-  - This won't get split out like the DNS firewall due to subnet mapping
-    - Consider supporting both resources in both places - sub-modules will need to be standalone
+- Network firewall: split into 3 sections
+  - Network firewall and logging config will move to VPC root module
+  - Create new sub-module for `network-firewall-rule-group (singular, RAM shareable)`
+  - Create new sub-module for `network-firewall-policy` (singular, RAM shareable)
 - Align conventions
   - ✅ `cidr_block` -> `ipv4_cidr_block` to compliment `ipv6_cidr_block`
-    - Except for `ipam` where resources use the pairing of `cidr` and `address_family` (down to AWS provider/API)
+    - Except for `ipam` where resources use the pairing of `cidr` and `address_family` (due to AWS provider/API)
   - ✅ default routes vs custom routes
   - ✅ default NACLs vs custom NACLs
 
