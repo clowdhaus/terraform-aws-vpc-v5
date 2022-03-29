@@ -98,7 +98,8 @@ resource "aws_networkfirewall_firewall_policy" "this" {
 ################################################################################
 
 resource "aws_networkfirewall_rule_group" "this" {
-  for_each = { for k, v in var.rule_groups : k => v if var.create }
+  # TODO - should rule groups be singluar?
+  for_each = { for k, v in var.rule_groups : k => v if var.create && var.create_rule_groups }
 
   name        = try(each.value.name, "${var.name}-${each.key}")
   description = try(each.value.description, null)
@@ -364,7 +365,6 @@ resource "aws_networkfirewall_logging_configuration" "this" {
   firewall_arn = aws_networkfirewall_firewall.this[0].arn
 
   logging_configuration {
-
     # At least one config, at most, only two blocks can be specified; one for `FLOW` logs and one for `ALERT` logs.
     dynamic "log_destination_config" {
       for_each = var.logging_configuration_destination_config
@@ -375,4 +375,23 @@ resource "aws_networkfirewall_logging_configuration" "this" {
       }
     }
   }
+}
+
+################################################################################
+# RAM Resource Association
+################################################################################
+
+resource "aws_ram_resource_association" "firewall_policy" {
+  for_each = { for k, v in var.firewall_policy_ram_resource_associations : k => v if var.create && var.create_firewall_policy }
+
+  resource_arn       = aws_networkfirewall_firewall_policy.this[0].arn
+  resource_share_arn = each.value.resource_share_arn
+}
+
+resource "aws_ram_resource_association" "rule_group" {
+  # TODO - should rule groups be singluar?
+  for_each = { for k, v in var.rule_groups_ram_resource_associations : k => v if var.create && var.create_rule_groups }
+
+  resource_arn       = aws_networkfirewall_rule_group.this[each.value.rule_group_key].arn
+  resource_share_arn = each.value.resource_share_arn
 }

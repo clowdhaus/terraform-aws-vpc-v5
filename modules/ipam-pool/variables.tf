@@ -133,3 +133,13 @@ variable "preview_netmask_length" {
   type        = number
   default     = null
 }
+
+################################################################################
+# RAM Resource Association
+################################################################################
+
+variable "ram_resource_associations" {
+  description = "A map of RAM resource associations for the created IPAM pool"
+  type        = map(string)
+  default     = {}
+}

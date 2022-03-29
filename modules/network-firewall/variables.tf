@@ -32,12 +32,6 @@ variable "delete_protection" {
   default     = true
 }
 
-variable "create_firewall_policy" {
-  description = "Controls if a Firewall Policy should be created"
-  type        = bool
-  default     = true
-}
-
 variable "firewall_policy_arn" {
   description = "The ARN of the Firewall Policy to use; required when `create_firewall_policy` is `false`"
   type        = string
@@ -71,6 +65,12 @@ variable "subnet_change_protection" {
 ################################################################################
 # Firewall Policy
 ################################################################################
+
+variable "create_firewall_policy" {
+  description = "Controls if a Firewall Policy should be created"
+  type        = bool
+  default     = true
+}
 
 variable "policy_description" {
   description = "A friendly description of the firewall policy"
@@ -120,13 +120,31 @@ variable "policy_stateless_rule_group_reference" {
   default     = {}
 }
 
+variable "firewall_policy_ram_resource_associations" {
+  description = "A map of RAM resource associations for the created firewall policy"
+  type        = map(string)
+  default     = {}
+}
+
 ################################################################################
 # Firewall Rule Group
 ################################################################################
 
+variable "create_rule_groups" {
+  description = "Controls if Firewall Rule Groups should be created"
+  type        = bool
+  default     = true
+}
+
 variable "rule_groups" {
-  description = "A map of rule group definitions to be created"
+  description = "A map of Firewall Rule Group definitions to be created"
   type        = any
+  default     = {}
+}
+
+variable "rule_groups_ram_resource_associations" {
+  description = "A map of RAM resource associations for the created Firewall Rule Groups"
+  type        = map(string)
   default     = {}
 }
 

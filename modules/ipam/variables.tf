@@ -159,3 +159,13 @@ variable "pool_tags" {
   type        = map(string)
   default     = {}
 }
+
+################################################################################
+# RAM Resource Association
+################################################################################
+
+variable "ram_resource_associations" {
+  description = "A map of RAM resource associations for the created IPAM pool"
+  type        = map(string)
+  default     = {}
+}

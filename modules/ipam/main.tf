@@ -66,5 +66,8 @@ module "vpc_ipam_pool" {
   disallowed_cidrs       = var.pool_disallowed_cidrs
   preview_netmask_length = var.pool_preview_netmask_length
 
+  # RAM resource association
+  ram_resource_associations = var.ram_resource_associations
+
   tags = merge(var.tags, var.pool_tags)
 }

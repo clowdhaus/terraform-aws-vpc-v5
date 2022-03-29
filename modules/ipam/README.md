@@ -90,6 +90,7 @@ module "ipam" {
 | <a name="input_pool_scope_key"></a> [pool\_scope\_key](#input\_pool\_scope\_key) | The key within the `scopes` map to use for the pool scope | `string` | `null` | no |
 | <a name="input_pool_tags"></a> [pool\_tags](#input\_pool\_tags) | A map of additional tags to add to the IPAM pool | `map(string)` | `{}` | no |
 | <a name="input_pool_use_private_scope"></a> [pool\_use\_private\_scope](#input\_pool\_use\_private\_scope) | Controls if the pool scope used is private or public. If `false`, the IPAM default public scope is used | `bool` | `true` | no |
+| <a name="input_ram_resource_associations"></a> [ram\_resource\_associations](#input\_ram\_resource\_associations) | A map of RAM resource associations for the created IPAM pool | `map(string)` | `{}` | no |
 | <a name="input_scopes"></a> [scopes](#input\_scopes) | A map of scope definitions to be created | `any` | `{}` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to add to all resources | `map(string)` | `{}` | no |
 

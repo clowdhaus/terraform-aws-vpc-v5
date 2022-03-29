@@ -74,3 +74,14 @@ resource "aws_vpc_ipam_preview_next_cidr" "this" {
     aws_vpc_ipam_pool_cidr.this
   ]
 }
+
+################################################################################
+# RAM Resource Association
+################################################################################
+
+resource "aws_ram_resource_association" "this" {
+  for_each = { for k, v in var.ram_resource_associations : k => v if var.create }
+
+  resource_arn       = aws_vpc_ipam_pool.this[0].arn
+  resource_share_arn = each.value.resource_share_arn
+}

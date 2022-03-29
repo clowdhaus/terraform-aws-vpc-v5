@@ -93,9 +93,9 @@ This is where most of the network logic is captured; the design is centered arou
 
 - ✅ aws_networkfirewall_firewall
 - ✅ aws_networkfirewall_firewall_policy
-  - [ ] aws_ram_resource_association
+  - ✅ aws_ram_resource_association
 - ✅ aws_networkfirewall_rule_group
-  - [ ] aws_ram_resource_association
+  - ✅ aws_ram_resource_association
 - ✅ aws_networkfirewall_resource_policy
 - ✅ aws_networkfirewall_logging_configuration
 
@@ -111,13 +111,13 @@ This is where most of the network logic is captured; the design is centered arou
 - ✅ aws_vpc_ipam
 - ✅ aws_vpc_ipam_scope
 - ✅ aws_vpc_ipam_pool
-  - [ ] aws_ram_resource_association
+  - ✅ aws_ram_resource_association
 - ❌ aws_vpc_ipam_organization_admin_account -> provision in root account for multi-account setup
 
 ### IPAM Pool
 
 - ✅ aws_vpc_ipam_pool
-  - [ ] aws_ram_resource_association
+  - ✅ aws_ram_resource_association
 - ✅ aws_vpc_ipam_pool_cidr
 - ✅ aws_vpc_ipam_pool_cidr_allocation
 - ✅ aws_vpc_ipam_preview_next_cidr
