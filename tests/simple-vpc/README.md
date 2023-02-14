@@ -1,7 +1,7 @@
-# First - Provision v3
+# First - Provision v4
 
 ```bash
-cd v3
+cd v4
 tf init -upgrade=true
 tf apply
 tf apply -refresh-only
@@ -11,7 +11,7 @@ tf plan # ensure state is clean before proceeding
 # Second - Migrate State via `state mv`
 
 ```bash
-cd v4
+cd v5
 
 tf state mv 'module.vpc.aws_subnet.public[0]' 'module.public_subnets.aws_subnet.this["eu-west-1a"]'
 tf state mv 'module.vpc.aws_subnet.public[1]' 'module.public_subnets.aws_subnet.this["eu-west-1b"]'
@@ -37,7 +37,7 @@ tf state mv 'module.vpc.aws_route.public_internet_gateway_ipv6[0]' 'module.publi
 
 tf state mv 'module.vpc.aws_route.private_ipv6_egress[0]' 'module.private_route_table.aws_route.this["igw_ipv6"]'
 
-# This is a bug in v3 - there are 3 routes that are all the same in the state file
+# This is a bug in v4 - there are 3 routes that are all the same in the state file
 # We migrate the first one to the new name, the rest need to be removed from the state
 # DO NOT destroy these or you will remove the egress only route and will need to re-provision on next apply
 # which could disrupt traffic

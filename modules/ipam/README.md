@@ -4,7 +4,7 @@ Terraform module which creates AWS VPC IPAM resources.
 
 ## Usage
 
-See [`examples/ipam`](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/examples/ipam) for working example to reference:
+See [`examples/ipam`](https://github.com/clowdhaus/terraform-aws-vpc-v5/tree/main/examples/ipam) for working example to reference:
 
 ```hcl
 module "ipam" {
@@ -115,4 +115,4 @@ module "ipam" {
 
 ## License
 
-Apache-2.0 Licensed. See [LICENSE](https://github.com/clowdhaus/terraform-aws-vpc-v4/blob/main/LICENSE).
+Apache-2.0 Licensed. See [LICENSE](https://github.com/clowdhaus/terraform-aws-vpc-v5/blob/main/LICENSE).

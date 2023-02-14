@@ -1,7 +1,7 @@
-# First - Provision v3
+# First - Provision v4
 
 ```bash
-cd v3
+cd v4
 tf init -upgrade=true
 tf apply
 tf apply -refresh-only
@@ -11,7 +11,7 @@ tf plan # ensure state is clean before proceeding
 # Second - Migrate State via `state mv`
 
 ```bash
-cd v4
+cd v5
 
 tf state mv 'module.vpc.aws_subnet.public[0]' 'module.public_subnets.aws_subnet.this["eu-west-1a"]'
 tf state mv 'module.vpc.aws_route_table.public[0]'  'module.public_route_table.aws_route_table.this[0]'

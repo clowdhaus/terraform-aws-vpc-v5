@@ -8,13 +8,13 @@ provider "aws" {
 }
 
 locals {
-  name    = "vpc-ex-${replace(basename(path.cwd), "_", "-")}"
+  name    = "vpc-ex-${basename(path.cwd)}"
   region1 = "eu-west-1"
   region2 = "us-west-2"
 
   tags = {
     Example    = local.name
-    GithubRepo = "terraform-aws-vpc-v4"
+    GithubRepo = "terraform-aws-vpc-v5"
   }
 }
 

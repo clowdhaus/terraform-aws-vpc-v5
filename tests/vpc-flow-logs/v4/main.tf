@@ -13,63 +13,27 @@ locals {
 }
 
 ################################################################################
-# VPC
+# VPC w/ Flow Logs to CloudWatch
 ################################################################################
 
 module "vpc" {
-  source = "../../../"
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "3.12.0"
 
-  name            = local.name
-  ipv4_cidr_block = "10.10.0.0/16"
+  name = local.name
+  cidr = "10.10.0.0/16"
 
-  # Not in v3.x
-  enable_dnssec_config          = false
-  manage_default_security_group = false
-  manage_default_network_acl    = false
-  manage_default_route_table    = false
+  azs            = ["${local.region}a"]
+  public_subnets = ["10.10.101.0/24"]
 
-  tags = local.tags
-}
+  # Cloudwatch log group and IAM role will be created
+  enable_flow_log                      = true
+  create_flow_log_cloudwatch_log_group = true
+  create_flow_log_cloudwatch_iam_role  = true
+  flow_log_max_aggregation_interval    = 60
 
-################################################################################
-# VPC Flow Log
-################################################################################
-
-module "vpc_flow_log" {
-  source = "../../../modules/flow-log"
-
-  vpc_id = module.vpc.id
-
-  create_cloudwatch_log_group            = true
-  cloudwatch_log_group_name              = "/aws/vpc-flow-log/${module.vpc.id}"
-  cloudwatch_log_group_retention_in_days = 0
-  create_cloudwatch_iam_role             = true
-  max_aggregation_interval               = 60
-
-  tags = merge(local.tags, {
+  vpc_flow_log_tags = {
     Name = "vpc-flow-logs-cloudwatch-logs-default"
-  })
-}
-
-################################################################################
-# Subnets Module
-################################################################################
-
-module "public_subnets" {
-  source = "../../../modules/subnet"
-
-  name   = "${local.name}-public"
-  vpc_id = module.vpc.id
-
-  map_public_ip_on_launch = true
-  ipv4_cidr_block         = "10.10.101.0/24"
-  availability_zone       = "${local.region}a"
-
-  routes = {
-    igw = {
-      destination_ipv4_cidr_block = "0.0.0.0/0"
-      gateway_id                  = module.vpc.internet_gateway_id
-    }
   }
 
   tags = local.tags

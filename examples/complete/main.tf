@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 locals {
-  name       = "vpc-ex-${replace(basename(path.cwd), "_", "-")}"
+  name       = "vpc-ex-${basename(path.cwd)}"
   region     = "eu-west-1"
   account_id = data.aws_caller_identity.current.account_id
 
@@ -21,7 +21,7 @@ locals {
 
   tags = {
     Example    = local.name
-    GithubRepo = "terraform-aws-vpc-v4"
+    GithubRepo = "terraform-aws-vpc-v5"
   }
 }
 

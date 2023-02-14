@@ -1,11 +1,11 @@
 # AWS VPC Terraform Module
 
-:warning: Please do not rely on this being stable. The goal of this project is to explore changes to the upstream `terraform-aws-vpc` module and eventually land those changes there as v4.0. For now, this is just for exploring and open collaboration on what that next version might look like, and how users can migrate from v3.x to v4.x. Feel free to watch along if you are curious.
+:warning: Please do not rely on this being stable. The goal of this project is to explore changes to the upstream `terraform-aws-vpc` module and eventually land those changes there as v5.0. For now, this is just for exploring and open collaboration on what that next version might look like, and how users can migrate from v4.x to v5.x. Feel free to watch along if you are curious.
 
 ## High Level Diagram
 
 <p align="center">
-  <img src="https://github.com/clowdhaus/terraform-aws-vpc-v4/blob/main/.github/images/hld.svg" alt="high level diagram">
+  <img src="https://github.com/clowdhaus/terraform-aws-vpc-v5/blob/main/.github/images/hld.svg" alt="high level diagram">
 </p>
 
 ## TODOs
@@ -228,11 +228,11 @@ See https://github.com/terraform-aws-modules/terraform-aws-transit-gateway
 
 ## Usage
 
-See [`examples`](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/examples) directory for working examples to reference:
+See [`examples`](https://github.com/clowdhaus/terraform-aws-vpc-v5/tree/main/examples) directory for working examples to reference:
 
 ```hcl
 module "vpc" {
-  source = "clowdhaus/vpc-v4/aws"
+  source = "clowdhaus/vpc-v5/aws"
 
   name                 = "example"
   cidr_block           = "10.99.0.0/16"
@@ -271,11 +271,11 @@ module "vpc" {
 
 ## Examples
 
-Examples provided in [`examples`](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/examples) are intended to give users references for how to use the module(s) as well as testing/validating changes to the source code of the module. If contributing to the project, please be sure to make any appropriate updates to the relevant examples to allow maintainers to test your changes and to keep the examples up to date for users. Thank you!
+Examples provided in [`examples`](https://github.com/clowdhaus/terraform-aws-vpc-v5/tree/main/examples) are intended to give users references for how to use the module(s) as well as testing/validating changes to the source code of the module. If contributing to the project, please be sure to make any appropriate updates to the relevant examples to allow maintainers to test your changes and to keep the examples up to date for users. Thank you!
 
-- [Complete](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/examples/complete)
-- [Default](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/examples/default)
-- [IPAM](https://github.com/clowdhaus/terraform-aws-vpc-v4/tree/main/examples/ipam)
+- [Complete](https://github.com/clowdhaus/terraform-aws-vpc-v5/tree/main/examples/complete)
+- [Default](https://github.com/clowdhaus/terraform-aws-vpc-v5/tree/main/examples/default)
+- [IPAM](https://github.com/clowdhaus/terraform-aws-vpc-v5/tree/main/examples/ipam)
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
@@ -336,9 +336,6 @@ No modules.
 | <a name="input_create_internet_gateway"></a> [create\_internet\_gateway](#input\_create\_internet\_gateway) | Controls if an internet gateway is created | `bool` | `true` | no |
 | <a name="input_customer_gateway_tags"></a> [customer\_gateway\_tags](#input\_customer\_gateway\_tags) | Additional tags for the Customer Gateway(s) | `map(string)` | `{}` | no |
 | <a name="input_customer_gateways"></a> [customer\_gateways](#input\_customer\_gateways) | Map of Customer Gateway definitions to create | `any` | `{}` | no |
-| <a name="input_default_dhcp_options_netbios_name_servers"></a> [default\_dhcp\_options\_netbios\_name\_servers](#input\_default\_dhcp\_options\_netbios\_name\_servers) | List of NETBIOS name servers | `list(string)` | `null` | no |
-| <a name="input_default_dhcp_options_netbios_node_type"></a> [default\_dhcp\_options\_netbios\_node\_type](#input\_default\_dhcp\_options\_netbios\_node\_type) | The NetBIOS node type (1, 2, 4, or 8). AWS recommends to specify 2 since broadcast and multicast are not supported in their network | `number` | `null` | no |
-| <a name="input_default_dhcp_options_owner_id"></a> [default\_dhcp\_options\_owner\_id](#input\_default\_dhcp\_options\_owner\_id) | The ID of the AWS account that owns the DHCP options set | `string` | `null` | no |
 | <a name="input_default_dhcp_options_tags"></a> [default\_dhcp\_options\_tags](#input\_default\_dhcp\_options\_tags) | Additional tags for the default DHCP options | `map(string)` | `{}` | no |
 | <a name="input_default_network_acl_egress_rules"></a> [default\_network\_acl\_egress\_rules](#input\_default\_network\_acl\_egress\_rules) | Egress rules to be added to the Default Network ACL | `any` | `{}` | no |
 | <a name="input_default_network_acl_ingress_rules"></a> [default\_network\_acl\_ingress\_rules](#input\_default\_network\_acl\_ingress\_rules) | Ingress rules to be added to the Default Network ACL | `any` | `{}` | no |
@@ -449,4 +446,4 @@ No modules.
 
 ## License
 
-Apache-2.0 Licensed. See [LICENSE](https://github.com/clowdhaus/terraform-aws-vpc-v4/blob/main/LICENSE).
+Apache-2.0 Licensed. See [LICENSE](https://github.com/clowdhaus/terraform-aws-vpc-v5/blob/main/LICENSE).

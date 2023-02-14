@@ -3,8 +3,8 @@ provider "aws" {
 }
 
 locals {
-  name   = "vpc-ex-${basename(path.cwd)}"
   region = "eu-west-1"
+  name   = "vpc-ex-simple"
 
   subnets = {
     "${local.region}a" = {
@@ -22,8 +22,8 @@ locals {
   }
 
   tags = {
-    Example    = local.name
-    GithubRepo = "terraform-aws-vpc-v5"
+    Owner       = "user"
+    Environment = "dev"
   }
 }
 
@@ -32,15 +32,23 @@ locals {
 ################################################################################
 
 module "vpc" {
-  source = "../../"
+  source = "../../../"
 
   name            = local.name
   ipv4_cidr_block = "10.0.0.0/16"
 
-  # Faster deploy
-  enable_dnssec_config = false
-
+  assign_generated_ipv6_cidr_block    = true
   create_egress_only_internet_gateway = true
+
+  # Not in v4.x
+  enable_dnssec_config          = false
+  manage_default_security_group = false
+  manage_default_network_acl    = false
+  manage_default_route_table    = false
+
+  vpc_tags = {
+    Name = "vpc-name"
+  }
 
   tags = local.tags
 }
@@ -50,7 +58,7 @@ module "vpc" {
 ################################################################################
 
 module "public_subnet" {
-  source = "../../modules/subnet"
+  source = "../../../modules/subnet"
 
   for_each = local.subnets
 
@@ -60,9 +68,6 @@ module "public_subnet" {
   availability_zone       = each.key
   map_public_ip_on_launch = true
   ipv4_cidr_block         = each.value.public_ipv4_cidr_block
-
-  # Just create one NAT Gateway
-  create_nat_gateway = each.key == "${local.region}a"
 
   routes = {
     igw_ipv4 = {
@@ -75,25 +80,23 @@ module "public_subnet" {
     }
   }
 
-  tags = local.tags
+  tags = merge(local.tags, {
+    Name = "overridden-name-public"
+  })
 }
 
 module "private_subnet" {
-  source = "../../modules/subnet"
+  source = "../../../modules/subnet"
 
   for_each = local.subnets
 
-  name   = "${local.name}-private"
+  name   = "${local.name}-private-${each.key}"
   vpc_id = module.vpc.id
 
   availability_zone = each.key
   ipv4_cidr_block   = each.value.private_ipv4_cidr_block
 
   routes = {
-    igw_ipv4 = {
-      destination_ipv4_cidr_block = "0.0.0.0/0"
-      nat_gateway_id              = module.public_subnet["${local.region}a"].nat_gateway_id
-    }
     igw_ipv6 = {
       destination_ipv6_cidr_block = "::/0"
       egress_only_gateway_id      = module.vpc.egress_only_internet_gateway_id
