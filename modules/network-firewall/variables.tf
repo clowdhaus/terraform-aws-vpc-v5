@@ -14,10 +14,10 @@ variable "tags" {
 # Firewall
 ################################################################################
 
-variable "name" {
-  description = "Name of the Network Firewall"
-  type        = string
-  default     = ""
+variable "delete_protection" {
+  description = "A boolean flag indicating whether it is possible to delete the firewall. Defaults to `true`"
+  type        = bool
+  default     = true
 }
 
 variable "description" {
@@ -26,10 +26,10 @@ variable "description" {
   default     = ""
 }
 
-variable "delete_protection" {
-  description = "A boolean flag indicating whether it is possible to delete the firewall. Defaults to `true`"
-  type        = bool
-  default     = true
+variable "encryption_configuration" {
+  description = "KMS encryption configuration settings"
+  type        = any
+  default     = {}
 }
 
 variable "firewall_policy_arn" {
@@ -50,16 +50,22 @@ variable "vpc_id" {
   default     = ""
 }
 
-variable "subnet_mapping" {
-  description = "Set of configuration blocks describing the public subnets. Each subnet must belong to a different Availability Zone in the VPC. AWS Network Firewall creates a firewall endpoint in each subnet"
-  type        = list(string)
-  default     = []
+variable "name" {
+  description = "Name of the Network Firewall"
+  type        = string
+  default     = ""
 }
 
 variable "subnet_change_protection" {
   description = "A boolean flag indicating whether it is possible to change the associated subnet(s). Defaults to `true`"
   type        = bool
   default     = true
+}
+
+variable "subnet_mapping" {
+  description = "Set of configuration blocks describing the public subnets. Each subnet must belong to a different Availability Zone in the VPC. AWS Network Firewall creates a firewall endpoint in each subnet"
+  type        = list(string)
+  default     = []
 }
 
 ################################################################################
@@ -76,6 +82,12 @@ variable "policy_description" {
   description = "A friendly description of the firewall policy"
   type        = string
   default     = null
+}
+
+variable "policy_encryption_configuration" {
+  description = "KMS encryption configuration settings"
+  type        = any
+  default     = {}
 }
 
 variable "policy_stateful_default_actions" {

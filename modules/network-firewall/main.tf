@@ -5,22 +5,33 @@
 resource "aws_networkfirewall_firewall" "this" {
   count = var.create ? 1 : 0
 
-  name              = var.name
-  description       = var.description
   delete_protection = var.delete_protection
+  description       = var.description
+
+  dynamic "encryption_configuration" {
+    for_each = length(var.encryption_configuration) > 0 ? [var.encryption_configuration] : []
+
+    content {
+      key_id = try(encryption_configuration.value.key_id, null)
+      type   = encryption_configuration.value.type
+    }
+  }
 
   firewall_policy_arn               = var.create_firewall_policy ? aws_networkfirewall_firewall_policy.this[0].arn : var.firewall_policy_arn
   firewall_policy_change_protection = var.firewall_policy_change_protection
-
-  vpc_id                   = var.vpc_id
-  subnet_change_protection = var.subnet_change_protection
+  name                              = var.name
+  subnet_change_protection          = var.subnet_change_protection
 
   dynamic "subnet_mapping" {
-    for_each = toset(var.subnet_mapping)
+    for_each = var.subnet_mapping
+
     content {
-      subnet_id = subnet_mapping.value
+      ip_address_type = try(subnet_mapping.value.ip_address_type, null)
+      subnet_id       = subnet_mapping.value
     }
   }
+
+  vpc_id = var.vpc_id
 
   tags = var.tags
 }
@@ -32,15 +43,24 @@ resource "aws_networkfirewall_firewall" "this" {
 resource "aws_networkfirewall_firewall_policy" "this" {
   count = var.create && var.create_firewall_policy ? 1 : 0
 
-  name        = var.name
   description = var.policy_description
+
+  dynamic "encryption_configuration" {
+    for_each = length(var.policy_encryption_configuration) > 0 ? [var.policy_encryption_configuration] : []
+
+    content {
+      key_id = try(encryption_configuration.value.key_id, null)
+      type   = encryption_configuration.value.type
+    }
+  }
 
   firewall_policy {
     # Stateful
     stateful_default_actions = var.policy_stateful_default_actions
 
     dynamic "stateful_engine_options" {
-      for_each = var.policy_stateful_engine_options
+      for_each = length(var.policy_stateful_engine_options) > 0 ? [var.policy_stateful_engine_options] : []
+
       content {
         rule_order = stateful_rule_group_reference.value.rule_order
       }
@@ -48,7 +68,16 @@ resource "aws_networkfirewall_firewall_policy" "this" {
 
     dynamic "stateful_rule_group_reference" {
       for_each = var.policy_stateful_rule_group_reference
+
       content {
+        dynamic "override" {
+          for_each = try([stateful_rule_group_reference.value.override], [])
+
+          content {
+            action = try(override.value.action, null)
+          }
+        }
+
         priority     = try(stateful_rule_group_reference.value.priority, null)
         resource_arn = try(stateful_rule_group_reference.value.resource_arn, aws_networkfirewall_rule_group.this[stateful_rule_group_reference.value.rule_group_key].arn, "REQUIRED")
       }
@@ -83,12 +112,15 @@ resource "aws_networkfirewall_firewall_policy" "this" {
 
     dynamic "stateless_rule_group_reference" {
       for_each = var.policy_stateless_rule_group_reference
+
       content {
-        priority     = try(stateless_rule_group_reference.value.priority, null)
+        priority     = stateless_rule_group_reference.value.priority
         resource_arn = try(stateless_rule_group_reference.value.resource_arn, aws_networkfirewall_rule_group.this[stateless_rule_group_reference.value.rule_group_key].arn, "REQUIRED")
       }
     }
   }
+
+  name = var.name
 
   tags = var.tags
 }
@@ -101,15 +133,23 @@ resource "aws_networkfirewall_rule_group" "this" {
   # TODO - should rule groups be singluar?
   for_each = { for k, v in var.rule_groups : k => v if var.create && var.create_rule_groups }
 
-  name        = try(each.value.name, "${var.name}-${each.key}")
-  description = try(each.value.description, null)
   capacity    = each.value.capacity
-  type        = each.value.type
+  description = try(each.value.description, null)
 
-  rules = try(each.value.rules, null)
+  dynamic "encryption_configuration" {
+    for_each = try([each.value.encryption_configuration], [])
+
+    content {
+      key_id = try(encryption_configuration.value.key_id, null)
+      type   = encryption_configuration.value.type
+    }
+  }
+
+  name = try(each.value.name, "${var.name}-${each.key}")
 
   dynamic "rule_group" {
     for_each = try([each.value.rule_group], [])
+
     content {
 
       dynamic "rule_variables" {
@@ -297,6 +337,9 @@ resource "aws_networkfirewall_rule_group" "this" {
       }
     }
   }
+
+  rules = try(each.value.rules, null)
+  type  = each.value.type
 
   tags = merge(var.tags, try(each.value.tags, {}))
 }
