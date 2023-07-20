@@ -1,16 +1,16 @@
 output "vpc_id" {
   description = "The ID of the VPC"
-  value       = module.vpc.id
+  value       = module.vpc.vpc_id
 }
 
 output "vpc_arn" {
   description = "The ARN of the VPC"
-  value       = module.vpc.arn
+  value       = module.vpc.vpc_arn
 }
 
-output "vpc_ipv4_cidr_block" {
+output "vpc_cidr_block" {
   description = "The CIDR block of the VPC"
-  value       = module.vpc.ipv4_cidr_block
+  value       = module.vpc.vpc_cidr_block
 }
 
 output "default_security_group_id" {
@@ -30,86 +30,127 @@ output "default_route_table_id" {
 
 output "vpc_main_route_table_id" {
   description = "The ID of the main route table associated with this VPC"
-  value       = module.vpc.main_route_table_id
+  value       = module.vpc.vpc_main_route_table_id
 }
 
 output "vpc_ipv6_association_id" {
   description = "The association ID for the IPv6 CIDR block"
-  value       = module.vpc.ipv6_association_id
+  value       = module.vpc.vpc_ipv6_association_id
 }
 
 output "vpc_ipv6_cidr_block" {
   description = "The IPv6 CIDR block"
-  value       = module.vpc.ipv6_cidr_block
+  value       = module.vpc.vpc_ipv6_cidr_block
+}
+
+output "vpc_secondary_cidr_blocks" {
+  description = "List of secondary CIDR blocks of the VPC"
+  value       = module.vpc.vpc_secondary_cidr_blocks
 }
 
 output "vpc_owner_id" {
   description = "The ID of the AWS account that owns the VPC"
-  value       = module.vpc.owner_id
+  value       = module.vpc.vpc_owner_id
 }
 
-# Private Subnets
+output "private_subnets" {
+  description = "List of IDs of private subnets"
+  value       = module.vpc.private_subnets
+}
+
 output "private_subnet_arns" {
   description = "List of ARNs of private subnets"
-  value       = [for subnet in module.private_subnet : subnet.arn]
+  value       = module.vpc.private_subnet_arns
 }
 
-output "private_subnets_ipv4_cidr_blocks" {
+output "private_subnets_cidr_blocks" {
   description = "List of cidr_blocks of private subnets"
-  value       = [for subnet in module.private_subnet : subnet.ipv4_cidr_block]
+  value       = module.vpc.private_subnets_cidr_blocks
 }
 
 output "private_subnets_ipv6_cidr_blocks" {
   description = "List of IPv6 cidr_blocks of private subnets in an IPv6 enabled VPC"
-  value       = [for subnet in module.private_subnet : subnet.ipv6_cidr_block]
+  value       = module.vpc.private_subnets_ipv6_cidr_blocks
 }
 
-# Public Subnets
+output "public_subnets" {
+  description = "List of IDs of public subnets"
+  value       = module.vpc.public_subnets
+}
+
 output "public_subnet_arns" {
   description = "List of ARNs of public subnets"
-  value       = [for subnet in module.public_subnet : subnet.arn]
+  value       = module.vpc.public_subnet_arns
 }
 
-output "public_subnets_ipv4_cidr_blocks" {
+output "public_subnets_cidr_blocks" {
   description = "List of cidr_blocks of public subnets"
-  value       = [for subnet in module.public_subnet : subnet.ipv4_cidr_block]
+  value       = module.vpc.public_subnets_cidr_blocks
 }
 
 output "public_subnets_ipv6_cidr_blocks" {
   description = "List of IPv6 cidr_blocks of public subnets in an IPv6 enabled VPC"
-  value       = [for subnet in module.public_subnet : subnet.ipv6_cidr_block]
+  value       = module.vpc.public_subnets_ipv6_cidr_blocks
 }
 
-# Database Subnets
+output "database_subnets" {
+  description = "List of IDs of database subnets"
+  value       = module.vpc.database_subnets
+}
+
 output "database_subnet_arns" {
   description = "List of ARNs of database subnets"
-  value       = [for subnet in module.database_subnet : subnet.arn]
+  value       = module.vpc.database_subnet_arns
 }
 
-output "database_subnets_ipv4_cidr_blocks" {
+output "database_subnets_cidr_blocks" {
   description = "List of cidr_blocks of database subnets"
-  value       = [for subnet in module.database_subnet : subnet.ipv4_cidr_block]
+  value       = module.vpc.database_subnets_cidr_blocks
 }
 
 output "database_subnets_ipv6_cidr_blocks" {
   description = "List of IPv6 cidr_blocks of database subnets in an IPv6 enabled VPC"
-  value       = [for subnet in module.database_subnet : subnet.ipv6_cidr_block]
+  value       = module.vpc.database_subnets_ipv6_cidr_blocks
 }
 
-# Route Tables
+output "database_subnet_group" {
+  description = "ID of database subnet group"
+  value       = module.vpc.database_subnet_group
+}
+
+output "database_subnet_group_name" {
+  description = "Name of database subnet group"
+  value       = module.vpc.database_subnet_group_name
+}
+
 output "public_route_table_ids" {
-  description = "Public route table ID"
-  value       = [for subnet in module.public_subnet : subnet.route_table_id]
+  description = "List of IDs of public route tables"
+  value       = module.vpc.public_route_table_ids
 }
 
 output "private_route_table_ids" {
   description = "List of IDs of private route tables"
-  value       = [for subnet in module.private_subnet : subnet.route_table_id]
+  value       = module.vpc.private_route_table_ids
 }
 
-output "database_route_table_id" {
-  description = "Database route table ID"
-  value       = [for subnet in module.database_subnet : subnet.route_table_id]
+output "database_route_table_ids" {
+  description = "List of IDs of database route tables"
+  value       = module.vpc.database_route_table_ids
+}
+
+output "private_route_table_association_ids" {
+  description = "List of IDs of the private route table association"
+  value       = module.vpc.private_route_table_association_ids
+}
+
+output "database_route_table_association_ids" {
+  description = "List of IDs of the database route table association"
+  value       = module.vpc.database_route_table_association_ids
+}
+
+output "public_route_table_association_ids" {
+  description = "List of IDs of the public route table association"
+  value       = module.vpc.public_route_table_association_ids
 }
 
 output "dhcp_options_id" {
@@ -119,20 +160,41 @@ output "dhcp_options_id" {
 
 output "nat_public_ips" {
   description = "List of public Elastic IPs created for AWS NAT Gateway"
-  value       = [for subnet in module.public_subnet : subnet.eip_public_ip]
+  value       = module.vpc.nat_public_ips
 }
 
 output "natgw_ids" {
   description = "List of NAT Gateway IDs"
-  value       = [for subnet in module.public_subnet : subnet.nat_gateway_id]
+  value       = module.vpc.natgw_ids
 }
 
 output "igw_id" {
   description = "The ID of the Internet Gateway"
-  value       = module.vpc.internet_gateway_id
+  value       = module.vpc.igw_id
 }
 
 output "igw_arn" {
   description = "The ARN of the Internet Gateway"
-  value       = module.vpc.internet_gateway_arn
+  value       = module.vpc.igw_arn
+}
+
+output "egress_only_internet_gateway_id" {
+  description = "The ID of the egress only Internet Gateway"
+  value       = module.vpc.egress_only_internet_gateway_id
+}
+
+# VPC flow log
+output "vpc_flow_log_id" {
+  description = "The ID of the Flow Log resource"
+  value       = module.vpc.vpc_flow_log_id
+}
+
+output "vpc_flow_log_destination_arn" {
+  description = "The ARN of the destination for VPC Flow Logs"
+  value       = module.vpc.vpc_flow_log_destination_arn
+}
+
+output "vpc_flow_log_cloudwatch_iam_role_arn" {
+  description = "The ARN of the IAM role used when pushing logs to Cloudwatch log group"
+  value       = module.vpc.vpc_flow_log_cloudwatch_iam_role_arn
 }
