@@ -20,11 +20,9 @@ resource "aws_vpc" "this" {
   ipv6_cidr_block_network_border_group = var.ipv6_cidr_block_network_border_group
   assign_generated_ipv6_cidr_block     = var.assign_generated_ipv6_cidr_block
 
-  instance_tenancy               = var.instance_tenancy
-  enable_dns_support             = var.enable_dns_support
-  enable_dns_hostnames           = var.enable_dns_hostnames
-  enable_classiclink             = var.enable_classiclink
-  enable_classiclink_dns_support = var.enable_classiclink_dns_support
+  instance_tenancy     = var.instance_tenancy
+  enable_dns_support   = var.enable_dns_support
+  enable_dns_hostnames = var.enable_dns_hostnames
 
   tags = merge(
     var.tags,
@@ -395,7 +393,6 @@ resource "aws_default_vpc" "this" {
 
   enable_dns_support   = var.default_vpc_enable_dns_support
   enable_dns_hostnames = var.default_vpc_enable_dns_hostnames
-  enable_classiclink   = var.default_vpc_enable_classiclink
 
   tags = merge(
     var.tags,

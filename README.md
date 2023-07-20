@@ -282,14 +282,14 @@ Examples provided in [`examples`](https://github.com/clowdhaus/terraform-aws-vpc
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.4 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 4.4 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.0 |
 
 ## Modules
 
@@ -347,7 +347,6 @@ No modules.
 | <a name="input_default_security_group_egress_rules"></a> [default\_security\_group\_egress\_rules](#input\_default\_security\_group\_egress\_rules) | Egress rules to be added to the Default Security Group | `list(map(string))` | `[]` | no |
 | <a name="input_default_security_group_ingress_rules"></a> [default\_security\_group\_ingress\_rules](#input\_default\_security\_group\_ingress\_rules) | Ingress rules to be added to the Default Security Group | `list(map(string))` | `[]` | no |
 | <a name="input_default_security_group_tags"></a> [default\_security\_group\_tags](#input\_default\_security\_group\_tags) | Additional tags for the Default Security Group | `map(string)` | `{}` | no |
-| <a name="input_default_vpc_enable_classiclink"></a> [default\_vpc\_enable\_classiclink](#input\_default\_vpc\_enable\_classiclink) | A boolean flag to enable/disable ClassicLink for the VPC. Only valid in regions and accounts that support EC2 Classic | `bool` | `null` | no |
 | <a name="input_default_vpc_enable_dns_hostnames"></a> [default\_vpc\_enable\_dns\_hostnames](#input\_default\_vpc\_enable\_dns\_hostnames) | A boolean flag to enable/disable DNS hostnames in the VPC. Defaults `false` | `bool` | `null` | no |
 | <a name="input_default_vpc_enable_dns_support"></a> [default\_vpc\_enable\_dns\_support](#input\_default\_vpc\_enable\_dns\_support) | A boolean flag to enable/disable DNS support in the VPC. Defaults `true` | `bool` | `null` | no |
 | <a name="input_default_vpc_tags"></a> [default\_vpc\_tags](#input\_default\_vpc\_tags) | Additional tags for the Default VPC | `map(string)` | `{}` | no |
@@ -361,8 +360,6 @@ No modules.
 | <a name="input_dns_firewall_rule_group_associations"></a> [dns\_firewall\_rule\_group\_associations](#input\_dns\_firewall\_rule\_group\_associations) | Map of Route53 Resolver Firewall Rule Groups to associate with the VPC | `any` | `{}` | no |
 | <a name="input_dns_query_log_config_id"></a> [dns\_query\_log\_config\_id](#input\_dns\_query\_log\_config\_id) | The ID of an existing Route53 Resolver DNS Query Log Config to associate with the VPC | `string` | `null` | no |
 | <a name="input_dns_query_log_destintion_arn"></a> [dns\_query\_log\_destintion\_arn](#input\_dns\_query\_log\_destintion\_arn) | The ARN of the resource that you want Route 53 Resolver to send query logs. You can send query logs to an S3 bucket, a CloudWatch Logs log group, or a Kinesis Data Firehose delivery stream | `string` | `null` | no |
-| <a name="input_enable_classiclink"></a> [enable\_classiclink](#input\_enable\_classiclink) | A boolean flag to enable/disable ClassicLink for the VPC. Only valid in regions and accounts that support EC2 Classic | `bool` | `null` | no |
-| <a name="input_enable_classiclink_dns_support"></a> [enable\_classiclink\_dns\_support](#input\_enable\_classiclink\_dns\_support) | A boolean flag to enable/disable ClassicLink DNS Support for the VPC. Only valid in regions and accounts that support EC2 Classic | `bool` | `null` | no |
 | <a name="input_enable_dns_firewall"></a> [enable\_dns\_firewall](#input\_enable\_dns\_firewall) | Controls if Route53 Resolver DNS Firewall is enabled/disabled | `bool` | `false` | no |
 | <a name="input_enable_dns_hostnames"></a> [enable\_dns\_hostnames](#input\_enable\_dns\_hostnames) | A boolean flag to enable/disable DNS hostnames in the VPC. Defaults `false` | `bool` | `null` | no |
 | <a name="input_enable_dns_query_logging"></a> [enable\_dns\_query\_logging](#input\_enable\_dns\_query\_logging) | Controls if Route53 Resolver DNS Query Logging is enabled/disabled | `bool` | `false` | no |

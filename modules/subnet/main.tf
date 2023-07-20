@@ -145,7 +145,7 @@ resource "aws_eip" "this" {
   customer_owned_ipv4_pool  = var.eip_customer_owned_ipv4_pool
   network_border_group      = var.eip_network_border_group
   public_ipv4_pool          = var.eip_public_ipv4_pool
-  vpc                       = true
+  domain                    = "vpc"
 
   tags = merge(
     var.tags,

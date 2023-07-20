@@ -86,18 +86,6 @@ variable "enable_dns_hostnames" {
   default     = null
 }
 
-variable "enable_classiclink" {
-  description = "A boolean flag to enable/disable ClassicLink for the VPC. Only valid in regions and accounts that support EC2 Classic"
-  type        = bool
-  default     = null
-}
-
-variable "enable_classiclink_dns_support" {
-  description = "A boolean flag to enable/disable ClassicLink DNS Support for the VPC. Only valid in regions and accounts that support EC2 Classic"
-  type        = bool
-  default     = null
-}
-
 variable "vpc_tags" {
   description = "Additional tags for the VPC"
   type        = map(string)
@@ -412,12 +400,6 @@ variable "default_vpc_enable_dns_support" {
 
 variable "default_vpc_enable_dns_hostnames" {
   description = "A boolean flag to enable/disable DNS hostnames in the VPC. Defaults `false`"
-  type        = bool
-  default     = null
-}
-
-variable "default_vpc_enable_classiclink" {
-  description = "A boolean flag to enable/disable ClassicLink for the VPC. Only valid in regions and accounts that support EC2 Classic"
   type        = bool
   default     = null
 }

@@ -47,7 +47,7 @@ module "vpc" {
   source = "../../../"
 
   name            = local.name
-  ipv4_cidr_block = "172.16.0.0/16" # 10.0.0.0/8 is reserved for EC2-Classic
+  ipv4_cidr_block = "172.16.0.0/16"
 
   # Not in v4.x
   enable_dnssec_config = false
@@ -92,9 +92,6 @@ module "vpc" {
 
   manage_default_security_group = true
   default_security_group_tags   = { Name = "${local.name}-default" }
-
-  enable_classiclink             = true
-  enable_classiclink_dns_support = true
 
   customer_gateways = {
     IP1 = {
