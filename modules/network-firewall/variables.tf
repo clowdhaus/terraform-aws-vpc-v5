@@ -21,7 +21,7 @@ variable "delete_protection" {
 }
 
 variable "description" {
-  description = "Description of the Network Firewall"
+  description = "A friendly description of the firewall"
   type        = string
   default     = ""
 }
@@ -44,14 +44,8 @@ variable "firewall_policy_change_protection" {
   default     = null
 }
 
-variable "vpc_id" {
-  description = "The unique identifier of the VPC where AWS Network Firewall should create the firewall"
-  type        = string
-  default     = ""
-}
-
 variable "name" {
-  description = "Name of the Network Firewall"
+  description = "A friendly name of the firewall"
   type        = string
   default     = ""
 }
@@ -66,6 +60,12 @@ variable "subnet_mapping" {
   description = "Set of configuration blocks describing the public subnets. Each subnet must belong to a different Availability Zone in the VPC. AWS Network Firewall creates a firewall endpoint in each subnet"
   type        = list(string)
   default     = []
+}
+
+variable "vpc_id" {
+  description = "The unique identifier of the VPC where AWS Network Firewall should create the firewall"
+  type        = string
+  default     = ""
 }
 
 ################################################################################

@@ -62,7 +62,8 @@ resource "aws_networkfirewall_firewall_policy" "this" {
       for_each = length(var.policy_stateful_engine_options) > 0 ? [var.policy_stateful_engine_options] : []
 
       content {
-        rule_order = stateful_rule_group_reference.value.rule_order
+        rule_order              = try(stateful_rule_group_reference.value.rule_order, null)
+        stream_exception_policy = try(stateful_rule_group_reference.value.stream_exception_policy, null)
       }
     }
 
@@ -86,16 +87,21 @@ resource "aws_networkfirewall_firewall_policy" "this" {
     # Stateless
     dynamic "stateless_custom_action" {
       for_each = var.policy_stateless_custom_action
+
       content {
         action_name = stateless_custom_action.value.action_name
+
         dynamic "action_definition" {
           for_each = stateless_custom_action.value.action_definition
+
           content {
             dynamic "publish_metric_action" {
               for_each = action_definition.value.publish_metric_action
+
               content {
                 dynamic "dimension" {
                   for_each = publish_metric_action.value.dimension
+
                   content {
                     value = dimension.value.value
                   }
@@ -130,7 +136,6 @@ resource "aws_networkfirewall_firewall_policy" "this" {
 ################################################################################
 
 resource "aws_networkfirewall_rule_group" "this" {
-  # TODO - should rule groups be singluar?
   for_each = { for k, v in var.rule_groups : k => v if var.create && var.create_rule_groups }
 
   capacity    = each.value.capacity
@@ -432,7 +437,6 @@ resource "aws_ram_resource_association" "firewall_policy" {
 }
 
 resource "aws_ram_resource_association" "rule_group" {
-  # TODO - should rule groups be singluar?
   for_each = { for k, v in var.rule_groups_ram_resource_associations : k => v if var.create && var.create_rule_groups }
 
   resource_arn       = aws_networkfirewall_rule_group.this[each.value.rule_group_key].arn
