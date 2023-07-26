@@ -35,7 +35,6 @@ Note that this example may create resources which will incur monetary charges on
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_dns_firewall_rule_group"></a> [dns\_firewall\_rule\_group](#module\_dns\_firewall\_rule\_group) | ../../modules/dns-firewall-rule-group | n/a |
-| <a name="module_network_firewall"></a> [network\_firewall](#module\_network\_firewall) | ../../modules/network-firewall | n/a |
 | <a name="module_public_network_acl"></a> [public\_network\_acl](#module\_public\_network\_acl) | ../../modules/network-acl | n/a |
 | <a name="module_public_subnet"></a> [public\_subnet](#module\_public\_subnet) | ../../modules/subnet | n/a |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | ../../ | n/a |
@@ -47,9 +46,7 @@ Note that this example may create resources which will incur monetary charges on
 |------|------|
 | [aws_cloudwatch_log_group.logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
 | [aws_s3_bucket.dns_query_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
-| [aws_s3_bucket.network_firewall_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
 | [aws_s3_bucket_policy.dns_query_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy) | resource |
-| [aws_s3_bucket_policy.network_firewall_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 
 ## Inputs
@@ -113,17 +110,6 @@ No inputs.
 | <a name="output_ipv6_cidr_block_associations"></a> [ipv6\_cidr\_block\_associations](#output\_ipv6\_cidr\_block\_associations) | Map of IPv6 CIDR block associations and their attributes |
 | <a name="output_ipv6_cidr_block_network_border_group"></a> [ipv6\_cidr\_block\_network\_border\_group](#output\_ipv6\_cidr\_block\_network\_border\_group) | The Network Border Group Zone name |
 | <a name="output_main_route_table_id"></a> [main\_route\_table\_id](#output\_main\_route\_table\_id) | The ID of the main route table associated with this VPC. Note that you can change a VPC's main route table by using an `aws_main_route_table_association` |
-| <a name="output_network_firewall_arn"></a> [network\_firewall\_arn](#output\_network\_firewall\_arn) | The Amazon Resource Name (ARN) that identifies the firewall |
-| <a name="output_network_firewall_id"></a> [network\_firewall\_id](#output\_network\_firewall\_id) | The Amazon Resource Name (ARN) that identifies the firewall |
-| <a name="output_network_firewall_logging_configuration_id"></a> [network\_firewall\_logging\_configuration\_id](#output\_network\_firewall\_logging\_configuration\_id) | The Amazon Resource Name (ARN) of the associated firewall |
-| <a name="output_network_firewall_policy_arn"></a> [network\_firewall\_policy\_arn](#output\_network\_firewall\_policy\_arn) | The Amazon Resource Name (ARN) that identifies the firewall policy |
-| <a name="output_network_firewall_policy_id"></a> [network\_firewall\_policy\_id](#output\_network\_firewall\_policy\_id) | The Amazon Resource Name (ARN) that identifies the firewall policy |
-| <a name="output_network_firewall_policy_resource_policy_id"></a> [network\_firewall\_policy\_resource\_policy\_id](#output\_network\_firewall\_policy\_resource\_policy\_id) | The Amazon Resource Name (ARN) of the firewall policy associated with the resource policy |
-| <a name="output_network_firewall_policy_update_token"></a> [network\_firewall\_policy\_update\_token](#output\_network\_firewall\_policy\_update\_token) | A string token used when updating a firewall policy |
-| <a name="output_network_firewall_rule_group_resource_policies"></a> [network\_firewall\_rule\_group\_resource\_policies](#output\_network\_firewall\_rule\_group\_resource\_policies) | Map of Rule Group resource policies created and their attributes |
-| <a name="output_network_firewall_rule_groups"></a> [network\_firewall\_rule\_groups](#output\_network\_firewall\_rule\_groups) | A map of the rule groups created and their attributes |
-| <a name="output_network_firewall_status"></a> [network\_firewall\_status](#output\_network\_firewall\_status) | Nested list of information about the current status of the firewall |
-| <a name="output_network_firewall_update_token"></a> [network\_firewall\_update\_token](#output\_network\_firewall\_update\_token) | A string token used when updating a firewall |
 | <a name="output_public_network_acl_arn"></a> [public\_network\_acl\_arn](#output\_public\_network\_acl\_arn) | The ID of the network ACL |
 | <a name="output_public_network_acl_id"></a> [public\_network\_acl\_id](#output\_public\_network\_acl\_id) | The ARN of the network ACL |
 | <a name="output_public_network_acl_rules_egress"></a> [public\_network\_acl\_rules\_egress](#output\_public\_network\_acl\_rules\_egress) | Map of egress network ACL rules created and their attributes |

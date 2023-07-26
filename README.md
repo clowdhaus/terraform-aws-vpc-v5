@@ -10,10 +10,6 @@
 
 ## TODOs
 
-- Network firewall: split into 3 sections
-  - Network firewall and logging config will move to VPC root module
-  - Create new sub-module for `network-firewall-rule-group (singular, RAM shareable)`
-  - Create new sub-module for `network-firewall-policy` (singular, RAM shareable)
 - Align conventions
   - ✅ `cidr_block` -> `ipv4_cidr_block` to compliment `ipv6_cidr_block`
     - Except for `ipam` where resources use the pairing of `cidr` and `address_family` (due to AWS provider/API)
@@ -91,6 +87,7 @@ This is where most of the network logic is captured; the design is centered arou
 
 ### Network Firewall
 
+- https://github.com/terraform-aws-modules/terraform-aws-network-firewall
 - ✅ aws_networkfirewall_firewall
 - ✅ aws_networkfirewall_firewall_policy
   - ✅ aws_ram_resource_association
