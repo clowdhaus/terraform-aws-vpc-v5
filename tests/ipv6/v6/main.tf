@@ -22,8 +22,8 @@ locals {
       private_ipv4_cidr_block  = "10.0.11.0/24"
       database_ipv4_cidr_block = "10.0.12.0/24"
       public_ipv6_cidr_block   = element(local.ipv6_cidr_subnets, 1)
-      public_ipv6_cidr_block   = element(local.ipv6_cidr_subnets, 3)
-      public_ipv6_cidr_block   = element(local.ipv6_cidr_subnets, 5)
+      private_ipv6_cidr_block  = element(local.ipv6_cidr_subnets, 3)
+      database_ipv6_cidr_block = element(local.ipv6_cidr_subnets, 5)
     }
   }
 

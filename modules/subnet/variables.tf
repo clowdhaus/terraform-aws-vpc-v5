@@ -92,6 +92,12 @@ variable "enable_dns64" {
   default     = null
 }
 
+variable "enable_lni_at_device_index" {
+  description = "Indicates the device position for local network interfaces in this subnet"
+  type        = number
+  default     = null
+}
+
 variable "enable_resource_name_dns_a_record_on_launch" {
   description = "Indicates whether to respond to DNS queries for instance hostnames with DNS A records"
   type        = bool
@@ -152,8 +158,14 @@ variable "create_route_table" {
   default     = true
 }
 
+variable "route_table_propagating_vgws" {
+  description = "List of virtual gateways for route propagation"
+  type        = list(string)
+  default     = []
+}
+
 variable "route_table_id" {
-  description = "The ID of an exissting route table to associate with the subnet"
+  description = "The ID of an existing route table to associate with the subnet"
   type        = string
   default     = null
 }
@@ -192,6 +204,12 @@ variable "route_timeouts" {
 
 variable "associated_gateways" {
   description = "Map of gateways to associate with the route table"
+  type        = map(string)
+  default     = {}
+}
+
+variable "route_table_association_timeouts" {
+  description = "Create, update, and delete timeout configurations for route table association"
   type        = map(string)
   default     = {}
 }
@@ -252,4 +270,44 @@ variable "nat_gateway_connectivity_type" {
   description = "Connectivity type for the gateway. Valid values are `private` and `public`. Defaults to `public`"
   type        = string
   default     = null
+}
+
+variable "nat_gateway_tags" {
+  description = "Additional tags for the NAT gateway"
+  type        = map(string)
+  default     = {}
+}
+
+################################################################################
+# Internet Gateway
+################################################################################
+
+variable "create_internet_gateway" {
+  description = "Controls if an internet gateway is created"
+  type        = bool
+  default     = true
+}
+
+variable "attach_internet_gateway" {
+  description = "Controls if an internet gateway is attached to the VPC"
+  type        = bool
+  default     = true
+}
+
+variable "internet_gateway_id" {
+  description = "The ID of an existing internet gateway to attach to the VPC. Reqiured if `create_internet_gateway` is `false` and `attach_internet_gateway` is `true`"
+  type        = string
+  default     = null
+}
+
+variable "create_egress_only_internet_gateway" {
+  description = "Controls if an egress only internet gateway is created"
+  type        = bool
+  default     = false
+}
+
+variable "internet_gateway_tags" {
+  description = "Additional tags for the internet gateway/egress only internet gateway"
+  type        = map(string)
+  default     = {}
 }

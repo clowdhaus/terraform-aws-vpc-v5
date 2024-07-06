@@ -8,28 +8,28 @@ locals {
 
   subnets = {
     "${local.region}a" = {
-      public_ipv4_cidr_block     = "172.16.0.0/24"
-      private_ipv4_cidr_block    = "172.16.10.0/24"
-      database_ipv4_cidr_block   = "172.16.20.0/24"
-      elastiache_ipv4_cidr_block = "172.16.30.0/24"
-      redshift_ipv4_cidr_block   = "172.16.40.0/24"
-      intra_ipv4_cidr_block      = "172.16.50.0/24"
+      public_ipv4_cidr_block      = "172.16.0.0/24"
+      private_ipv4_cidr_block     = "172.16.10.0/24"
+      database_ipv4_cidr_block    = "172.16.20.0/24"
+      elasticache_ipv4_cidr_block = "172.16.30.0/24"
+      redshift_ipv4_cidr_block    = "172.16.40.0/24"
+      intra_ipv4_cidr_block       = "172.16.50.0/24"
     }
     "${local.region}b" = {
-      public_ipv4_cidr_block     = "172.16.1.0/24"
-      private_ipv4_cidr_block    = "172.16.11.0/24"
-      database_ipv4_cidr_block   = "172.16.22.0/24"
-      elastiache_ipv4_cidr_block = "172.16.31.0/24"
-      redshift_ipv4_cidr_block   = "172.16.41.0/24"
-      intra_ipv4_cidr_block      = "172.16.51.0/24"
+      public_ipv4_cidr_block      = "172.16.1.0/24"
+      private_ipv4_cidr_block     = "172.16.11.0/24"
+      database_ipv4_cidr_block    = "172.16.22.0/24"
+      elasticache_ipv4_cidr_block = "172.16.31.0/24"
+      redshift_ipv4_cidr_block    = "172.16.41.0/24"
+      intra_ipv4_cidr_block       = "172.16.51.0/24"
     }
     "${local.region}c" = {
-      public_ipv4_cidr_block     = "172.16.2.0/24"
-      private_ipv4_cidr_block    = "172.16.12.0/24"
-      database_ipv4_cidr_block   = "172.16.22.0/24"
-      elastiache_ipv4_cidr_block = "172.16.32.0/24"
-      redshift_ipv4_cidr_block   = "172.16.42.0/24"
-      intra_ipv4_cidr_block      = "172.16.52.0/24"
+      public_ipv4_cidr_block      = "172.16.2.0/24"
+      private_ipv4_cidr_block     = "172.16.12.0/24"
+      database_ipv4_cidr_block    = "172.16.22.0/24"
+      elasticache_ipv4_cidr_block = "172.16.32.0/24"
+      redshift_ipv4_cidr_block    = "172.16.42.0/24"
+      intra_ipv4_cidr_block       = "172.16.52.0/24"
     }
   }
 
