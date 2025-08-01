@@ -16,25 +16,24 @@ $ terraform apply
 
 Note that this example may create resources which will incur monetary charges on your AWS bill. Run `terraform destroy` when you no longer need these resources.
 
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.56 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.7 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.5 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.56 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 6.5 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_dns_firewall_rule_group"></a> [dns\_firewall\_rule\_group](#module\_dns\_firewall\_rule\_group) | ../../modules/dns-firewall-rule-group | n/a |
 | <a name="module_public_network_acl"></a> [public\_network\_acl](#module\_public\_network\_acl) | ../../modules/network-acl | n/a |
 | <a name="module_public_subnet"></a> [public\_subnet](#module\_public\_subnet) | ../../modules/subnet | n/a |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | ../../ | n/a |
@@ -80,13 +79,6 @@ No inputs.
 | <a name="output_dhcp_options_arn"></a> [dhcp\_options\_arn](#output\_dhcp\_options\_arn) | The ARN of the DHCP options set |
 | <a name="output_dhcp_options_association_id"></a> [dhcp\_options\_association\_id](#output\_dhcp\_options\_association\_id) | The ID of the DHCP Options set association |
 | <a name="output_dhcp_options_id"></a> [dhcp\_options\_id](#output\_dhcp\_options\_id) | The ID of the DHCP options set |
-| <a name="output_dns_firewall_config_id"></a> [dns\_firewall\_config\_id](#output\_dns\_firewall\_config\_id) | The ID of the firewall configuration |
-| <a name="output_dns_firewall_rule_group_arn"></a> [dns\_firewall\_rule\_group\_arn](#output\_dns\_firewall\_rule\_group\_arn) | The ARN (Amazon Resource Name) of the rule group |
-| <a name="output_dns_firewall_rule_group_associations"></a> [dns\_firewall\_rule\_group\_associations](#output\_dns\_firewall\_rule\_group\_associations) | Map of Route53 resolver firewall rule group associations and their attributes |
-| <a name="output_dns_firewall_rule_group_domain_lists"></a> [dns\_firewall\_rule\_group\_domain\_lists](#output\_dns\_firewall\_rule\_group\_domain\_lists) | Map of all domain lists created and their attributes |
-| <a name="output_dns_firewall_rule_group_id"></a> [dns\_firewall\_rule\_group\_id](#output\_dns\_firewall\_rule\_group\_id) | The ID of the rule group |
-| <a name="output_dns_firewall_rule_group_rules"></a> [dns\_firewall\_rule\_group\_rules](#output\_dns\_firewall\_rule\_group\_rules) | Map of all rules created and their attributes |
-| <a name="output_dns_firewall_rule_group_share_status"></a> [dns\_firewall\_rule\_group\_share\_status](#output\_dns\_firewall\_rule\_group\_share\_status) | Whether the rule group is shared with other AWS accounts, or was shared with the current account by another AWS account. Sharing is configured through AWS Resource Access Manager (AWS RAM). Valid values: `NOT_SHARED`, `SHARED_BY_ME`, `SHARED_WITH_ME` |
 | <a name="output_dns_query_log_config_arn"></a> [dns\_query\_log\_config\_arn](#output\_dns\_query\_log\_config\_arn) | The ARN (Amazon Resource Name) of the Route 53 Resolver query logging configuration |
 | <a name="output_dns_query_log_config_association_id"></a> [dns\_query\_log\_config\_association\_id](#output\_dns\_query\_log\_config\_association\_id) | he ID of the Route 53 Resolver query logging configuration association |
 | <a name="output_dns_query_log_config_id"></a> [dns\_query\_log\_config\_id](#output\_dns\_query\_log\_config\_id) | The ID of the Route 53 Resolver query logging configuration |
@@ -123,6 +115,6 @@ No inputs.
 | <a name="output_public_subnet_ipv6_cidr_blocks"></a> [public\_subnet\_ipv6\_cidr\_blocks](#output\_public\_subnet\_ipv6\_cidr\_blocks) | Public subnet IPv6 CIDR blocks |
 | <a name="output_public_subnet_route_table_id"></a> [public\_subnet\_route\_table\_id](#output\_public\_subnet\_route\_table\_id) | Public subnet route table IDs |
 | <a name="output_vpn_gateways"></a> [vpn\_gateways](#output\_vpn\_gateways) | Map of VPN Gateways and their attributes |
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- END_TF_DOCS -->
 
 Apache-2.0 Licensed. See [LICENSE](../../LICENSE).

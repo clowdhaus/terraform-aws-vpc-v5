@@ -2,227 +2,6 @@
 
 :warning: Please do not rely on this being stable. The goal of this project is to explore changes to the upstream `terraform-aws-vpc` module and eventually land those changes there as v5.0. For now, this is just for exploring and open collaboration on what that next version might look like, and how users can migrate from v4.x to v5.x. Feel free to watch along if you are curious.
 
-## High Level Diagram
-
-<p align="center">
-  <img src="https://github.com/clowdhaus/terraform-aws-vpc-v5/blob/main/.github/images/hld.svg" alt="high level diagram">
-</p>
-
-## TODOs
-
-- Align conventions
-  - ✅ `cidr_block` -> `ipv4_cidr_block` to compliment `ipv6_cidr_block`
-    - Except for `ipam` where resources use the pairing of `cidr` and `address_family` (due to AWS provider/API)
-  - ✅ default routes vs custom routes
-  - ✅ default NACLs vs custom NACLs
-
-## Notes
-
-- https://docs.aws.amazon.com/ram/latest/userguide/shareable.html
-- VPC Endpoints
-  - One per AZ; subnets may wrap around and double/triple/etc. within an AZ, but VPC endpoints have to be separate
-- IPAM
-  - One public scope - default public scope created by IPAM
-  - IPAM pools can be nested up to a depth of 10 max
-
-## Supported Resources
-
-### VPC (Core)
-
-- ✅ aws_vpc
-- ✅ aws_vpc_ipv4_cidr_block_association
-- ✅ aws_vpc_ipv6_cidr_block_association
-- ✅ aws_route53_resolver_dnssec_config
-- ✅ aws_route53_resolver_query_log_config
-  - ✅ aws_route53_resolver_query_log_config_association
-  - ❌ aws_ram_resource_association -> users can use a shared query log config within the module
-- ✅ aws_route53_resolver_firewall_config
-  - ✅ aws_route53_resolver_firewall_rule_group_association
-- ✅ aws_vpc_dhcp_options
-  - ✅ aws_vpc_dhcp_options_association
-- ✅ aws_internet_gateway
-  - ✅ aws_internet_gateway_attachment
-- ✅ aws_egress_only_internet_gateway
-- ✅ aws_customer_gateway
-- ✅ aws_vpn_gateway
-- ✅ aws_default_security_group
-- ✅ aws_default_network_acl
-  - ✅ aws_network_acl_rule: ingress
-  - ✅ aws_network_acl_rule: egress
-- ✅ aws_default_route_table
-  - ✅ aws_route
-- ✅ aws_default_vpc
-- ✅ aws_default_vpc_dhcp_options
-- ❌ aws_main_route_table_association -> conflicts with `aws_default_route_table`
-- ❌ aws_default_subnet
-
-### Subnet
-
-This is where most of the network logic is captured; the design is centered around the subnet and its usage patterns
-
-- ✅ aws_subnet
-  - ✅ aws_ram_resource_association
-- ✅ aws_ec2_subnet_cidr_reservation
-- ✅ aws_network_acl
-  - ❌ aws_network_acl_association -> subnet association handled in `aws_subnet_acl`
-- ✅ aws_network_acl_rule
-- ✅ aws_route_table
-  - ✅ aws_route
-  - ✅ aws_route_table_association
-    - ✅ aws_route_table_association: subnet
-    - ✅ aws_route_table_association: gateway(s)
-- ✅ aws_nat_gateway
-  - ✅ aws_eip
-
-### VPC Endpoint
-
-- ✅ aws_vpc_endpoint
-- [ ] aws_vpc_endpoint_connection_accepter
-- [ ] aws_vpc_endpoint_connection_notification
-- [ ] aws_vpc_endpoint_route_table_association
-- [ ] aws_vpc_endpoint_service
-- [ ] aws_vpc_endpoint_service_allowed_principal
-- [ ] aws_vpc_endpoint_subnet_association
-- [ ] aws_vpc_endpoint_policy
-
-### Network Firewall
-
-- https://github.com/terraform-aws-modules/terraform-aws-network-firewall
-- ✅ aws_networkfirewall_firewall
-- ✅ aws_networkfirewall_firewall_policy
-  - ✅ aws_ram_resource_association
-- ✅ aws_networkfirewall_rule_group
-  - ✅ aws_ram_resource_association
-- ✅ aws_networkfirewall_resource_policy
-- ✅ aws_networkfirewall_logging_configuration
-
-### DNS Firewall Rule Group
-
-- ✅ aws_route53_resolver_firewall_rule_group
-  - ✅ aws_ram_resource_association
-- ✅ aws_route53_resolver_firewall_domain_list
-- ✅ aws_route53_resolver_firewall_rule
-
-### IPAM
-
-- ✅ aws_vpc_ipam
-- ✅ aws_vpc_ipam_scope
-- ✅ aws_vpc_ipam_pool
-  - ✅ aws_ram_resource_association
-- ❌ aws_vpc_ipam_organization_admin_account -> provision in root account for multi-account setup
-
-### IPAM Pool
-
-- ✅ aws_vpc_ipam_pool
-  - ✅ aws_ram_resource_association
-- ✅ aws_vpc_ipam_pool_cidr
-- ✅ aws_vpc_ipam_pool_cidr_allocation
-- ✅ aws_vpc_ipam_preview_next_cidr
-
-### VPC Flow Log
-
-- ✅ aws_flow_log
-  - ✅ aws_cloudwatch_log_group
-    - ✅ aws_iam_role
-
-### Network Manager
-
-:warning: requires v4.6.0
-
-- [ ] aws_networkmanager_connection
-- [ ] aws_networkmanager_customer_gateway_association
-- [ ] aws_networkmanager_device
-- [ ] aws_networkmanager_global_network
-- [ ] aws_networkmanager_link
-- [ ] aws_networkmanager_link_association
-- [ ] aws_networkmanager_site
-- [ ] aws_networkmanager_transit_gateway_connect_peer_association
-- [ ] aws_networkmanager_transit_gateway_registration
-
-### EC2 Misc
-
-- [ ] aws_ec2_managed_prefix_list
-- [ ] aws_ec2_managed_prefix_list_entry
-- [ ] aws_ec2_network_insights_path
-- [ ] aws_ec2_transit_gateway_connect
-- [ ] aws_ec2_transit_gateway_connect_peer
-
-## Resources Not Supported
-
-### VPC Peering
-
-TODO - consider support as sub-module or standalone module
-
-- ❌ aws_vpc_peering_connection
-- ❌ aws_vpc_peering_connection_accepter
-- ❌ aws_vpc_peering_connection_options
-
-### Resource Access Manager (RAM)
-
-In resource sharing for VPCs, we're really sharing subnets. `aws_ram_resource_association` is provided in the `subnet` module which allows the respective subnet to be shared or not, while `aws_ram_resource_share` in the root module is the collection of resource associations. It is up to users to create and manage `aws_ram_principal_association` and `aws_ram_resource_share_accepter` separately, externally.
-
-- ❌ aws_ram_principal_association
-- ❌ aws_ram_resource_share_accepter
-
-### VPN Gateway
-
-See https://github.com/terraform-aws-modules/terraform-aws-vpn-gateway
-Note below on Client VPN
-
-- ❌ aws_vpn_connection
-- ❌ aws_vpn_connection_route
-- ❌ aws_vpn_gateway_attachment
-- ❌ aws_vpn_gateway_route_propagation
-
-### Client VPN
-
-TODO - change [terraform-aws-vpn-gateway](https://github.com/terraform-aws-modules/terraform-aws-vpn-gateway) into `terraform-aws-vpn` with two sub-modules:
-
-1. `client`
-2. `gateway`
-
-- ❌ aws_ec2_client_vpn_authorization_rule
-- ❌ aws_ec2_client_vpn_endpoint
-- ❌ aws_ec2_client_vpn_network_association
-- ❌ aws_ec2_client_vpn_route
-
-### Security Group
-
-See https://github.com/terraform-aws-modules/terraform-aws-security-group
-
-- ❌ aws_security_group
-- ❌ aws_security_group_rule
-
-### Network Interface
-
-- ❌ aws_network_interface
-- ❌ aws_network_interface_attachment
-- ❌ aws_network_interface_sg_attachment
-
-### Route53 Resolver
-
-- ❌ aws_route53_resolver_endpoint
-- ❌ aws_route53_resolver_rule
-
-### Transit Gateway
-
-See https://github.com/terraform-aws-modules/terraform-aws-transit-gateway
-
-- ❌ aws_ec2_transit_gateway
-- ❌ aws_ec2_transit_gateway_peering_attachment
-- ❌ aws_ec2_transit_gateway_peering_attachment_accepter
-- ❌ aws_ec2_transit_gateway_prefix_list_reference
-- ❌ aws_ec2_transit_gateway_route
-- ❌ aws_ec2_transit_gateway_route_table
-- ❌ aws_ec2_transit_gateway_route_table_association
-- ❌ aws_ec2_transit_gateway_route_table_propagation
-- ❌ aws_ec2_transit_gateway_vpc_attachment
-- ❌ aws_ec2_transit_gateway_vpc_attachment_accepter
-- ❌ aws_ec2_transit_gateway_multicast_domain
-- ❌ aws_ec2_transit_gateway_multicast_domain_association
-- ❌ aws_ec2_transit_gateway_multicast_group_member
-- ❌ aws_ec2_transit_gateway_multicast_group_source
-
 ## Usage
 
 See [`examples`](https://github.com/clowdhaus/terraform-aws-vpc-v5/tree/main/examples) directory for working examples to reference:
@@ -266,6 +45,12 @@ module "vpc" {
 }
 ```
 
+## High Level Diagram
+
+<p align="center">
+  <img src="https://github.com/clowdhaus/terraform-aws-vpc-v5/blob/main/.github/images/hld.svg" alt="high level diagram">
+</p>
+
 ## Examples
 
 Examples provided in [`examples`](https://github.com/clowdhaus/terraform-aws-vpc-v5/tree/main/examples) are intended to give users references for how to use the module(s) as well as testing/validating changes to the source code of the module. If contributing to the project, please be sure to make any appropriate updates to the relevant examples to allow maintainers to test your changes and to keep the examples up to date for users. Thank you!
@@ -274,19 +59,19 @@ Examples provided in [`examples`](https://github.com/clowdhaus/terraform-aws-vpc
 - [Default](https://github.com/clowdhaus/terraform-aws-vpc-v5/tree/main/examples/default)
 - [IPAM](https://github.com/clowdhaus/terraform-aws-vpc-v5/tree/main/examples/ipam)
 
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.7 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.5 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 6.5 |
 
 ## Modules
 
@@ -348,7 +133,7 @@ No modules.
 | <a name="input_default_vpc_enable_dns_support"></a> [default\_vpc\_enable\_dns\_support](#input\_default\_vpc\_enable\_dns\_support) | A boolean flag to enable/disable DNS support in the VPC. Defaults `true` | `bool` | `null` | no |
 | <a name="input_default_vpc_tags"></a> [default\_vpc\_tags](#input\_default\_vpc\_tags) | Additional tags for the Default VPC | `map(string)` | `{}` | no |
 | <a name="input_dhcp_options_domain_name"></a> [dhcp\_options\_domain\_name](#input\_dhcp\_options\_domain\_name) | The suffix domain name to use by default when resolving non fully qualified domain names | `string` | `null` | no |
-| <a name="input_dhcp_options_domain_name_servers"></a> [dhcp\_options\_domain\_name\_servers](#input\_dhcp\_options\_domain\_name\_servers) | List of name servers to configure in `/etc/resolv.conf` | `list(string)` | <pre>[<br>  "AmazonProvidedDNS"<br>]</pre> | no |
+| <a name="input_dhcp_options_domain_name_servers"></a> [dhcp\_options\_domain\_name\_servers](#input\_dhcp\_options\_domain\_name\_servers) | List of name servers to configure in `/etc/resolv.conf` | `list(string)` | <pre>[<br/>  "AmazonProvidedDNS"<br/>]</pre> | no |
 | <a name="input_dhcp_options_netbios_name_servers"></a> [dhcp\_options\_netbios\_name\_servers](#input\_dhcp\_options\_netbios\_name\_servers) | List of NETBIOS name servers | `list(string)` | `null` | no |
 | <a name="input_dhcp_options_netbios_node_type"></a> [dhcp\_options\_netbios\_node\_type](#input\_dhcp\_options\_netbios\_node\_type) | The NetBIOS node type (1, 2, 4, or 8). AWS recommends to specify 2 since broadcast and multicast are not supported in their network | `number` | `null` | no |
 | <a name="input_dhcp_options_ntp_servers"></a> [dhcp\_options\_ntp\_servers](#input\_dhcp\_options\_ntp\_servers) | List of NTP servers to configure | `list(string)` | `null` | no |
@@ -436,7 +221,7 @@ No modules.
 | <a name="output_vpn_gateway_arns"></a> [vpn\_gateway\_arns](#output\_vpn\_gateway\_arns) | List of VPN Gateways ARNs |
 | <a name="output_vpn_gateway_ids"></a> [vpn\_gateway\_ids](#output\_vpn\_gateway\_ids) | List of VPN Gateway IDs |
 | <a name="output_vpn_gateways"></a> [vpn\_gateways](#output\_vpn\_gateways) | Map of VPN Gateways and their attributes |
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- END_TF_DOCS -->
 
 ## License
 

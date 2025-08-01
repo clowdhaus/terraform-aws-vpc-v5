@@ -16,13 +16,13 @@ $ terraform apply
 
 Note that this example may create resources which will incur monetary charges on your AWS bill. Run `terraform destroy` when you no longer need these resources.
 
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.56 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.7 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.5 |
 
 ## Providers
 
@@ -61,6 +61,6 @@ No inputs.
 | <a name="output_ipam_regional_pool"></a> [ipam\_regional\_pool](#output\_ipam\_regional\_pool) | A map of the regional pools created and their attributes |
 | <a name="output_ipam_scope_count"></a> [ipam\_scope\_count](#output\_ipam\_scope\_count) | The number of scopes in the IPAM |
 | <a name="output_ipam_scopes"></a> [ipam\_scopes](#output\_ipam\_scopes) | A map of the scopes created and their attributes |
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- END_TF_DOCS -->
 
 Apache-2.0 Licensed. See [LICENSE](../../LICENSE).

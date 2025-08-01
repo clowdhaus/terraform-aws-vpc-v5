@@ -50,17 +50,17 @@ module "vpc" {
   #   }
   # }
 
-  # DNS Firewall
-  enable_dns_firewall = true
-  dns_firewall_rule_group_associations = {
-    one = {
-      name                   = local.name
-      firewall_rule_group_id = module.dns_firewall_rule_group.id
-      priority               = 101
-      # Disable for test/example
-      mutation_protection = "DISABLED"
-    }
-  }
+  # # DNS Firewall
+  # enable_dns_firewall = true
+  # dns_firewall_rule_group_associations = {
+  #   one = {
+  #     name                   = local.name
+  #     firewall_rule_group_id = module.dns_firewall_rule_group.id
+  #     priority               = 101
+  #     # Disable for test/example
+  #     mutation_protection = "DISABLED"
+  #   }
+  # }
 
   # DNS Query Logging
   enable_dns_query_logging     = true
@@ -169,52 +169,6 @@ module "public_network_acl" {
 }
 
 ################################################################################
-# DNS Firewall Module
-################################################################################
-
-module "dns_firewall_rule_group" {
-  source = "../../modules/dns-firewall-rule-group"
-
-  name = local.name
-
-  rules = {
-    block = {
-      name           = "blockit"
-      priority       = 110
-      action         = "BLOCK"
-      block_response = "NODATA"
-      domains        = ["google.com."]
-
-      tags = { rule = true }
-    }
-    block_override = {
-      priority                = 120
-      action                  = "BLOCK"
-      block_response          = "OVERRIDE"
-      block_override_dns_type = "CNAME"
-      block_override_domain   = "example.com."
-      block_override_ttl      = 1
-      domains                 = ["microsoft.com."]
-    }
-    # # unfortunately there is not a data source yet to pull managed domain lists
-    # # so keeping this commented out but available for reference
-    # block_managed_domain_list = {
-    #   priority       = 135
-    #   action         = "BLOCK"
-    #   block_response = "NODATA"
-    #   domain_list_id = "xxxx"
-    # }
-    allow = {
-      priority = 130
-      action   = "ALLOW"
-      domains  = ["amazon.com.", "amazonaws.com."]
-    }
-  }
-
-  tags = local.tags
-}
-
-################################################################################
 # Supporting Resources
 ################################################################################
 
@@ -232,7 +186,6 @@ resource "aws_s3_bucket" "dns_query_logs" {
 
   tags = local.tags
 }
-
 
 # Query log configuration automatically adds this policy if not present
 resource "aws_s3_bucket_policy" "dns_query_logs" {

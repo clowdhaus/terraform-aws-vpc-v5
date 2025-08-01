@@ -20,19 +20,19 @@ module "ipam_pool" {
 }
 ```
 
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.56 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.7 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.5 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.56 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 6.5 |
 
 ## Modules
 
@@ -86,7 +86,7 @@ No modules.
 | <a name="output_preview_next_cidr"></a> [preview\_next\_cidr](#output\_preview\_next\_cidr) | The previewed CIDR from the pool |
 | <a name="output_preview_next_cidr_id"></a> [preview\_next\_cidr\_id](#output\_preview\_next\_cidr\_id) | The ID of the preview |
 | <a name="output_state"></a> [state](#output\_state) | State of the IPAM Pool |
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- END_TF_DOCS -->
 
 ## License
 
