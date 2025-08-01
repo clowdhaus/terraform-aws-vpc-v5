@@ -4,6 +4,12 @@ variable "create" {
   default     = true
 }
 
+variable "region" {
+  description = "Region where the resource(s) will be managed. Defaults to the Region set in the provider configuration"
+  type        = string
+  default     = null
+}
+
 variable "name" {
   description = "Name used across the resources created"
   type        = string
@@ -189,12 +195,6 @@ variable "route_table_tags" {
 variable "routes" {
   description = "Map of route definitions to create"
   type        = map(any)
-  default     = {}
-}
-
-variable "route_timeouts" {
-  description = "Default create, update, and delete timeout configurations for routes"
-  type        = map(string)
   default     = {}
 }
 
