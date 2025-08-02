@@ -124,8 +124,11 @@ variable "outpost_arn" {
 
 variable "timeouts" {
   description = "Create and delete timeout configurations for subnet"
-  type        = map(string)
-  default     = {}
+  type = object({
+    create = optional(string)
+    delete = optional(string)
+  })
+  default = null
 }
 
 ################################################################################
@@ -134,8 +137,12 @@ variable "timeouts" {
 
 variable "cidr_reservations" {
   description = "Map of CIDR reservations to create"
-  type        = any
-  default     = {}
+  type = map(object({
+    cidr_block       = string
+    description      = optional(string)
+    reservation_type = string
+  }))
+  default = {}
 }
 
 ################################################################################
@@ -178,8 +185,12 @@ variable "route_table_id" {
 
 variable "route_table_timeouts" {
   description = "Create, update, and delete timeout configurations for route table"
-  type        = map(string)
-  default     = {}
+  type = object({
+    create = optional(string)
+    update = optional(string)
+    delete = optional(string)
+  })
+  default = null
 }
 
 variable "route_table_tags" {
@@ -194,8 +205,37 @@ variable "route_table_tags" {
 
 variable "routes" {
   description = "Map of route definitions to create"
-  type        = map(any)
-  default     = {}
+  type = map(object({
+    destination_ipv4_cidr_block = optional(string)
+    destination_ipv6_cidr_block = optional(string)
+    destination_prefix_list_id  = optional(string)
+    carrier_gateway_id          = optional(string)
+    core_network_arn            = optional(string)
+    egress_only_gateway_id      = optional(string)
+    gateway_id                  = optional(string)
+    local_gateway_id            = optional(string)
+    nat_gateway_id              = optional(string)
+    network_interface_id        = optional(string)
+    transit_gateway_id          = optional(string)
+    vpc_endpoint_id             = optional(string)
+    vpc_peering_connection_id   = optional(string)
+    timeouts = optional(object({
+      create = optional(string)
+      update = optional(string)
+      delete = optional(string)
+    }))
+  }))
+  default = {}
+}
+
+variable "route_timeouts" {
+  description = "Default create, update, and delete timeout configurations for routes"
+  type = object({
+    create = optional(string)
+    update = optional(string)
+    delete = optional(string)
+  })
+  default = null
 }
 
 ################################################################################
