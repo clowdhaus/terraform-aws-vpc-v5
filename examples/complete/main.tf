@@ -51,16 +51,16 @@ module "vpc" {
   # }
 
   # DNS Query Logging
-  enable_dns_query_logging     = true
-  dns_query_log_destintion_arn = aws_s3_bucket.dns_query_logs.arn
+  enable_dns_query_logging      = true
+  dns_query_log_destination_arn = aws_s3_bucket.dns_query_logs.arn
 
   # DHCP
-  create_dhcp_options              = true
-  dhcp_options_domain_name         = "${local.region}.compute.internal"
-  dhcp_options_domain_name_servers = ["AmazonProvidedDNS"]
-  dhcp_options_ntp_servers         = ["169.254.169.123"]
-  dhcp_options_netbios_node_type   = 2
-  dhcp_options_tags                = { dhcp_options_tags = true }
+  dhcp_options = {
+    domain_name         = "${local.region}.compute.internal"
+    domain_name_servers = ["AmazonProvidedDNS"]
+    ntp_servers         = ["169.254.169.123"]
+    netbios_node_type   = 2
+  }
 
   tags = local.tags
 }

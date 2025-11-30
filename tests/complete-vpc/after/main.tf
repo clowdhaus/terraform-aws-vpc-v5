@@ -52,8 +52,9 @@ module "vpc" {
   # Not in v4.x
   enable_dnssec_config = false
 
-  manage_default_network_acl = true
-  default_network_acl_tags   = { Name = "${local.name}-default" }
+  manage_default_route_table    = true
+  manage_default_security_group = true
+  manage_default_network_acl    = true
   default_network_acl_ingress_rules = {
     100 = {
       rule_action     = "allow"
@@ -87,12 +88,6 @@ module "vpc" {
     }
   }
 
-  manage_default_route_table = true
-  default_route_table_tags   = { Name = "${local.name}-default" }
-
-  manage_default_security_group = true
-  default_security_group_tags   = { Name = "${local.name}-default" }
-
   customer_gateways = {
     IP1 = {
       bgp_asn     = 65112
@@ -109,9 +104,10 @@ module "vpc" {
     one = {}
   }
 
-  create_dhcp_options              = true
-  dhcp_options_domain_name         = "service.consul"
-  dhcp_options_domain_name_servers = ["127.0.0.1", "172.16.0.2"]
+  dhcp_options = {
+    domain_name         = "service.consul"
+    domain_name_servers = ["127.0.0.1", "172.16.0.2"]
+  }
 
   tags = local.tags
 }

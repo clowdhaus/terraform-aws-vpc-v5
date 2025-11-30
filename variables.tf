@@ -26,6 +26,36 @@ variable "tags" {
 # VPC
 ################################################################################
 
+variable "assign_generated_ipv6_cidr_block" {
+  description = "Requests an Amazon-provided IPv6 CIDR block with a `/56` prefix length for the VPC. You cannot specify the range of IP addresses, or the size of the CIDR block. Default is `false`. Conflicts with `ipv6_ipam_pool_id`"
+  type        = bool
+  default     = null
+}
+
+variable "enable_dns_support" {
+  description = "A boolean flag to enable/disable DNS support in the VPC. Defaults `true`"
+  type        = bool
+  default     = null
+}
+
+variable "enable_dns_hostnames" {
+  description = "A boolean flag to enable/disable DNS hostnames in the VPC. Defaults `true`"
+  type        = bool
+  default     = true
+}
+
+variable "enable_network_address_usage_metrics" {
+  description = "A boolean flag to enable/disable network address usage metrics in the VPC. Defaults `false`"
+  type        = bool
+  default     = null
+}
+
+variable "instance_tenancy" {
+  description = "A tenancy option for instances launched into the VPC. Default is `default`, which makes your instances shared on the host"
+  type        = string
+  default     = null
+}
+
 variable "ipv4_cidr_block" {
   description = "The IPv4 CIDR block for the VPC. CIDR can be explicitly set or it can be derived from IPAM using `ipv4_netmask_length`"
   type        = string
@@ -68,30 +98,6 @@ variable "ipv6_cidr_block_network_border_group" {
   default     = null
 }
 
-variable "assign_generated_ipv6_cidr_block" {
-  description = "Requests an Amazon-provided IPv6 CIDR block with a `/56` prefix length for the VPC. You cannot specify the range of IP addresses, or the size of the CIDR block. Default is `false`. Conflicts with `ipv6_ipam_pool_id`"
-  type        = bool
-  default     = null
-}
-
-variable "instance_tenancy" {
-  description = "A tenancy option for instances launched into the VPC. Default is `default`, which makes your instances shared on the host"
-  type        = string
-  default     = null
-}
-
-variable "enable_dns_support" {
-  description = "A boolean flag to enable/disable DNS support in the VPC. Defaults `true`"
-  type        = bool
-  default     = null
-}
-
-variable "enable_dns_hostnames" {
-  description = "A boolean flag to enable/disable DNS hostnames in the VPC. Defaults `false`"
-  type        = bool
-  default     = null
-}
-
 variable "vpc_tags" {
   description = "Additional tags for the VPC"
   type        = map(string)
@@ -104,14 +110,118 @@ variable "vpc_tags" {
 
 variable "ipv4_cidr_block_associations" {
   description = "Map of additional IPv4 CIDR blocks to associate with the VPC to extend the IP address pool"
-  type        = any
-  default     = {}
+  type = map(object({
+    cidr_block          = optional(string)
+    ipv4_ipam_pool_id   = optional(string)
+    ipv4_netmask_length = optional(number)
+    timeouts = optional(object({
+      create = optional(string)
+      delete = optional(string)
+    }))
+  }))
+  default = null
 }
 
 variable "ipv6_cidr_block_associations" {
   description = "Map of additional IPv6 CIDR blocks to associate with the VPC to extend the IP address pool"
-  type        = any
-  default     = {}
+  type = map(object({
+    ipv6_cidr_block     = optional(string)
+    ipv6_ipam_pool_id   = optional(string)
+    ipv6_netmask_length = optional(number)
+    timeouts = optional(object({
+      create = optional(string)
+      delete = optional(string)
+    }))
+  }))
+  default = null
+}
+
+################################################################################
+# VPC Block Public Access
+################################################################################
+
+variable "block_public_access_exclusion" {
+  description = "Configuration for VPC Block Public Access exclusion"
+  type = object({
+    internet_gateway_exclusion_mode = string
+  })
+  default = null
+}
+
+################################################################################
+# DHCP Options Set
+################################################################################
+
+variable "dhcp_options" {
+  description = "Configuration block for custom DHCP options set. If `null`, no custom DHCP options set is created"
+  type = object({
+    domain_name                       = optional(string)
+    domain_name_servers               = optional(list(string), ["AmazonProvidedDNS"])
+    ipv6_address_preferred_lease_time = optional(string)
+    netbios_name_servers              = optional(list(string))
+    netbios_node_type                 = optional(string)
+    ntp_servers                       = optional(list(string))
+    tags                              = optional(map(string), {})
+  })
+  default = null
+}
+
+################################################################################
+# Internet Gateway
+################################################################################
+
+variable "create_internet_gateway" {
+  description = "Controls if an internet gateway is created"
+  type        = bool
+  default     = true
+}
+
+variable "attach_internet_gateway" {
+  description = "Controls if an internet gateway is attached to the VPC"
+  type        = bool
+  default     = true
+}
+
+variable "internet_gateway_id" {
+  description = "The ID of an existing internet gateway to attach to the VPC. Required if `create_internet_gateway` is `false` and `attach_internet_gateway` is `true`"
+  type        = string
+  default     = null
+}
+
+variable "create_egress_only_internet_gateway" {
+  description = "Controls if an egress only internet gateway is created"
+  type        = bool
+  default     = false
+}
+
+################################################################################
+# Customer Gateway(s)
+################################################################################
+
+variable "customer_gateways" {
+  description = "Map of Customer Gateway definitions to create"
+  type = map(object({
+    bgp_asn          = optional(string)
+    bgp_asn_extended = optional(string)
+    certificate_arn  = optional(string)
+    device_name      = optional(string)
+    ip_address       = optional(string)
+    type             = optional(string, "ipsec.1")
+  }))
+  default = null
+}
+
+################################################################################
+# VPN Gateway(s)
+################################################################################
+
+variable "vpn_gateways" {
+  description = "Map of VPN Gateway definitions to create"
+  type = map(object({
+    amazon_side_asn   = optional(string)
+    availability_zone = optional(string)
+  }))
+  default = null
 }
 
 ################################################################################
@@ -142,7 +252,7 @@ variable "dns_query_log_config_id" {
   default     = null
 }
 
-variable "dns_query_log_destintion_arn" {
+variable "dns_query_log_destination_arn" {
   description = "The ARN of the resource that you want Route 53 Resolver to send query logs. You can send query logs to an S3 bucket, a CloudWatch Logs log group, or a Kinesis Data Firehose delivery stream"
   type        = string
   default     = null
@@ -166,120 +276,14 @@ variable "dns_firewall_fail_open" {
 
 variable "dns_firewall_rule_group_associations" {
   description = "Map of Route53 Resolver Firewall Rule Groups to associate with the VPC"
-  type        = any
-  default     = {}
-}
-
-################################################################################
-# DHCP Options Set
-################################################################################
-
-variable "create_dhcp_options" {
-  description = "Controls if custom DHCP options set is created"
-  type        = bool
-  default     = false
-}
-
-variable "dhcp_options_domain_name" {
-  description = "The suffix domain name to use by default when resolving non fully qualified domain names"
-  type        = string
-  default     = null
-}
-
-variable "dhcp_options_domain_name_servers" {
-  description = "List of name servers to configure in `/etc/resolv.conf`"
-  type        = list(string)
-  default     = ["AmazonProvidedDNS"]
-}
-
-variable "dhcp_options_ntp_servers" {
-  description = "List of NTP servers to configure"
-  type        = list(string)
-  default     = null
-}
-
-variable "dhcp_options_netbios_name_servers" {
-  description = "List of NETBIOS name servers"
-  type        = list(string)
-  default     = null
-}
-
-variable "dhcp_options_netbios_node_type" {
-  description = "The NetBIOS node type (1, 2, 4, or 8). AWS recommends to specify 2 since broadcast and multicast are not supported in their network"
-  type        = number
-  default     = null
-}
-
-variable "dhcp_options_tags" {
-  description = "Additional tags for the DHCP option set"
-  type        = map(string)
-  default     = {}
-}
-
-################################################################################
-# Internet Gateway
-################################################################################
-
-variable "create_internet_gateway" {
-  description = "Controls if an internet gateway is created"
-  type        = bool
-  default     = true
-}
-
-variable "attach_internet_gateway" {
-  description = "Controls if an internet gateway is attached to the VPC"
-  type        = bool
-  default     = true
-}
-
-variable "internet_gateway_id" {
-  description = "The ID of an existing internet gateway to attach to the VPC. Reqiured if `create_internet_gateway` is `false` and `attach_internet_gateway` is `true`"
-  type        = string
-  default     = null
-}
-
-variable "create_egress_only_internet_gateway" {
-  description = "Controls if an egress only internet gateway is created"
-  type        = bool
-  default     = false
-}
-
-variable "internet_gateway_tags" {
-  description = "Additional tags for the internet gateway/egress only internet gateway"
-  type        = map(string)
-  default     = {}
-}
-
-################################################################################
-# Customer Gateway(s)
-################################################################################
-
-variable "customer_gateways" {
-  description = "Map of Customer Gateway definitions to create"
-  type        = any
-  default     = {}
-}
-
-variable "customer_gateway_tags" {
-  description = "Additional tags for the Customer Gateway(s)"
-  type        = map(string)
-  default     = {}
-}
-
-################################################################################
-# VPN Gateway(s)
-################################################################################
-
-variable "vpn_gateways" {
-  description = "Map of VPN Gateway definitions to create"
-  type        = any
-  default     = {}
-}
-
-variable "vpn_gateway_tags" {
-  description = "Additional tags for the VPN Gateway(s)"
-  type        = map(string)
-  default     = {}
+  type = map(object({
+    firewall_rule_group_id = string
+    mutation_protection    = optional(string)
+    name                   = optional(string)
+    priority               = number
+    tags                   = optional(map(string), {})
+  }))
+  default = null
 }
 
 ################################################################################
@@ -293,21 +297,37 @@ variable "manage_default_security_group" {
 }
 
 variable "default_security_group_ingress_rules" {
-  description = "Ingress rules to be added to the Default Security Group"
-  type        = list(map(string))
-  default     = []
+  description = "Ingress rules to be added to the Default Security Group. This should not be used! Use custom security groups instead"
+  type = list(object({
+    description      = optional(string)
+    from_port        = number
+    ipv4_cidr_blocks = optional(list(string))
+    ipv6_cidr_blocks = optional(list(string))
+    prefix_list_ids  = optional(list(string))
+    protocol         = string
+    security_groups  = optional(list(string))
+    self             = optional(bool)
+    to_port          = number
+  }))
+  default  = []
+  nullable = false
 }
 
 variable "default_security_group_egress_rules" {
-  description = "Egress rules to be added to the Default Security Group"
-  type        = list(map(string))
-  default     = []
-}
-
-variable "default_security_group_tags" {
-  description = "Additional tags for the Default Security Group"
-  type        = map(string)
-  default     = {}
+  description = "Egress rules to be added to the Default Security Group. By default, the VPC added egress rule(s) are removed upon creation. This should not be used! Use custom security groups instead"
+  type = list(object({
+    description      = optional(string)
+    from_port        = number
+    ipv4_cidr_blocks = optional(list(string))
+    ipv6_cidr_blocks = optional(list(string))
+    prefix_list_ids  = optional(list(string))
+    protocol         = string
+    security_groups  = optional(list(string))
+    self             = optional(bool)
+    to_port          = number
+  }))
+  default  = []
+  nullable = false
 }
 
 ################################################################################
@@ -322,20 +342,34 @@ variable "manage_default_network_acl" {
 
 variable "default_network_acl_ingress_rules" {
   description = "Ingress rules to be added to the Default Network ACL"
-  type        = any
-  default     = {}
+  type = map(object({
+    from_port       = optional(number)
+    icmp_code       = optional(number)
+    icmp_type       = optional(number)
+    ipv4_cidr_block = optional(string)
+    ipv6_cidr_block = optional(string)
+    protocol        = optional(string, "tcp")
+    rule_action     = string
+    to_port         = optional(number)
+  }))
+  default  = {}
+  nullable = false
 }
 
 variable "default_network_acl_egress_rules" {
   description = "Egress rules to be added to the Default Network ACL"
-  type        = any
-  default     = {}
-}
-
-variable "default_network_acl_tags" {
-  description = "Additional tags for the default network ACL"
-  type        = map(string)
-  default     = {}
+  type = map(object({
+    from_port       = optional(number)
+    icmp_code       = optional(number)
+    icmp_type       = optional(number)
+    ipv4_cidr_block = optional(string)
+    ipv6_cidr_block = optional(string)
+    protocol        = optional(string, "tcp")
+    rule_action     = string
+    to_port         = optional(number)
+  }))
+  default  = {}
+  nullable = false
 }
 
 ################################################################################
@@ -356,18 +390,30 @@ variable "default_route_table_propagating_vgws" {
 
 variable "default_route_table_routes" {
   description = "Configuration block of routes. See [`route`](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_route_table#route) for more information"
-  type        = list(map(string))
-  default     = []
+  type = map(object({
+    destination_cidr_block      = optional(string)
+    destination_ipv6_cidr_block = optional(string)
+    destination_prefix_list_id  = optional(string)
+    # One of the following target arguments must be supplied:
+    carrier_gateway_id        = optional(string)
+    core_network_arn          = optional(string)
+    egress_only_gateway_id    = optional(string)
+    gateway_id                = optional(string)
+    local_gateway_id          = optional(string)
+    nat_gateway_id            = optional(string)
+    network_interface_id      = optional(string)
+    transit_gateway_id        = optional(string)
+    vpc_endpoint_id           = optional(string)
+    vpc_peering_connection_id = optional(string)
+  }))
+  default = null
 }
 
 variable "default_route_table_timeouts" {
   description = "Create and update timeout configurations for the default route table"
-  type        = map(string)
-  default     = {}
-}
-
-variable "default_route_table_tags" {
-  description = "Additional tags for the default route table"
-  type        = map(string)
-  default     = {}
+  type = object({
+    create = optional(string)
+    update = optional(string)
+  })
+  default = null
 }

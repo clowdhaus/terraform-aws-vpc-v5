@@ -219,10 +219,6 @@ module "vpc" {
     }
   }
 
-  default_network_acl_tags = {
-    Name = local.name
-  }
-
   tags = local.tags
 
   vpc_tags = {
