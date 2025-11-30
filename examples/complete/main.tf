@@ -78,23 +78,6 @@ module "vpc" {
 }
 
 ################################################################################
-# VPC Flow Log
-################################################################################
-
-module "vpc_flow_log" {
-  source = "../../modules/flow-log"
-
-  vpc_id = module.vpc.id
-
-  create_cloudwatch_log_group            = true
-  cloudwatch_log_group_name              = "/aws/flow-log/vpc-${module.vpc.id}"
-  cloudwatch_log_group_retention_in_days = 7
-  create_cloudwatch_iam_role             = true
-
-  tags = local.tags
-}
-
-################################################################################
 # Subnets
 ################################################################################
 
