@@ -155,13 +155,6 @@ module "public_network_acl" {
 # Supporting Resources
 ################################################################################
 
-resource "aws_cloudwatch_log_group" "logs" {
-  name              = "${local.name}-logs"
-  retention_in_days = 7
-
-  tags = local.tags
-}
-
 # DNS Query Logging
 resource "aws_s3_bucket" "dns_query_logs" {
   bucket        = "${local.name}-dns-query-logs-${local.account_id}"

@@ -236,57 +236,6 @@ output "vgw_arn" {
   value       = module.vpc.vpn_gateway_arns
 }
 
-# Default Resources
-output "default_vpc_id" {
-  description = "The ID of the Default VPC"
-  value       = module.vpc.default_vpc_id
-}
-
-output "default_vpc_arn" {
-  description = "The ARN of the Default VPC"
-  value       = module.vpc.default_vpc_arn
-}
-
-output "default_vpc_cidr_block" {
-  description = "The CIDR block of the Default VPC"
-  value       = module.vpc.default_vpc_ipv4_cidr_block
-}
-
-output "default_vpc_default_security_group_id" {
-  description = "The ID of the security group created by default on Default VPC creation"
-  value       = module.vpc.default_vpc_default_security_group_id
-}
-
-output "default_vpc_default_network_acl_id" {
-  description = "The ID of the default network ACL of the Default VPC"
-  value       = module.vpc.default_vpc_default_network_acl_id
-}
-
-output "default_vpc_default_route_table_id" {
-  description = "The ID of the default route table of the Default VPC"
-  value       = module.vpc.default_vpc_default_route_table_id
-}
-
-output "default_vpc_instance_tenancy" {
-  description = "Tenancy of instances spin up within Default VPC"
-  value       = module.vpc.default_vpc_instance_tenancy
-}
-
-output "default_vpc_enable_dns_support" {
-  description = "Whether or not the Default VPC has DNS support"
-  value       = module.vpc.default_vpc_enable_dns_support
-}
-
-output "default_vpc_enable_dns_hostnames" {
-  description = "Whether or not the Default VPC has DNS hostname support"
-  value       = module.vpc.default_vpc_enable_dns_hostnames
-}
-
-output "default_vpc_main_route_table_id" {
-  description = "The ID of the main route table associated with the Default VPC"
-  value       = module.vpc.default_vpc_main_route_table_id
-}
-
 # VPC endpoints
 output "vpc_endpoints" {
   description = "Array containing the full resource object and attributes for all endpoints created"
