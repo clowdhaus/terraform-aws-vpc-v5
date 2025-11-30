@@ -5,6 +5,8 @@
 resource "aws_vpc_ipam" "this" {
   count = var.create ? 1 : 0
 
+  region = var.region
+
   description = var.description
 
   dynamic "operating_regions" {
@@ -24,6 +26,8 @@ resource "aws_vpc_ipam" "this" {
 resource "aws_vpc_ipam_scope" "this" {
   for_each = { for k, v in var.scopes : k => v if var.create }
 
+  region = var.region
+
   ipam_id     = aws_vpc_ipam.this[0].id
   description = try(each.value.description, null)
 }
@@ -40,6 +44,8 @@ locals {
 
 module "vpc_ipam_pool" {
   source = "../ipam-pool"
+
+  region = var.region
 
   create = var.create && var.create_ipam_pool
 

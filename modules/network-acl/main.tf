@@ -5,6 +5,8 @@
 resource "aws_network_acl" "this" {
   count = var.create ? 1 : 0
 
+  region = var.region
+
   vpc_id     = var.vpc_id
   subnet_ids = var.subnet_ids
 
@@ -13,6 +15,8 @@ resource "aws_network_acl" "this" {
 
 resource "aws_network_acl_rule" "ingress" {
   for_each = { for k, v in var.ingress_rules : k => v if var.create }
+
+  region = var.region
 
   network_acl_id = aws_network_acl.this[0].id
 
@@ -30,6 +34,8 @@ resource "aws_network_acl_rule" "ingress" {
 
 resource "aws_network_acl_rule" "egress" {
   for_each = { for k, v in var.egress_rules : k => v if var.create }
+
+  region = var.region
 
   network_acl_id = aws_network_acl.this[0].id
 

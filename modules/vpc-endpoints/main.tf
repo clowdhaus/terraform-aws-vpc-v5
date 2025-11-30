@@ -7,6 +7,7 @@ data "aws_vpc_endpoint_service" "this" {
 
   service      = try(each.value.service, each.key, null)
   service_name = try(each.value.service_name, null)
+  # service_region = var.region # TODO - what is the correct way to set region for this data source?
 
   filter {
     name   = "service-type"
@@ -16,6 +17,8 @@ data "aws_vpc_endpoint_service" "this" {
 
 resource "aws_vpc_endpoint" "this" {
   for_each = { for k, v in var.vpc_endpoints : k => v if var.create }
+
+  region = var.region
 
   vpc_id            = var.vpc_id
   service_name      = data.aws_vpc_endpoint_service.this[each.key].service_name

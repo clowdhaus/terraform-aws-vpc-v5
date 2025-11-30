@@ -5,6 +5,8 @@
 resource "aws_vpc_ipam_pool" "this" {
   count = var.create ? 1 : 0
 
+  region = var.region
+
   description = var.description
 
   address_family                    = var.address_family
@@ -29,6 +31,8 @@ resource "aws_vpc_ipam_pool" "this" {
 resource "aws_vpc_ipam_pool_cidr" "this" {
   count = var.create ? 1 : 0
 
+  region = var.region
+
   cidr         = var.cidr
   ipam_pool_id = aws_vpc_ipam_pool.this[0].id
 
@@ -48,6 +52,8 @@ resource "aws_vpc_ipam_pool_cidr" "this" {
 resource "aws_vpc_ipam_pool_cidr_allocation" "this" {
   for_each = { for k, v in var.cidr_allocations : k => v if var.create }
 
+  region = var.region
+
   cidr             = try(each.value.cidr, null)
   description      = try(each.value.description, null)
   disallowed_cidrs = try(each.value.disallowed_cidrs, var.disallowed_cidrs)
@@ -66,6 +72,8 @@ resource "aws_vpc_ipam_pool_cidr_allocation" "this" {
 resource "aws_vpc_ipam_preview_next_cidr" "this" {
   count = var.create && var.preview_next_cidr ? 1 : 0
 
+  region = var.region
+
   disallowed_cidrs = var.disallowed_cidrs
   ipam_pool_id     = aws_vpc_ipam_pool.this[0].id
   netmask_length   = var.preview_netmask_length
@@ -81,6 +89,8 @@ resource "aws_vpc_ipam_preview_next_cidr" "this" {
 
 resource "aws_ram_resource_association" "this" {
   for_each = { for k, v in var.ram_resource_associations : k => v if var.create }
+
+  region = var.region
 
   resource_arn       = aws_vpc_ipam_pool.this[0].arn
   resource_share_arn = each.value.resource_share_arn

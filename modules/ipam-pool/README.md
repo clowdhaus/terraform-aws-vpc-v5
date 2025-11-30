@@ -71,6 +71,7 @@ No modules.
 | <a name="input_preview_next_cidr"></a> [preview\_next\_cidr](#input\_preview\_next\_cidr) | Controls whether to preview the next available CIDR in the pool | `bool` | `false` | no |
 | <a name="input_publicly_advertisable"></a> [publicly\_advertisable](#input\_publicly\_advertisable) | Defines whether or not IPv6 pool space is publicly advertisable over the internet. This option is not available for IPv4 pool space | `bool` | `null` | no |
 | <a name="input_ram_resource_associations"></a> [ram\_resource\_associations](#input\_ram\_resource\_associations) | A map of RAM resource associations for the created IPAM pool | `map(string)` | `{}` | no |
+| <a name="input_region"></a> [region](#input\_region) | Region where the resource(s) will be managed. Defaults to the Region set in the provider configuration | `string` | `null` | no |
 | <a name="input_source_ipam_pool_id"></a> [source\_ipam\_pool\_id](#input\_source\_ipam\_pool\_id) | The ID of the source IPAM pool. Use this argument to create a child pool within an existing pool | `string` | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to add to all resources | `map(string)` | `{}` | no |
 

@@ -3,29 +3,14 @@ provider "aws" {
 }
 
 locals {
-  name       = "vpc-ex-${basename(path.cwd)}"
-  region     = "eu-west-1"
-  account_id = data.aws_caller_identity.current.account_id
-
-  subnets = {
-    "${local.region}a" = {
-      public_ipv4_cidr_block = "10.0.0.0/24"
-    }
-    "${local.region}b" = {
-      public_ipv4_cidr_block = "10.0.0.0/24"
-    }
-    "${local.region}c" = {
-      public_ipv4_cidr_block = "10.0.0.0/24"
-    }
-  }
+  name   = "vpc-ex-${basename(path.cwd)}"
+  region = "eu-west-1"
 
   tags = {
     Example    = local.name
     GithubRepo = "terraform-aws-vpc-v5"
   }
 }
-
-data "aws_caller_identity" "current" {}
 
 ################################################################################
 # VPC
@@ -81,32 +66,26 @@ module "vpc" {
 # Subnets
 ################################################################################
 
-module "public_subnet" {
+module "public_subnets" {
   source = "../../modules/subnet"
 
-  for_each = local.subnets
+  for_each = {
+    "${local.region}a" = {
+      public_ipv4_cidr_block = "10.0.0.0/24"
+    }
+    "${local.region}b" = {
+      public_ipv4_cidr_block = "10.0.0.1/24"
+    }
+    "${local.region}c" = {
+      public_ipv4_cidr_block = "10.0.0.2/24"
+    }
+  }
 
   name   = "${local.name}-public-${each.key}"
   vpc_id = module.vpc.id
 
-  availability_zone       = each.key
-  map_public_ip_on_launch = true
-  ipv4_cidr_block         = each.value.public_ipv4_cidr_block
-
-  cidr_reservations = each.key == "${local.region}a" ? {
-    one = {
-      subnet_key       = "${local.region}a"
-      description      = "Example EC2 subnet CIDR reservation"
-      cidr_block       = "10.0.0.0/28"
-      reservation_type = "prefix"
-    }
-    two = {
-      subnet_key       = "${local.region}b"
-      description      = "Example EC2 subnet CIDR reservation"
-      cidr_block       = "10.0.0.16/28"
-      reservation_type = "prefix"
-    }
-  } : {}
+  availability_zone = each.key
+  ipv4_cidr_block   = each.value.public_ipv4_cidr_block
 
   routes = {
     igw = {
@@ -126,7 +105,7 @@ module "public_network_acl" {
   source = "../../modules/network-acl"
 
   vpc_id     = module.vpc.id
-  subnet_ids = [for subnet in module.public_subnet : subnet.id]
+  subnet_ids = [for subnet in module.public_subnets : subnet.id]
 
   ingress_rules = {
     100 = {
@@ -157,7 +136,7 @@ module "public_network_acl" {
 
 # DNS Query Logging
 resource "aws_s3_bucket" "dns_query_logs" {
-  bucket        = "${local.name}-dns-query-logs-${local.account_id}"
+  bucket_prefix = "${local.name}-dns-query-logs-"
   force_destroy = true
 
   tags = local.tags

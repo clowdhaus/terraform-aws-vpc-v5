@@ -10,6 +10,8 @@ locals {
 resource "aws_vpc" "this" {
   count = var.create ? 1 : 0
 
+  region = var.region
+
   cidr_block          = var.ipv4_cidr_block
   ipv4_ipam_pool_id   = var.ipv4_ipam_pool_id
   ipv4_netmask_length = var.ipv4_netmask_length
@@ -38,6 +40,8 @@ resource "aws_vpc" "this" {
 resource "aws_vpc_ipv4_cidr_block_association" "this" {
   for_each = { for k, v in var.ipv4_cidr_block_associations : k => v if var.create }
 
+  region = var.region
+
   vpc_id              = aws_vpc.this[0].id
   cidr_block          = try(each.value.ipv4_cidr_block, null)
   ipv4_ipam_pool_id   = try(each.value.ipv4_ipam_pool_id, null)
@@ -51,6 +55,8 @@ resource "aws_vpc_ipv4_cidr_block_association" "this" {
 
 resource "aws_vpc_ipv6_cidr_block_association" "this" {
   for_each = { for k, v in var.ipv6_cidr_block_associations : k => v if var.create }
+
+  region = var.region
 
   vpc_id              = aws_vpc.this[0].id
   ipv6_cidr_block     = try(each.value.ipv6_cidr_block, null)
@@ -70,6 +76,8 @@ resource "aws_vpc_ipv6_cidr_block_association" "this" {
 resource "aws_route53_resolver_dnssec_config" "this" {
   count = var.create && var.enable_dnssec_config ? 1 : 0
 
+  region = var.region
+
   resource_id = aws_vpc.this[0].id
 }
 
@@ -82,6 +90,8 @@ resource "aws_route53_resolver_dnssec_config" "this" {
 resource "aws_route53_resolver_query_log_config" "this" {
   count = var.create && var.enable_dns_query_logging && var.create_dns_query_log_config ? 1 : 0
 
+  region = var.region
+
   name            = var.name
   destination_arn = var.dns_query_log_destintion_arn
 
@@ -90,6 +100,8 @@ resource "aws_route53_resolver_query_log_config" "this" {
 
 resource "aws_route53_resolver_query_log_config_association" "this" {
   count = var.create && var.enable_dns_query_logging ? 1 : 0
+
+  region = var.region
 
   resolver_query_log_config_id = var.create_dns_query_log_config ? aws_route53_resolver_query_log_config.this[0].id : var.dns_query_log_config_id
   resource_id                  = aws_vpc.this[0].id
@@ -102,12 +114,16 @@ resource "aws_route53_resolver_query_log_config_association" "this" {
 resource "aws_route53_resolver_firewall_config" "this" {
   count = var.create && var.enable_dns_firewall ? 1 : 0
 
+  region = var.region
+
   resource_id        = aws_vpc.this[0].id
   firewall_fail_open = var.dns_firewall_fail_open
 }
 
 resource "aws_route53_resolver_firewall_rule_group_association" "this" {
   for_each = { for k, v in var.dns_firewall_rule_group_associations : k => v if var.create && var.enable_dns_firewall }
+
+  region = var.region
 
   name   = try(each.value.name, "${var.name}-${each.key}")
   vpc_id = aws_vpc.this[0].id
@@ -126,6 +142,8 @@ resource "aws_route53_resolver_firewall_rule_group_association" "this" {
 resource "aws_vpc_dhcp_options" "this" {
   count = var.create && var.create_dhcp_options ? 1 : 0
 
+  region = var.region
+
   domain_name          = var.dhcp_options_domain_name
   domain_name_servers  = var.dhcp_options_domain_name_servers
   ntp_servers          = var.dhcp_options_ntp_servers
@@ -142,6 +160,8 @@ resource "aws_vpc_dhcp_options" "this" {
 resource "aws_vpc_dhcp_options_association" "this" {
   count = var.create && var.create_dhcp_options ? 1 : 0
 
+  region = var.region
+
   vpc_id          = aws_vpc.this[0].id
   dhcp_options_id = aws_vpc_dhcp_options.this[0].id
 }
@@ -153,6 +173,8 @@ resource "aws_vpc_dhcp_options_association" "this" {
 resource "aws_internet_gateway" "this" {
   count = var.create && var.create_internet_gateway ? 1 : 0
 
+  region = var.region
+
   tags = merge(
     var.tags,
     { Name = var.name },
@@ -163,12 +185,16 @@ resource "aws_internet_gateway" "this" {
 resource "aws_internet_gateway_attachment" "this" {
   count = var.create && var.attach_internet_gateway ? 1 : 0
 
+  region = var.region
+
   vpc_id              = local.vpc_id
   internet_gateway_id = var.create_internet_gateway ? aws_internet_gateway.this[0].id : var.internet_gateway_id
 }
 
 resource "aws_egress_only_internet_gateway" "this" {
   count = var.create && var.create_egress_only_internet_gateway ? 1 : 0
+
+  region = var.region
 
   vpc_id = local.vpc_id
 
@@ -185,6 +211,8 @@ resource "aws_egress_only_internet_gateway" "this" {
 
 resource "aws_customer_gateway" "this" {
   for_each = { for k, v in var.customer_gateways : k => v if var.create }
+
+  region = var.region
 
   bgp_asn    = each.value.bgp_asn
   ip_address = each.value.ip_address
@@ -207,6 +235,8 @@ resource "aws_customer_gateway" "this" {
 resource "aws_vpn_gateway" "this" {
   for_each = { for k, v in var.vpn_gateways : k => v if var.create }
 
+  region = var.region
+
   vpc_id            = local.vpc_id
   amazon_side_asn   = try(each.value.vpn_gateway_amazon_side_asn, null)
   availability_zone = try(each.value.availability_zone, null)
@@ -224,6 +254,8 @@ resource "aws_vpn_gateway" "this" {
 
 resource "aws_default_security_group" "this" {
   count = var.create && var.manage_default_security_group ? 1 : 0
+
+  region = var.region
 
   vpc_id = local.vpc_id
 
@@ -271,6 +303,8 @@ resource "aws_default_security_group" "this" {
 resource "aws_default_network_acl" "this" {
   count = var.create && var.manage_default_network_acl ? 1 : 0
 
+  region = var.region
+
   default_network_acl_id = try(aws_vpc.this[0].default_network_acl_id, null)
 
   tags = merge(
@@ -294,6 +328,8 @@ resource "aws_default_network_acl" "this" {
 resource "aws_network_acl_rule" "default_ingress" {
   for_each = { for k, v in var.default_network_acl_ingress_rules : k => v if var.create && var.manage_default_network_acl }
 
+  region = var.region
+
   network_acl_id = aws_default_network_acl.this[0].id
 
   rule_number     = each.key
@@ -310,6 +346,8 @@ resource "aws_network_acl_rule" "default_ingress" {
 
 resource "aws_network_acl_rule" "default_egress" {
   for_each = { for k, v in var.default_network_acl_egress_rules : k => v if var.create && var.manage_default_network_acl }
+
+  region = var.region
 
   network_acl_id = aws_default_network_acl.this[0].id
 
@@ -331,6 +369,8 @@ resource "aws_network_acl_rule" "default_egress" {
 
 resource "aws_default_route_table" "this" {
   count = var.create && var.manage_default_route_table ? 1 : 0
+
+  region = var.region
 
   default_route_table_id = aws_vpc.this[0].default_route_table_id
   propagating_vgws       = var.default_route_table_propagating_vgws
@@ -359,6 +399,8 @@ resource "aws_default_route_table" "this" {
 
 resource "aws_route" "default" {
   for_each = { for k, v in var.default_route_table_routes : k => v if var.create && var.manage_default_route_table }
+
+  region = var.region
 
   route_table_id = aws_default_route_table.this[0].id
 
