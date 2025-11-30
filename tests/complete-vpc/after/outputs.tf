@@ -235,9 +235,3 @@ output "vgw_arn" {
   description = "The ARN of the VPN Gateway"
   value       = module.vpc.vpn_gateway_arns
 }
-
-# VPC endpoints
-output "vpc_endpoints" {
-  description = "Array containing the full resource object and attributes for all endpoints created"
-  value       = module.vpc_endpoints.vpc_endpoints
-}

@@ -73,6 +73,7 @@ module "public_subnets" {
   }
 }
 ```
+
 ### Private Subnets
 
 ```hcl

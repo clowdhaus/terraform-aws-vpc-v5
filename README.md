@@ -25,12 +25,6 @@ module "vpc" {
   enable_dns_query_logging     = true
   dns_query_log_destintion_arn = "arn:aws:s3:::my-dns-query-log-bucket"
 
-  # Flow Log
-  create_flow_log                                 = true
-  create_flow_log_cloudwatch_iam_role             = true
-  create_flow_log_cloudwatch_log_group            = true
-  flow_log_cloudwatch_log_group_retention_in_days = 90
-
   # DHCP
   create_dhcp_options              = true
   dhcp_options_domain_name         = "us-east-1.compute.internal"

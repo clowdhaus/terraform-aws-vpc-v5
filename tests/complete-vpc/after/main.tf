@@ -163,7 +163,6 @@ module "private_subnet" {
     }
   }
 
-
   tags = local.tags
 }
 
@@ -217,122 +216,6 @@ module "intra_subnet" {
 
   availability_zone = each.key
   ipv4_cidr_block   = each.value.intra_ipv4_cidr_block
-
-  tags = local.tags
-}
-
-################################################################################
-# VPC Endpoints
-################################################################################
-
-module "vpc_endpoints" {
-  source = "../../../modules/vpc-endpoints"
-
-  vpc_id = module.vpc.id
-
-  vpc_endpoint_defaults = {
-    security_group_ids  = [aws_security_group.vpc_tls.id]
-    subnet_ids          = [for subnet in module.private_subnet : subnet.id]
-    private_dns_enabled = true
-  }
-
-  vpc_endpoints = {
-    s3 = {
-      private_dns_enabled = false
-      tags                = { Name = "s3-vpc-endpoint" }
-    },
-    dynamodb = {
-      service_type = "Gateway"
-      route_table_ids = concat(
-        [for subnet in module.public_subnet : subnet.route_table_id],
-        [for subnet in module.private_subnet : subnet.route_table_id],
-        [for subnet in module.intra_subnet : subnet.route_table_id],
-      )
-      policy = data.aws_iam_policy_document.dynamodb_endpoint_policy.json
-      tags   = { Name = "dynamodb-vpc-endpoint" }
-    },
-    ssm           = {},
-    ssmmessages   = {},
-    lambda        = {},
-    ecs           = {},
-    ecs-telemetry = {},
-    ec2           = {},
-    ec2messages   = {},
-    ecr_api = {
-      service = "ecr.api"
-      policy  = data.aws_iam_policy_document.generic_endpoint_policy.json
-    },
-    ecr_dkr = {
-      service = "ecr.dkr"
-      policy  = data.aws_iam_policy_document.generic_endpoint_policy.json
-    },
-    kms                        = {},
-    codedeploy                 = {},
-    codedeploy-commands-secure = {},
-  }
-
-  tags = merge(local.tags, {
-    Project  = "Secret"
-    Endpoint = "true"
-  })
-}
-
-################################################################################
-# Supporting Resources
-################################################################################
-
-data "aws_iam_policy_document" "dynamodb_endpoint_policy" {
-  statement {
-    effect    = "Deny"
-    actions   = ["dynamodb:*"]
-    resources = ["*"]
-
-    principals {
-      type        = "*"
-      identifiers = ["*"]
-    }
-
-    condition {
-      test     = "StringNotEquals"
-      variable = "aws:sourceVpce"
-
-      values = [module.vpc.id]
-    }
-  }
-}
-
-data "aws_iam_policy_document" "generic_endpoint_policy" {
-  statement {
-    effect    = "Deny"
-    actions   = ["*"]
-    resources = ["*"]
-
-    principals {
-      type        = "*"
-      identifiers = ["*"]
-    }
-
-    condition {
-      test     = "StringNotEquals"
-      variable = "aws:SourceVpc"
-
-      values = [module.vpc.id]
-    }
-  }
-}
-
-resource "aws_security_group" "vpc_tls" {
-  name_prefix = "${local.name}-vpc_tls"
-  description = "Allow TLS inbound traffic"
-  vpc_id      = module.vpc.id
-
-  ingress {
-    description = "TLS from VPC"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = [module.vpc.ipv4_cidr_block]
-  }
 
   tags = local.tags
 }

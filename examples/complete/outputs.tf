@@ -184,42 +184,42 @@ output "default_route_table_id" {
 
 output "public_subnet_arns" {
   description = "Public subnet ARNs"
-  value       = [for subnet in module.public_subnet : subnet.arn]
+  value       = [for subnet in module.public_subnets : subnet.arn]
 }
 
 output "public_subnet_ids" {
   description = "Public subnet IDs"
-  value       = [for subnet in module.public_subnet : subnet.id]
+  value       = [for subnet in module.public_subnets : subnet.id]
 }
 
 output "public_subnet_ipv4_cidr_blocks" {
   description = "Public subnet IPv4 CIDR blocks"
-  value       = [for subnet in module.public_subnet : subnet.ipv4_cidr_block]
+  value       = [for subnet in module.public_subnets : subnet.ipv4_cidr_block]
 }
 
 output "public_subnet_ipv6_cidr_blocks" {
   description = "Public subnet IPv6 CIDR blocks"
-  value       = compact([for subnet in module.public_subnet : subnet.ipv6_cidr_block])
+  value       = compact([for subnet in module.public_subnets : subnet.ipv6_cidr_block])
 }
 
 output "public_subnet_ec2_subnet_cidr_reservations" {
   description = "Map of public subnet EC2 CIDR reservations created and their attributes"
-  value       = flatten([for subnet in module.public_subnet : subnet.ec2_subnet_cidr_reservations])
+  value       = flatten([for subnet in module.public_subnets : subnet.ec2_subnet_cidr_reservations])
 }
 
 output "public_subnet_route_table_id" {
   description = "Public subnet route table IDs"
-  value       = [for subnet in module.public_subnet : subnet.route_table_id]
+  value       = [for subnet in module.public_subnets : subnet.route_table_id]
 }
 
 output "public_route_table_subnet_association_ids" {
   description = "Public subnet route table association IDs"
-  value       = [for subnet in module.public_subnet : subnet.route_table_subnet_association_id]
+  value       = [for subnet in module.public_subnets : subnet.route_table_subnet_association_id]
 }
 
 output "public_route_table_gateway_association_ids" {
   description = "Public subnet route table association IDs"
-  value       = [for subnet in module.public_subnet : subnet.route_table_gateway_association_ids]
+  value       = [for subnet in module.public_subnets : subnet.route_table_gateway_association_ids]
 }
 
 ################################################################################
