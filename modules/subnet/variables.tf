@@ -22,15 +22,15 @@ variable "tags" {
   default     = {}
 }
 
-variable "vpc_id" {
-  description = "The ID of the VPC the resources are created within"
-  type        = string
-  default     = ""
-}
-
 ################################################################################
 # Subnet
 ################################################################################
+
+variable "assign_ipv6_address_on_creation" {
+  description = "Specify true to indicate that network interfaces created in the specified subnet should be assigned an IPv6 address"
+  type        = bool
+  default     = null
+}
 
 variable "availability_zone" {
   description = "AZ for the subnet"
@@ -44,32 +44,38 @@ variable "availability_zone_id" {
   default     = null
 }
 
-variable "map_customer_owned_ip_on_launch" {
-  description = "Specify true to indicate that network interfaces created in the subnet should be assigned a customer owned IP address. The `customer_owned_ipv4_pool` and `outpost_arn` arguments must be specified when set to `true`"
-  type        = bool
-  default     = null
-}
-
-variable "map_public_ip_on_launch" {
-  description = "Specify true to indicate that instances launched into the subnet should be assigned a public IP address"
-  type        = bool
-  default     = null
-}
-
-variable "private_dns_hostname_type_on_launch" {
-  description = "The type of hostnames to assign to instances in the subnet at launch. For IPv6-only subnets, an instance DNS name must be based on the instance ID. For dual-stack and IPv4-only subnets, you can specify whether DNS names use the instance IPv4 address or the instance ID"
+variable "customer_owned_ipv4_pool" {
+  description = "The customer owned IPv4 address pool. Typically used with the `map_customer_owned_ip_on_launch` argument. The `outpost_arn` argument must be specified when configured"
   type        = string
+  default     = null
+}
+
+variable "enable_dns64" {
+  description = "Indicates whether DNS queries made to the Amazon-provided DNS Resolver in this subnet should return synthetic IPv6 addresses for IPv4-only destinations"
+  type        = bool
+  default     = null
+}
+
+variable "enable_lni_at_device_index" {
+  description = "Indicates the device position for local network interfaces in this subnet"
+  type        = number
+  default     = null
+}
+
+variable "enable_resource_name_dns_aaaa_record_on_launch" {
+  description = "Indicates whether to respond to DNS queries for instance hostnames with DNS AAAA records"
+  type        = bool
+  default     = null
+}
+
+variable "enable_resource_name_dns_a_record_on_launch" {
+  description = "Indicates whether to respond to DNS queries for instance hostnames with DNS A records"
+  type        = bool
   default     = null
 }
 
 variable "ipv4_cidr_block" {
   description = "The IPv4 CIDR block for the subnet"
-  type        = string
-  default     = null
-}
-
-variable "customer_owned_ipv4_pool" {
-  description = "The customer owned IPv4 address pool. Typically used with the `map_customer_owned_ip_on_launch` argument. The `outpost_arn` argument must be specified when configured"
   type        = string
   default     = null
 }
@@ -86,32 +92,14 @@ variable "ipv6_native" {
   default     = null
 }
 
-variable "assign_ipv6_address_on_creation" {
-  description = "Specify true to indicate that network interfaces created in the specified subnet should be assigned an IPv6 address"
+variable "map_customer_owned_ip_on_launch" {
+  description = "Specify true to indicate that network interfaces created in the subnet should be assigned a customer owned IP address. The `customer_owned_ipv4_pool` and `outpost_arn` arguments must be specified when set to `true`"
   type        = bool
   default     = null
 }
 
-variable "enable_dns64" {
-  description = "Indicates whether DNS queries made to the Amazon-provided DNS Resolver in this subnet should return synthetic IPv6 addresses for IPv4-only destinations"
-  type        = bool
-  default     = null
-}
-
-variable "enable_lni_at_device_index" {
-  description = "Indicates the device position for local network interfaces in this subnet"
-  type        = number
-  default     = null
-}
-
-variable "enable_resource_name_dns_a_record_on_launch" {
-  description = "Indicates whether to respond to DNS queries for instance hostnames with DNS A records"
-  type        = bool
-  default     = null
-}
-
-variable "enable_resource_name_dns_aaaa_record_on_launch" {
-  description = "Indicates whether to respond to DNS queries for instance hostnames with DNS AAAA records"
+variable "map_public_ip_on_launch" {
+  description = "Specify true to indicate that instances launched into the subnet should be assigned a public IP address"
   type        = bool
   default     = null
 }
@@ -120,6 +108,18 @@ variable "outpost_arn" {
   description = "The Amazon Resource Name (ARN) of the Outpost"
   type        = string
   default     = null
+}
+
+variable "private_dns_hostname_type_on_launch" {
+  description = "The type of hostnames to assign to instances in the subnet at launch. For IPv6-only subnets, an instance DNS name must be based on the instance ID. For dual-stack and IPv4-only subnets, you can specify whether DNS names use the instance IPv4 address or the instance ID"
+  type        = string
+  default     = null
+}
+
+variable "vpc_id" {
+  description = "The ID of the VPC the resources are created within"
+  type        = string
+  default     = ""
 }
 
 variable "timeouts" {
@@ -132,7 +132,7 @@ variable "timeouts" {
 }
 
 ################################################################################
-# EC2 Subnet CIDR Reservation
+# Subnet CIDR Reservation
 ################################################################################
 
 variable "cidr_reservations" {
@@ -142,7 +142,7 @@ variable "cidr_reservations" {
     description      = optional(string)
     reservation_type = string
   }))
-  default = {}
+  default = null
 }
 
 ################################################################################
@@ -178,7 +178,7 @@ variable "route_table_propagating_vgws" {
 }
 
 variable "route_table_id" {
-  description = "The ID of an existing route table to associate with the subnet"
+  description = "The ID of an existing route table to associate with the subnet. Required if `create_route_table` is `false`"
   type        = string
   default     = null
 }
@@ -194,7 +194,7 @@ variable "route_table_timeouts" {
 }
 
 variable "route_table_tags" {
-  description = "Additional tags for the VPC"
+  description = "Additional tags for the route table"
   type        = map(string)
   default     = {}
 }
@@ -225,16 +225,6 @@ variable "routes" {
       delete = optional(string)
     }))
   }))
-  default = {}
-}
-
-variable "route_timeouts" {
-  description = "Default create, update, and delete timeout configurations for routes"
-  type = object({
-    create = optional(string)
-    update = optional(string)
-    delete = optional(string)
-  })
   default = null
 }
 
@@ -244,110 +234,44 @@ variable "route_timeouts" {
 
 variable "associated_gateways" {
   description = "Map of gateways to associate with the route table"
-  type        = map(string)
-  default     = {}
-}
-
-variable "route_table_association_timeouts" {
-  description = "Create, update, and delete timeout configurations for route table association"
-  type        = map(string)
-  default     = {}
+  type = map(object({
+    gateway_id = string
+    timeouts = optional(object({
+      create = optional(string)
+      update = optional(string)
+      delete = optional(string)
+    }))
+  }))
+  default = null
 }
 
 ################################################################################
 # NAT Gateway
 ################################################################################
 
-variable "create_nat_gateway" {
-  description = "Controls if a NAT gateway should be created"
-  type        = bool
-  default     = true
-}
+variable "nat_gateway" {
+  description = "Configuration for the NAT gateway to create in the subnet. Set to `null` to not create a NAT gateway"
+  type = object({
+    connectivity_type                  = optional(string)
+    private_ip                         = optional(string)
+    secondary_private_ip_address_count = optional(number)
+    secondary_private_ip_addresses     = optional(list(string))
+    tags                               = optional(map(string), {})
 
-variable "create_eip" {
-  description = "Controls if an EIP should be created for the NAT gateway"
-  type        = bool
-  default     = true
-}
-
-variable "eip_address" {
-  description = "IP address from an EC2 BYOIP pool"
-  type        = string
-  default     = null
-}
-
-variable "eip_associate_with_private_ip" {
-  description = "User-specified primary or secondary private IP address to associate with the Elastic IP address. If no private IP address is specified, the Elastic IP address is associated with the primary private IP address"
-  type        = bool
-  default     = null
-}
-
-variable "eip_customer_owned_ipv4_pool" {
-  description = "ID of a customer-owned address pool"
-  type        = string
-  default     = null
-}
-
-variable "eip_network_border_group" {
-  description = "Location from which the IP address is advertised. Use this parameter to limit the address to this location"
-  type        = string
-  default     = null
-}
-
-variable "eip_public_ipv4_pool" {
-  description = "EC2 IPv4 address pool identifier or `amazon`"
-  type        = string
-  default     = null
-}
-
-variable "nat_gateway_allocation_id" {
-  description = "The Allocation ID of the Elastic IP address for the gateway. Required when `nat_gateway_connectivity_type` is `public` and `create_eip` is `false`"
-  type        = string
-  default     = null
-}
-
-variable "nat_gateway_connectivity_type" {
-  description = "Connectivity type for the gateway. Valid values are `private` and `public`. Defaults to `public`"
-  type        = string
-  default     = null
-}
-
-variable "nat_gateway_tags" {
-  description = "Additional tags for the NAT gateway"
-  type        = map(string)
-  default     = {}
-}
-
-################################################################################
-# Internet Gateway
-################################################################################
-
-variable "create_internet_gateway" {
-  description = "Controls if an internet gateway is created"
-  type        = bool
-  default     = true
-}
-
-variable "attach_internet_gateway" {
-  description = "Controls if an internet gateway is attached to the VPC"
-  type        = bool
-  default     = true
-}
-
-variable "internet_gateway_id" {
-  description = "The ID of an existing internet gateway to attach to the VPC. Reqiured if `create_internet_gateway` is `false` and `attach_internet_gateway` is `true`"
-  type        = string
-  default     = null
-}
-
-variable "create_egress_only_internet_gateway" {
-  description = "Controls if an egress only internet gateway is created"
-  type        = bool
-  default     = false
-}
-
-variable "internet_gateway_tags" {
-  description = "Additional tags for the internet gateway/egress only internet gateway"
-  type        = map(string)
-  default     = {}
+    # EIP(s)
+    eips = optional(map(object({
+      address                   = optional(string)
+      associate_with_private_ip = optional(bool)
+      customer_owned_ipv4_pool  = optional(string)
+      ipam_pool_id              = optional(string)
+      network_border_group      = optional(string)
+      public_ipv4_pool          = optional(string)
+    })))
+  })
+  # Creates one NAT gateway w/ an EIP by default
+  default = {
+    eips = {
+      default = {}
+    }
+  }
 }

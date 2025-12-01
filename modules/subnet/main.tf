@@ -10,12 +10,12 @@ resource "aws_subnet" "this" {
   assign_ipv6_address_on_creation                = var.assign_ipv6_address_on_creation
   availability_zone                              = var.availability_zone
   availability_zone_id                           = var.availability_zone_id
-  cidr_block                                     = var.ipv4_cidr_block
   customer_owned_ipv4_pool                       = var.customer_owned_ipv4_pool
   enable_dns64                                   = var.enable_dns64
   enable_lni_at_device_index                     = var.enable_lni_at_device_index
   enable_resource_name_dns_aaaa_record_on_launch = var.enable_resource_name_dns_aaaa_record_on_launch
   enable_resource_name_dns_a_record_on_launch    = var.enable_resource_name_dns_a_record_on_launch
+  cidr_block                                     = var.ipv4_cidr_block
   ipv6_cidr_block                                = var.ipv6_cidr_block
   ipv6_native                                    = var.ipv6_native
   map_customer_owned_ip_on_launch                = var.map_customer_owned_ip_on_launch
@@ -40,11 +40,11 @@ resource "aws_subnet" "this" {
 }
 
 ################################################################################
-# EC2 Subnet CIDR Reservation
+# Subnet CIDR Reservation
 ################################################################################
 
 resource "aws_ec2_subnet_cidr_reservation" "this" {
-  for_each = { for k, v in var.cidr_reservations : k => v if var.create }
+  for_each = var.create && var.cidr_reservations != null ? var.cidr_reservations : {}
 
   region = var.region
 
@@ -71,8 +71,12 @@ resource "aws_ram_resource_association" "this" {
 # Route Table
 ################################################################################
 
+locals {
+  create_route_table = var.create && var.create_route_table
+}
+
 resource "aws_route_table" "this" {
-  count = var.create && var.create_route_table ? 1 : 0
+  count = local.create_route_table ? 1 : 0
 
   region = var.region
 
@@ -83,9 +87,9 @@ resource "aws_route_table" "this" {
     for_each = var.route_table_timeouts != null ? [var.route_table_timeouts] : []
 
     content {
-      create = each.value.create
-      update = each.value.update
-      delete = each.value.delete
+      create = timeouts.value.create
+      update = timeouts.value.update
+      delete = timeouts.value.delete
     }
   }
 
@@ -97,11 +101,11 @@ resource "aws_route_table" "this" {
 }
 
 ################################################################################
-# Routes
+# Route(s)
 ################################################################################
 
 resource "aws_route" "this" {
-  for_each = { for k, v in var.routes : k => v if var.create && var.create_route_table }
+  for_each = local.create_route_table && var.routes != null ? var.routes : {}
 
   region = var.region
 
@@ -124,12 +128,12 @@ resource "aws_route" "this" {
   vpc_peering_connection_id = each.value.vpc_peering_connection_id
 
   dynamic "timeouts" {
-    for_each = var.route_timeouts != null ? [var.route_timeouts] : []
+    for_each = each.value.timeouts != null ? [each.value.timeouts] : []
 
     content {
-      create = each.value.create
-      update = each.value.update
-      delete = each.value.delete
+      create = timeouts.value.create
+      update = timeouts.value.update
+      delete = timeouts.value.delete
     }
   }
 }
@@ -138,12 +142,21 @@ resource "aws_route" "this" {
 # Route Table Association
 ################################################################################
 
-resource "aws_route_table_association" "gateway" {
-  for_each = { for k, v in var.associated_gateways : k => v if var.create && var.create_route_table }
+resource "aws_route_table_association" "subnet" {
+  count = var.create ? 1 : 0
 
   region = var.region
 
-  gateway_id     = each.value.id
+  subnet_id      = aws_subnet.this[0].id
+  route_table_id = var.create_route_table ? aws_route_table.this[0].id : var.route_table_id
+}
+
+resource "aws_route_table_association" "gateway" {
+  for_each = var.create && var.create_route_table && var.associated_gateways != null ? var.associated_gateways : {}
+
+  region = var.region
+
+  gateway_id     = each.value.gateway_id
   route_table_id = aws_route_table.this[0].id
 
   dynamic "timeouts" {
@@ -157,102 +170,65 @@ resource "aws_route_table_association" "gateway" {
   }
 }
 
-resource "aws_route_table_association" "subnet" {
-  count = var.create ? 1 : 0
-
-  region = var.region
-
-  subnet_id      = aws_subnet.this[0].id
-  route_table_id = var.create_route_table ? aws_route_table.this[0].id : var.route_table_id
-
-  dynamic "timeouts" {
-    for_each = var.route_table_association_timeouts != null ? [var.route_table_association_timeouts] : []
-
-    content {
-      create = each.value.create
-      update = each.value.update
-      delete = each.value.delete
-    }
-  }
-}
-
 ################################################################################
 # NAT Gateway
 ################################################################################
 
-resource "aws_eip" "this" {
-  count = var.create && var.create_nat_gateway && var.create_eip ? 1 : 0
-
-  region = var.region
-
-  address                   = var.eip_address
-  associate_with_private_ip = var.eip_associate_with_private_ip
-  customer_owned_ipv4_pool  = var.eip_customer_owned_ipv4_pool
-  domain                    = "vpc"
-  network_border_group      = var.eip_network_border_group
-  public_ipv4_pool          = var.eip_public_ipv4_pool
-
-  tags = merge(
-    var.tags,
-    { Name = var.name },
-  )
-
-  depends_on = [
-    aws_internet_gateway.this
-  ]
+locals {
+  create_nat_gateway = var.create && var.nat_gateway != null
 }
 
 resource "aws_nat_gateway" "this" {
-  count = var.create && var.create_nat_gateway ? 1 : 0
+  count = local.create_nat_gateway ? 1 : 0
 
   region = var.region
 
-  allocation_id     = var.create_eip ? aws_eip.this[0].id : var.nat_gateway_allocation_id
-  connectivity_type = var.nat_gateway_connectivity_type
-  subnet_id         = aws_subnet.this[0].id
+  # allocation_id                    = // Set below with EIP association
+  connectivity_type                  = var.nat_gateway.connectivity_type
+  private_ip                         = var.nat_gateway.private_ip
+  secondary_private_ip_address_count = var.nat_gateway.secondary_private_ip_address_count
+  secondary_private_ip_addresses     = var.nat_gateway.secondary_private_ip_addresses
+  subnet_id                          = aws_subnet.this[0].id
 
   tags = merge(
     var.tags,
     { Name = var.name },
-    var.nat_gateway_tags,
+    var.nat_gateway.tags,
   )
 }
 
 ################################################################################
-# Internet Gateway
+# NAT Gateway EIPs
 ################################################################################
 
-resource "aws_internet_gateway" "this" {
-  count = var.create && var.create_internet_gateway ? 1 : 0
+locals {
+  nat_gateway_eips = try(var.nat_gateway.eips, {})
+}
+
+resource "aws_nat_gateway_eip_association" "this" {
+  for_each = local.create_nat_gateway && local.nat_gateway_eips != null ? local.nat_gateway_eips : {}
 
   region = var.region
+
+  allocation_id  = aws_eip.this[each.key].id
+  nat_gateway_id = aws_nat_gateway.this[0].id
+}
+
+resource "aws_eip" "this" {
+  for_each = local.create_nat_gateway && local.nat_gateway_eips != null ? local.nat_gateway_eips : {}
+
+  region = var.region
+
+  address                   = each.value.address
+  associate_with_private_ip = each.value.associate_with_private_ip
+  customer_owned_ipv4_pool  = each.value.customer_owned_ipv4_pool
+  domain                    = "vpc"
+  ipam_pool_id              = each.value.ipam_pool_id
+  network_border_group      = each.value.network_border_group
+  public_ipv4_pool          = each.value.public_ipv4_pool
 
   tags = merge(
     var.tags,
     { Name = var.name },
-    var.internet_gateway_tags,
-  )
-}
-
-resource "aws_internet_gateway_attachment" "this" {
-  count = var.create && var.attach_internet_gateway ? 1 : 0
-
-  region = var.region
-
-  vpc_id              = var.vpc_id
-  internet_gateway_id = var.create_internet_gateway ? aws_internet_gateway.this[0].id : var.internet_gateway_id
-}
-
-resource "aws_egress_only_internet_gateway" "this" {
-  count = var.create && var.create_egress_only_internet_gateway ? 1 : 0
-
-  region = var.region
-
-  vpc_id = var.vpc_id
-
-  tags = merge(
-    var.tags,
-    { Name = var.name },
-    var.internet_gateway_tags,
   )
 }

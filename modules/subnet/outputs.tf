@@ -33,7 +33,7 @@ output "ipv6_cidr_block_association_id" {
 }
 
 ################################################################################
-# EC2 Subnet CIDR Reservation
+# Subnet CIDR Reservation
 ################################################################################
 
 output "ec2_subnet_cidr_reservations" {
@@ -164,23 +164,4 @@ output "nat_gateway_private_ip" {
 output "nat_gateway_public_ip" {
   description = "The public IP address of the NAT Gateway"
   value       = try(aws_nat_gateway.this[0].public_ip, null)
-}
-
-################################################################################
-# Internet Gateway
-################################################################################
-
-output "internet_gateway_id" {
-  description = "The ID of the Internet Gateway"
-  value       = try(aws_internet_gateway.this[0].id, null)
-}
-
-output "internet_gateway_arn" {
-  description = "The ARN of the Internet Gateway"
-  value       = try(aws_internet_gateway.this[0].arn, null)
-}
-
-output "egress_only_internet_gateway_id" {
-  description = "The ID of the Egress-Only Internet Gateway"
-  value       = try(aws_egress_only_internet_gateway.this[0].id, null)
 }

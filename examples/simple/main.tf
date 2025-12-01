@@ -62,7 +62,8 @@ module "public_subnet" {
   ipv4_cidr_block         = each.value.public_ipv4_cidr_block
 
   # Just create one NAT Gateway
-  create_nat_gateway = each.key == "${local.region}a"
+  # THIS IS WRONG DUMMY!!!2/3 AZs do not have routes to this
+  # nat_gateway = each.key == "${local.region}a"
 
   routes = {
     igw_ipv4 = {
