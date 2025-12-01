@@ -1,14 +1,14 @@
 # AWS VPC Terraform Module
 
-:warning: Please do not rely on this being stable. The goal of this project is to explore changes to the upstream `terraform-aws-vpc` module and eventually land those changes there as v5.0. For now, this is just for exploring and open collaboration on what that next version might look like, and how users can migrate from v4.x to v5.x. Feel free to watch along if you are curious.
+:warning: Please do not rely on this being stable. The goal of this project is to explore changes to the upstream `terraform-aws-vpc` module and eventually land those changes there as `v7.0`. For now, this is just for exploring and open collaboration on what that next version might look like, and how users can migrate from `v6.x` to `v7.x`. Feel free to watch along if you are curious.
 
 ## Usage
 
-See [`examples`](https://github.com/clowdhaus/terraform-aws-vpc-v5/tree/main/examples) directory for working examples to reference:
+See [`examples`](https://github.com/clowdhaus/terraform-aws-vpc-v7/tree/main/examples) directory for working examples to reference:
 
 ```hcl
 module "vpc" {
-  source = "clowdhaus/vpc-v5/aws"
+  source = "clowdhaus/vpc-v7/aws"
 
   name                 = "example"
   cidr_block           = "10.99.0.0/16"
@@ -42,16 +42,16 @@ module "vpc" {
 ## High Level Diagram
 
 <p align="center">
-  <img src="https://github.com/clowdhaus/terraform-aws-vpc-v5/blob/main/.github/images/hld.svg" alt="high level diagram">
+  <img src="https://github.com/clowdhaus/terraform-aws-vpc-v7/blob/main/.github/images/hld.svg" alt="high level diagram">
 </p>
 
 ## Examples
 
-Examples provided in [`examples`](https://github.com/clowdhaus/terraform-aws-vpc-v5/tree/main/examples) are intended to give users references for how to use the module(s) as well as testing/validating changes to the source code of the module. If contributing to the project, please be sure to make any appropriate updates to the relevant examples to allow maintainers to test your changes and to keep the examples up to date for users. Thank you!
+Examples provided in [`examples`](https://github.com/clowdhaus/terraform-aws-vpc-v7/tree/main/examples) are intended to give users references for how to use the module(s) as well as testing/validating changes to the source code of the module. If contributing to the project, please be sure to make any appropriate updates to the relevant examples to allow maintainers to test your changes and to keep the examples up to date for users. Thank you!
 
-- [Complete](https://github.com/clowdhaus/terraform-aws-vpc-v5/tree/main/examples/complete)
-- [Default](https://github.com/clowdhaus/terraform-aws-vpc-v5/tree/main/examples/default)
-- [IPAM](https://github.com/clowdhaus/terraform-aws-vpc-v5/tree/main/examples/ipam)
+- [Complete](https://github.com/clowdhaus/terraform-aws-vpc-v7/tree/main/examples/complete)
+- [Default](https://github.com/clowdhaus/terraform-aws-vpc-v7/tree/main/examples/default)
+- [IPAM](https://github.com/clowdhaus/terraform-aws-vpc-v7/tree/main/examples/ipam)
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -191,4 +191,4 @@ No modules.
 
 ## License
 
-Apache-2.0 Licensed. See [LICENSE](https://github.com/clowdhaus/terraform-aws-vpc-v5/blob/main/LICENSE).
+Apache-2.0 Licensed. See [LICENSE](https://github.com/clowdhaus/terraform-aws-vpc-v7/blob/main/LICENSE).

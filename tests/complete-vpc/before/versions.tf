@@ -8,9 +8,9 @@ terraform {
     }
   }
 
-  # Used to aid in diffing across v4/v5 in separate folders
+  # Used to aid in diffing across v46/v7 in separate folders
   backend "s3" {
-    bucket = "terraform-aws-vpc-v5"
+    bucket = "terraform-aws-vpc-v7"
     key    = "complete-vpc/terraform.tfstate"
     region = "eu-west-1"
   }

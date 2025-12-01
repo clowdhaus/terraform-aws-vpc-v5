@@ -11,7 +11,7 @@ locals {
 
   tags = {
     Example    = local.name
-    GithubRepo = "terraform-aws-vpc-v5"
+    GithubRepo = "terraform-aws-vpc-v7"
   }
 }
 

@@ -4,7 +4,7 @@ Terraform module which creates AWS Network ACL resources.
 
 ## Usage
 
-See [`examples`](https://github.com/clowdhaus/terraform-aws-vpc-v5/tree/main/examples) directory for working examples to reference:
+See [`examples`](https://github.com/clowdhaus/terraform-aws-vpc-v7/tree/main/examples) directory for working examples to reference:
 
 ```hcl
 module "network_acl" {
@@ -69,4 +69,4 @@ No modules.
 
 ## License
 
-Apache-2.0 Licensed. See [LICENSE](https://github.com/clowdhaus/terraform-aws-vpc-v5/blob/main/LICENSE).
+Apache-2.0 Licensed. See [LICENSE](https://github.com/clowdhaus/terraform-aws-vpc-v7/blob/main/LICENSE).
